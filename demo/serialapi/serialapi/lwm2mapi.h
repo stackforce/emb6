@@ -94,6 +94,8 @@ typedef void(*f_lwm2m_resource_access_cb)( uint16_t objID, uint16_t instId, uint
     uint8_t type, void* val, uint16_t len, void* p_user  );
 
 
+/** LWM2M API Init function. */
+typedef int8_t(*fn_lwm2m_ApiInit_t)( void );
 /*
  *  --- Global Functions Definition ------------------------------------------*
  */
@@ -132,6 +134,18 @@ int8_t lwm2mApiInit( uint8_t* p_txBuf, uint16_t txBufLen,
  */
 int8_t lwm2mApiInput( uint8_t* p_data, uint16_t len, uint8_t valid );
 
+/**
+ * \brief   Register a handler for a specific LWM2M module.
+ *
+ *          This function can be used to register a separate LWM2M module.
+ *
+ * \param   pf_init   Module initialization function.
+ */
+int8_t lwm2mApiRegister( fn_lwm2m_ApiInit_t pf_init );
+
+int8_t lwm2mApi_startLWM2M( void );
+
+int8_t lwm2mApi_stopLWM2M( void );
 
 #endif /* __LWM2MAPI_H__ */
 

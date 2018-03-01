@@ -593,6 +593,9 @@ static uint16_t _serverPort = LWM2MAPI_SERVER_PORT;
 /** lwm2m endpoint name */
 static lwm2mapi_cfg_cliname_t _epName = LWM2MAPI_ENDPOINT;
 
+/** Registrated module pointer. */
+static fn_lwm2m_ApiInit_t fn_lwm2mModule;
+
 
 /*
  *  --- Local Functions ---------------------------------------------------- *
@@ -987,6 +990,10 @@ static int8_t _startLWM2M( void )
     lwm2m_object_ipsoHumidityInit( _lwm2m_resource_access_cb, NULL );
     lwm2m_object_ipsoBarometerInit( _lwm2m_resource_access_cb, NULL );
 #endif /* #if LWM2MAPI_NIKI_EIS_OBJECTS */
+
+    /* Initialize the registrated modules. */
+    if( fn_lwm2mModule != NULL )
+        fn_lwm2mModule();
 
 #if LWM2M_SERIAL_API_SUPPORT_DYN_OBJ == TRUE
     /* register dynamic objects */
@@ -2420,7 +2427,14 @@ static void lwm2m_delete(void *request, void *response, uint8_t *buffer,
 /*
  *  --- Global Functions  ---------------------------------------------------*
  */
+int8_t lwm2mApiRegister( fn_lwm2m_ApiInit_t pf_init ) {
 
+  EMB6_ASSERT_RET( (pf_init != NULL), -1 );
+
+  fn_lwm2mModule = pf_init;
+
+  return 0;
+}
 /*---------------------------------------------------------------------------*/
 /*
 * lwm2mApiInit()
@@ -2443,6 +2457,7 @@ int8_t lwm2mApiInit( uint8_t* p_txBuf, uint16_t txBufLen,
     for( i = 0; i < LWM2MAPI_OBJ_MAX; i++ )
       lwm2m_object_container[i] = NULL;
 #endif /* #if LWM2M_SERIAL_API_SUPPORT_DYN_OBJ == TRUE */
+
 
     _serverIP = (uip_ipaddr_t){.u16 = {LWM2MAPI_SERVER_IP}};
     _serverPort = LWM2MAPI_SERVER_PORT;
@@ -2480,4 +2495,21 @@ int8_t lwm2mApiInput( uint8_t* p_data, uint16_t len, uint8_t valid )
 
     return ret;
 } /* lwm2mApiInput() */
+
+/*---------------------------------------------------------------------------*/
+/*
+* lwm2mApi_startLWM2M()
+*/
+int8_t lwm2mApi_startLWM2M() {
+  return _startLWM2M();
+}
+
+/*---------------------------------------------------------------------------*/
+/*
+* lwm2mApi_startLWM2M()
+*/
+int8_t lwm2mApi_stopLWM2M() {
+  return _stopLWM2M();
+}
+
 
