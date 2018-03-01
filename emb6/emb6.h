@@ -741,10 +741,9 @@ extern const s_nsRF_t rf_driver_ticc13xx;
  *          given.
  *
  * \param   pst_netStack    Pointer to the stack structure to initialize.
- * \param   ps_demos        Demos to initialize.
  * \param   p_err           Pointer to store error status to.
  */
-void emb6_init( s_ns_t* ps_ns, s_demo_t* ps_demos, e_nsErr_t* p_err );
+void emb6_init( s_ns_t* ps_ns, e_nsErr_t* p_err );
 
 
 /**
