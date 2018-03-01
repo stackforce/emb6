@@ -204,6 +204,9 @@ static void loc_set_status( e_stack_status_t status );
  * For further details have a look at the function definitions. */
 static void loc_event_callback( c_event_t ev, p_data_t data );
 
+/** callback function called directly after the NETSTACK initialization. */
+static void (*loc_postInit_callback)(s_ns_t* ps_ns, e_nsErr_t* p_err) =  NULL;
+
 #if (NETSTK_CFG_LPM_ENABLED == TRUE)
 static int32_t loc_stackIdle(void)
 {
@@ -495,7 +498,17 @@ void emb6_init( s_ns_t* ps_ns, e_nsErr_t* p_err )
     /* register low-power management callback for the stack */
     lpm_register(loc_stackIdle);
 #endif /* #if (NETSTK_CFG_LPM_ENABLED == TRUE) */
+    /* call to a callback function if it is initialized */
+    if (loc_postInit_callback)
     {
+      /* call to a callback function after netstack initialization */
+      loc_postInit_callback(ps_nsTmp , p_err);
+
+      if ( *p_err != NETSTK_ERR_NONE)
+      {
+        /* error when enabling stack */
+        emb6_errorHandler( p_err );
+      }
     }
 
     /* turn the stack on */
@@ -680,4 +693,25 @@ void emb6_errorHandler( e_nsErr_t* p_err )
     }
 
 } /* emb6_errorHandler() */
+
+
+/*---------------------------------------------------------------------------*/
+/*
+* emb6_set_postInit_callback()
+*/
+void emb6_set_postInit_callback( void (*cb_func)(s_ns_t* , e_nsErr_t*), e_nsErr_t* p_err)
+{
+
+  if (cb_func)
+  {
+    /* set the callback funtion */
+    loc_postInit_callback = cb_func;
+  }
+  else
+  {
+    /* error when setting callback */
+    *p_err = NETSTK_ERR_INIT;
+  }
+
+} /* emb6_set_postInit_callback() */
 

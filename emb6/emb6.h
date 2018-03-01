@@ -827,5 +827,20 @@ void emb6_stop( e_nsErr_t *p_err );
  */
 void emb6_errorHandler( e_nsErr_t* p_err );
 
+
+/**
+ * emb6_set_postStackInit_callback()
+ *
+ * \brief   Post stack intialization callback setter.
+ *
+ *          This function will set the post stack intialization callback. It must
+ *          be called before the emb6_init().
+ *
+ * \param   cb_func   Pointer to the function which will be linked to the callback function.
+ * \param   p_err     Error that occurred.
+ */
+void emb6_set_postInit_callback( void (*cb_func)(s_ns_t* , e_nsErr_t*), e_nsErr_t* p_err);
+
+
 #endif /* __EMB6_H__ */
 
