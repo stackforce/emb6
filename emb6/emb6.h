@@ -288,6 +288,19 @@ typedef enum
 
 
 /**
+ * \brief   Netstack I/O Control command enumeration declaration
+ */
+typedef enum
+{
+    E_AUTHORIZATION_NO = 0,
+    E_AUTHORIZATION_LEVEL1 = 1,
+    E_AUTHORIZATION_LEVEL2 = 2,
+    E_AUTHORIZATION_LEVEL3 = 3,
+
+} e_authorization_t;
+
+
+/**
  * \brief   IEEE-802.15.4g operating mode supports
  */
 typedef enum
