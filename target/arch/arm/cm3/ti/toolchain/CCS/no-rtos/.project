@@ -96,6 +96,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>demo/demo_main.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/demo/demo_main.c</locationURI>
+		</link>
+		<link>
 			<name>demo/dtls</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -159,11 +164,6 @@
 			<name>emb6/inc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>emb6/main.c</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/main.c</locationURI>
 		</link>
 		<link>
 			<name>emb6/src</name>
