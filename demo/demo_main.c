@@ -481,13 +481,6 @@ static void emb6_task( void* p_params )
         emb6_errorHandler( &err );
     }
 
-    if( ret != NETSTK_ERR_NONE )
-    {
-        /* no recovery possible, call global error handler. */
-        err = NETSTK_ERR_INIT;
-        emb6_errorHandler(&err);
-    }
-
     loc_demoAppsConf(&s_ns);
 
     /* Initialize stack */
