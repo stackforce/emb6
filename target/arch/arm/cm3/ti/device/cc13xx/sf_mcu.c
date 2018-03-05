@@ -94,6 +94,8 @@ uint16_t sf_mcu_datamemory_write(uint8_t *pc_data, uint16_t i_len, uint32_t l_ad
   static uint8_t ac_flashPage[MCU_INFOFLASH_SIZE];
   /* Address of the first segment. */
   uint32_t l_addrSegmStart;
+  /* Current Mode */
+  uint32_t VIMCurrentMode;
 
   /* Check the input parameters */
   if((i_len > 0x00U) && (NULL != pc_data) &&
@@ -110,8 +112,12 @@ uint16_t sf_mcu_datamemory_write(uint8_t *pc_data, uint16_t i_len, uint32_t l_ad
     l_addr %= SECTOR_SIZE;
 
     /* Disable the cache */
-    VIMSModeSet(VIMS_BASE, VIMS_MODE_DISABLED);
-    while(VIMSModeGet(VIMS_BASE) != VIMS_MODE_DISABLED);
+    VIMCurrentMode = VIMSModeGet(VIMS_BASE);
+    if (VIMCurrentMode == VIMS_MODE_ENABLED)
+    {
+        VIMSModeSet(VIMS_BASE, VIMS_MODE_DISABLED);
+        while(VIMSModeGet(VIMS_BASE) != VIMS_MODE_DISABLED);
+    }
 
     /* Check if the flash is protected */
     if(FlashProtectionGet(l_addr) != FLASH_WRITE_PROTECT)
@@ -141,7 +147,10 @@ uint16_t sf_mcu_datamemory_write(uint8_t *pc_data, uint16_t i_len, uint32_t l_ad
       }
     }/* if  */
     /* Re-enable the cache */
-    VIMSModeSet(VIMS_BASE, VIMS_MODE_ENABLED);
+    if (VIMCurrentMode == VIMS_MODE_ENABLED)
+    {
+        VIMSModeSet(VIMS_BASE, VIMS_MODE_ENABLED);
+    }
   }/* if */
 
   return i_return;
