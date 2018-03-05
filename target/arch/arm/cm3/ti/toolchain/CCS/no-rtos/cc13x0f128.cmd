@@ -109,6 +109,7 @@ SECTIONS
     .nonretenvar    :   > SRAM
     .gpram          :   > GPRAM
 
+
 	.bss:transactions_memb_memb_mem			:	> GPRAM
 
     /*.bss:observers_memb_memb_mem			:	> GPRAM */
@@ -124,6 +125,7 @@ SECTIONS
 
     .bss:lwm2minstance_storage_memb_mem		:	> GPRAM
     .bss:lwm2minstance_storage_memb_count	:	> GPRAM*/
+
 
 #ifdef __TI_COMPILER_VERSION__
 #if __TI_COMPILER_VERSION__ >= 15009000
