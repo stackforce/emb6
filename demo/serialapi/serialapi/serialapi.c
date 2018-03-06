@@ -303,6 +303,9 @@ typedef struct
   /** callback of the protocol input*/
   fn_serial_ApiInput_t p_fin;
 
+  /** Is the module initialized. */
+  bool isModuleInit;
+
 } s_serialapi_prot_t;
 
 /**
@@ -400,8 +403,10 @@ static uint16_t _txBufLen = 0;
 /** Tx parameter */
 static void* _p_txParam = NULL;
 
-static s_serialapi_prot_t protCtx;
-
+/** Extended module registration variable. */
+#define PROT_CTX_SIZE     2
+static s_serialapi_prot_t protCtx[PROT_CTX_SIZE];
+static uint8_t protCtxIndex = 0U;
 /*
  *  --- Local Functions ---------------------------------------------------- *
  */
@@ -473,6 +478,7 @@ static int8_t _rx_data( uint8_t* p_data, uint16_t len )
 {
 
   int8_t ret = 0;
+  uint8_t i;
   serialapi_frameID_t id;
   size_t bufLeft = len;
   uint8_t* p_dataPtr = p_data;
@@ -540,10 +546,11 @@ static int8_t _rx_data( uint8_t* p_data, uint16_t len )
 
     default:
       /* check if the ID was registered */
-      if( (protCtx.id == id ) && (protCtx.p_fin != NULL) )
-        return protCtx.p_fin( p_dataPtr, bufLeft, TRUE );
-      else
-        ret = -2;
+      for( i = 0; i < protCtxIndex; i++ ) {
+        if( (protCtx[i].id == id ) && (protCtx[i].p_fin != NULL) )
+          return protCtx[i].p_fin( p_dataPtr, bufLeft, TRUE );
+      }
+      ret = -2;
       break;
   }
 
@@ -585,6 +592,15 @@ static int8_t _rx_data( uint8_t* p_data, uint16_t len )
         EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
         SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
             e_serial_api_ret_error );
+
+        /* PWEB: Workaround for new SF protocol. */
+        EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
+        SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
+            0x01 );
+        /* PWEB: Workaround for new SF protocol. */
+        EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
+        SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
+            0xad );
         break;
     }
 
@@ -1042,7 +1058,7 @@ int8_t serialApiInit( uint8_t* p_txBuf, uint16_t txBufLen,
         void(*fn_tx)(uint16_t len, void* p_param), void* p_txParam )
 {
     int8_t ret = 0;
-
+    uint8_t i;
     /* set buffer description */
     _p_txBuf = p_txBuf;
     _txBufLen = txBufLen;
@@ -1051,9 +1067,14 @@ int8_t serialApiInit( uint8_t* p_txBuf, uint16_t txBufLen,
     /* set Tx function */
     _fn_tx = fn_tx;
 
-    /* reset protocol index */
-    protCtx.id = 0;
-    protCtx.p_fin = NULL;
+    /* Check if there are some uninitialized modules. */
+    for( i = 0; i < protCtxIndex; i++ ) {
+      if( (protCtx[i].isModuleInit == false ) && (protCtx[i].p_finit != NULL) && (protCtx[i].id != NULL) ) {
+        protCtx[ i ].p_finit( (_p_txBuf + sizeof(serialapi_frameID_t)),
+                  (_txBufLen - sizeof(serialapi_frameID_t)), _txData, &protCtx[ i ].id );
+        protCtx[i].isModuleInit = true;
+      }
+    }
 
     /* register events */
     evproc_regCallback( EVENT_TYPE_STATUS_CHANGE, _event_callback );
@@ -1080,7 +1101,6 @@ int8_t serialApiInput( uint8_t* p_data, uint16_t len, uint8_t valid )
 
     if( ret != 0 )
     {
-
       /* set the according frame id of the reply  */
       EMB6_ASSERT_RET( txBufLen >= sizeof(serialapi_frameID_t), -1 );
       SERIAL_API_SET_FIELD( p_txBuf, txBufLen, serialapi_frameID_t,
@@ -1090,6 +1110,15 @@ int8_t serialApiInput( uint8_t* p_data, uint16_t len, uint8_t valid )
       EMB6_ASSERT_RET( txBufLen >= sizeof(serialapi_frameID_t), -1 );
       SERIAL_API_SET_FIELD( p_txBuf, txBufLen, serialapi_frameID_t,
           e_serial_api_ret_error );
+
+      /* PWEB: Workaround for new SF protocol. */
+      EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
+      SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
+          0x01 );
+      /* PWEB: Workaround for new SF protocol. */
+      EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
+      SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
+          0xad );
 
       EMB6_ASSERT_RET( _fn_tx != NULL, -1 );
       _fn_tx( (p_txBuf - _p_txBuf), _p_txParam );
@@ -1112,16 +1141,24 @@ int8_t serialApiRegister( serialapi_frameID_t id,
     EMB6_ASSERT_RET( (pf_init != NULL), -1 );
     EMB6_ASSERT_RET( (pf_in != NULL), -1 );
 
-    /* register protocol handler */
-    protCtx.id = id;
-    protCtx.p_finit = pf_init;
-    protCtx.p_fin = pf_in;
 
-    /* initialize the upper protocol */
-    protCtx.p_finit( (_p_txBuf + sizeof(serialapi_frameID_t)),
-        (_txBufLen - sizeof(serialapi_frameID_t)), _txData, &protCtx.id );
+    /* Register the module. */
+    if ( protCtxIndex < PROT_CTX_SIZE ) {
+      memset(&protCtx[ protCtxIndex ], 0U, sizeof(s_serialapi_prot_t));
+      /* register protocol handler */
+      protCtx[ protCtxIndex ].id = id;
+      protCtx[ protCtxIndex ].p_finit = pf_init;
+      protCtx[ protCtxIndex ].p_fin = pf_in;
 
-    ret = 0;
+      /* Initialize the upper protocol */
+      protCtx[ protCtxIndex ].p_finit( (_p_txBuf + sizeof(serialapi_frameID_t)),
+          (_txBufLen - sizeof(serialapi_frameID_t)), _txData, &protCtx[ protCtxIndex ].id );
+      protCtx[protCtxIndex].isModuleInit = false;
+
+      protCtxIndex++;
+      ret = 0;
+    }
+
     return ret;
 } /* serialApiInput() */
 

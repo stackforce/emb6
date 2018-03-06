@@ -186,6 +186,8 @@ typedef enum
     NETSTK_ERR_BAD_FORMAT,
     NETSTK_ERR_INVALID_ADDRESS,
     NETSTK_ERR_FATAL,
+    NETSTK_ERR_UNAUTHORIZED,
+    NETSTK_ERR_MEMORY_UNDERSIZED,
 
     /*
      * LLC error codes
@@ -283,6 +285,19 @@ typedef enum
     NETSTK_CMD_RF_WOR_EN,
 
 } e_nsIocCmd_t;
+
+
+/**
+ * \brief   Netstack I/O Control command enumeration declaration
+ */
+typedef enum
+{
+    E_AUTHORIZATION_NO = 0,
+    E_AUTHORIZATION_LEVEL1 = 1,
+    E_AUTHORIZATION_LEVEL2 = 2,
+    E_AUTHORIZATION_LEVEL3 = 3,
+
+} e_authorization_t;
 
 
 /**
@@ -741,10 +756,9 @@ extern const s_nsRF_t rf_driver_ticc13xx;
  *          given.
  *
  * \param   pst_netStack    Pointer to the stack structure to initialize.
- * \param   ps_demos        Demos to initialize.
  * \param   p_err           Pointer to store error status to.
  */
-void emb6_init( s_ns_t* ps_ns, s_demo_t* ps_demos, e_nsErr_t* p_err );
+void emb6_init( s_ns_t* ps_ns, e_nsErr_t* p_err );
 
 
 /**
@@ -827,6 +841,21 @@ void emb6_stop( e_nsErr_t *p_err );
  * \param   p_err   Error that occurred.
  */
 void emb6_errorHandler( e_nsErr_t* p_err );
+
+
+/**
+ * emb6_set_postStackInit_callback()
+ *
+ * \brief   Post stack intialization callback setter.
+ *
+ *          This function will set the post stack intialization callback. It must
+ *          be called before the emb6_init().
+ *
+ * \param   cb_func   Pointer to the function which will be linked to the callback function.
+ * \param   p_err     Error that occurred.
+ */
+void emb6_set_postInit_callback( void (*cb_func)(s_ns_t* , e_nsErr_t*), e_nsErr_t* p_err);
+
 
 #endif /* __EMB6_H__ */
 

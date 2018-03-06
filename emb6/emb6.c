@@ -96,8 +96,6 @@
 
 /** Pointer to the stack structure */
 static s_ns_t* ps_stack;
-/** Pointer to the demo structures */
-static s_demo_t* ps_dms;
 /** Heartbeat Timer */
 static struct ctimer s_hbTimer;
 
@@ -192,14 +190,6 @@ s_mac_phy_conf_t mac_phy_config = {
  * the function definition. */
 static int8_t loc_stackInit( s_ns_t* ps_ns );
 
-/* Configure the stack demos. For further information refer to
- * the function definition. */
-static int8_t loc_demoConf( s_ns_t* ps_ns, s_demo_t* p_demos );
-
-/* Initialize the stack demos. For further information refer to
- * the function definition. */
-static int8_t loc_demoInit( s_demo_t* p_demos );
-
 #if EMB6_INIT_ROOT == TRUE
 /* Initialize the DAGROOT. For further information refer to
  * the function definition. */
@@ -213,6 +203,9 @@ static void loc_set_status( e_stack_status_t status );
 /** Called by the stack in case new data was available from the RX interface.
  * For further details have a look at the function definitions. */
 static void loc_event_callback( c_event_t ev, p_data_t data );
+
+/** callback function called directly after the NETSTACK initialization. */
+static void (*loc_postInit_callback)(s_ns_t* ps_ns, e_nsErr_t* p_err) =  NULL;
 
 #if (NETSTK_CFG_LPM_ENABLED == TRUE)
 static int32_t loc_stackIdle(void)
@@ -333,65 +326,6 @@ static int8_t loc_stackInit( s_ns_t* ps_ns )
     return ret;
 }
 
-
-/**
- * \brief Configure selected demos.
- *
- *        This function configures all the demos given in the list of
- *        selected demos.
- *
- * \param ps_ns     Stack structure used to configure.
- * \param p_demos   Demos to configure.
- *
- * \return  0 on success or nagative value on error.
- */
-static int8_t loc_demoConf( s_ns_t* ps_ns, s_demo_t* p_demos )
-{
-  s_demo_t* p_d = p_demos;
-
-  EMB6_ASSERT_RET( ps_ns != NULL, 0 );
-
-  while( p_d != NULL )
-  {
-    /* configure current demo and switch
-     * to next demo */
-    p_d->pf_conf( ps_ns );
-    p_d = p_d->p_next;
-  }
-
-  return 0;
-}
-
-
-/**
- * \brief Initialize selected demos.
- *
- *        This function initializes all the demos given in the list of
- *        selected demos.
- *
- * \param p_demos   Demos to initialize.
- *
- * \return  0 on success or negative value on error.
- */
-static int8_t loc_demoInit( s_demo_t* p_demos )
-{
-  s_demo_t* p_d = p_demos;
-
-  EMB6_ASSERT_RET( (p_demos != NULL), -1 );
-
-  while( p_d != NULL )
-  {
-    /* initialize current demo and switch
-     * to next demo */
-    p_d->pf_init();
-    p_d = p_d->p_next;
-  }
-
-  return 0;
-}
-
-
-
 #if EMB6_INIT_ROOT==TRUE
 /**
  * \brief   Initialize the DAGRoot.
@@ -489,7 +423,7 @@ void loc_event_callback( c_event_t ev, p_data_t data )
   else if( ev == EVENT_TYPE_REQ_INIT )
   {
     /* reinitialize the stack */
-    emb6_init( NULL, NULL, &err );
+    emb6_init( NULL, &err );
   }
   else if( ev == EVENT_TYPE_REQ_STOP )
   {
@@ -512,33 +446,20 @@ void loc_event_callback( c_event_t ev, p_data_t data )
 /*
 * emb6_init()
 */
-void emb6_init( s_ns_t* ps_ns, s_demo_t* ps_demos, e_nsErr_t* p_err )
+void emb6_init( s_ns_t* ps_ns, e_nsErr_t* p_err )
 {
     uint8_t ret;
     e_nsErr_t err;
     s_ns_t* ps_nsTmp;
-    s_demo_t* ps_dmsTmp;
 
     EMB6_ASSERT_FN( (p_err != NULL), emb6_errorHandler( p_err ) );
     EMB6_ASSERT_RETS( ((ps_ns != NULL) || (ps_stack != NULL) ),
-            ,(*p_err), NETSTK_ERR_INVALID_ARGUMENT );
-    EMB6_ASSERT_RETS( ((ps_demos != NULL) || (ps_dms != NULL) ),
             ,(*p_err), NETSTK_ERR_INVALID_ARGUMENT );
 
     /* set return error code to default */
     *p_err = NETSTK_ERR_NONE;
 
     ps_nsTmp = (ps_ns != NULL) ? ps_ns : ps_stack;
-    ps_dmsTmp = (ps_demos != NULL) ? ps_demos : ps_dms;
-
-    /* configure demo applications */
-    ret = loc_demoConf( ps_nsTmp, ps_dmsTmp );
-    if( ret != 0 )
-    {
-        *p_err = NETSTK_ERR_INIT;
-        LOG_ERR("Failed to initialize emb6 demos");
-        emb6_errorHandler(&err);
-    }
 
     /* Initialize stack protocols */
     evproc_init();
@@ -577,19 +498,17 @@ void emb6_init( s_ns_t* ps_ns, s_demo_t* ps_demos, e_nsErr_t* p_err )
     /* register low-power management callback for the stack */
     lpm_register(loc_stackIdle);
 #endif /* #if (NETSTK_CFG_LPM_ENABLED == TRUE) */
+    /* call to a callback function if it is initialized */
+    if (loc_postInit_callback)
+    {
+      /* call to a callback function after netstack initialization */
+      loc_postInit_callback(ps_nsTmp , p_err);
 
-    /* initialize demo applications */
-    ret = loc_demoInit( ps_dmsTmp );
-    if( ret != 0 )
-    {
-        *p_err = NETSTK_ERR_INIT;
-        LOG_ERR("Failed to initialize emb6 demos");
-        emb6_errorHandler(&err);
-    }
-    else
-    {
-      /* set local demo pointer */
-      ps_dms = ps_dmsTmp;
+      if ( *p_err != NETSTK_ERR_NONE)
+      {
+        /* error when enabling stack */
+        emb6_errorHandler( p_err );
+      }
     }
 
     /* turn the stack on */
@@ -714,7 +633,7 @@ void emb6_start( e_nsErr_t *p_err )
     {
         /* reinitialize stack with the given
          * parameters and configurations */
-        emb6_init( NULL, NULL, &err );
+        emb6_init( NULL, &err );
 
         /* turn the stack on */
         ps_stack->dllc->on( &err );
@@ -774,4 +693,25 @@ void emb6_errorHandler( e_nsErr_t* p_err )
     }
 
 } /* emb6_errorHandler() */
+
+
+/*---------------------------------------------------------------------------*/
+/*
+* emb6_set_postInit_callback()
+*/
+void emb6_set_postInit_callback( void (*cb_func)(s_ns_t* , e_nsErr_t*), e_nsErr_t* p_err)
+{
+
+  if (cb_func)
+  {
+    /* set the callback funtion */
+    loc_postInit_callback = cb_func;
+  }
+  else
+  {
+    /* error when setting callback */
+    *p_err = NETSTK_ERR_INIT;
+  }
+
+} /* emb6_set_postInit_callback() */
 

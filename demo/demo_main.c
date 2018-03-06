@@ -170,11 +170,6 @@
  * --- Macro Definitions --------------------------------------------------- *
  */
 
-/** Maximum number of demos */
-#ifndef EMB6_DEMOS_MAX
-#define EMB6_DEMOS_MAX                      11
-#endif /* #ifndef EMB6_DEMOS_MAX */
-
 /** default delay for running the emb6 process in microseconds */
 #ifndef EMB6_PROC_DELAY
 #define EMB6_PROC_DELAY                     500
@@ -186,17 +181,14 @@
 #define mainLED_TASK_PRIORITY           ( tskIDLE_PRIORITY + 2 )
 #endif /* #if USE_FREERTOS */
 
-#define EMB6_DEMO_SET( i,name, demos )      do{                                             \
-                                              if( (i < EMB6_DEMOS_MAX) && (i >= 0) )        \
-                                              {                                             \
-                                                if( i > 0 )                                 \
-                                                  demos[i-1].p_next = &demos[i];            \
-                                                demos[i].pf_conf = demo_##name##Conf;       \
-                                                demos[i++].pf_init = demo_##name##Init;     \
-                                              }                                             \
-                                              else                                          \
-                                                i = -1;                                     \
-                                            }while(0);
+#define EMB6_DEMO_INIT(name)  do{ \
+                                 demo_##name##Init(); \
+                                 }while(0);
+
+#define EMB6_DEMO_CONF(name, ns)  do{ \
+                                 demo_##name##Conf(ns); \
+                                 }while(0);
+
 
 #if USE_FREERTOS & USE_TI_RTOS
 #error Please choose only one RTOS
@@ -212,8 +204,6 @@ typedef struct
 {
   /** MAC address */
   uint16_t ui_macAddr;
-  /** Demos */
-  s_demo_t* p_demos;
 }s_emb6_startup_params_t;
 
 #if USE_FREERTOS
@@ -232,9 +222,6 @@ typedef struct
 /*
  *  --- Local Variables ---------------------------------------------------- *
  */
-
-/** Demo configurations */
-static s_demo_t emb6_demos[EMB6_DEMOS_MAX];
 
 /** parameters for emb6 startup */
 static s_emb6_startup_params_t emb6_startupParams;
@@ -256,6 +243,7 @@ static uint16_t loc_parseMac( const char* mac, uint16_t defaultMac );
 /* Configures the stack. For more information please refer to the
  * function definition. */
 static void loc_stackConf(uint16_t mac_addr_word);
+
 
 /**
  * emb6 task.
@@ -339,67 +327,116 @@ static void loc_stackConf( uint16_t mac_addr_word )
 
 
 /**
- * \brief   Set the demo applications.
+ * \brief   initialize the demo applications.
  *
- *          This function sets the demo applications according
- *          according to the build configuration. This will be used
- *          by the stack to configure and to initialize the according
- *          demos
+ *          This function initializes the demo applications according
+ *          according to the build configuration.
  *
- * \return  Pointer to the demo structures on success or NULL on error.
  */
-static s_demo_t* loc_demoAppsSet( void )
+static void loc_demoAppsInit(void)
 {
-    int16_t ret = 0;
+
 #if DEMO_USE_EXTIF
-    EMB6_DEMO_SET( ret, extif, emb6_demos );
+    EMB6_DEMO_INIT(extif);
 #endif /* #if DEMO_USE_EXTIF */
 
 #if DEMO_USE_COAP
-    EMB6_DEMO_SET( ret, coap, emb6_demos );
+    EMB6_DEMO_INIT(coap);
 #endif /* #if DEMO_USE_COAP */
 
 #if DEMO_USE_LWM2M
-    EMB6_DEMO_SET( ret, lwm2m, emb6_demos );
+    EMB6_DEMO_INIT(lwm2m);
 #endif /* #if DEMO_USE_LWM2M */
 
 #if DEMO_USE_MDNS
-    EMB6_DEMO_SET( ret, mdns, emb6_demos );
+    EMB6_DEMO_INIT(mdns);
 #endif /* #if DEMO_USE_MDNS */
 
 #if DEMO_USE_SERIALAPI
-    EMB6_DEMO_SET( ret, serialApi, emb6_demos );
+    EMB6_DEMO_INIT(serialApi);
 #endif /* #if DEMO_USE_SERIALAPI */
 
 #if DEMO_USE_UDPALIVE
-    EMB6_DEMO_SET( ret, udpAlive, emb6_demos );
+    EMB6_DEMO_INIT(udpAlive);
 #endif /* #if DEMO_USE_UDPALIVE */
 
 #if DEMO_USE_UDP_SOCKET
-    EMB6_DEMO_SET( ret, udpSocket, emb6_demos );
+    EMB6_DEMO_INIT(udpSocket);
 #endif /* #if DEMO_USE_UDP_SOCKET */
 
 #if DEMO_USE_UDP_SOCKET_SIMPLE
-    EMB6_DEMO_SET( ret, udpSocketSimple, emb6_demos );
+    EMB6_DEMO_INIT(udpSocketSimple);
 #endif /* #if DEMO_USE_UDP_SOCKET_SIMPLE */
 
 #if DEMO_USE_APTB
-    EMB6_DEMO_SET( ret, aptb, emb6_demos );
+    EMB6_DEMO_INIT(aptb);
 #endif /* #if DEMO_USE_APTB */
 
 #if DEMO_USE_6TISCH
-    EMB6_DEMO_SET( ret, 6tisch, emb6_demos );
+    EMB6_DEMO_INIT(6tisch);
 #endif /* #if DEMO_USE_6TISCH */
 
 #if DEMO_USE_DTLS
-    EMB6_DEMO_SET( ret, dtls, emb6_demos );
+    EMB6_DEMO_INIT(dtls;
 #endif /* #if DEMO_USE_DTLS */
-    if( ret > 0 )
-      return emb6_demos;
-    else
-      return NULL;
+
 }
 
+
+/**
+ * \brief   Configure the demo applications.
+ *
+ *          This function Configures the demo applications.according
+ *          according to the build configuration.
+ */
+static void loc_demoAppsConf(s_ns_t* s_ns)
+{
+
+#if DEMO_USE_EXTIF
+    EMB6_DEMO_CONF(extif, s_ns);
+#endif /* #if DEMO_USE_EXTIF */
+
+#if DEMO_USE_COAP
+    EMB6_DEMO_CONF(coap, s_ns);
+#endif /* #if DEMO_USE_COAP */
+
+#if DEMO_USE_LWM2M
+    EMB6_DEMO_CONF(lwm2m, s_ns);
+#endif /* #if DEMO_USE_LWM2M */
+
+#if DEMO_USE_MDNS
+    EMB6_DEMO_CONF(mdns, s_ns);
+#endif /* #if DEMO_USE_MDNS */
+
+#if DEMO_USE_SERIALAPI
+    EMB6_DEMO_CONF(serialApi, s_ns);
+#endif /* #if DEMO_USE_SERIALAPI */
+
+#if DEMO_USE_UDPALIVE
+    EMB6_DEMO_CONF(udpAlive, s_ns);
+#endif /* #if DEMO_USE_UDPALIVE */
+
+#if DEMO_USE_UDP_SOCKET
+    EMB6_DEMO_CONF(udpSocket, s_ns);
+#endif /* #if DEMO_USE_UDP_SOCKET */
+
+#if DEMO_USE_UDP_SOCKET_SIMPLE
+    EMB6_DEMO_CONF(udpSocketSimple, s_ns);
+#endif /* #if DEMO_USE_UDP_SOCKET_SIMPLE */
+
+#if DEMO_USE_APTB
+    EMB6_DEMO_CONF(aptb, s_ns);
+#endif /* #if DEMO_USE_APTB */
+
+#if DEMO_USE_6TISCH
+    EMB6_DEMO_CONF(6tisch, s_ns);
+#endif /* #if DEMO_USE_6TISCH */
+
+#if DEMO_USE_DTLS
+    EMB6_DEMO_CONF(dtls, s_ns);
+#endif /* #if DEMO_USE_DTLS */
+
+}
 
 /**
  * \brief   Main emb6 task.
@@ -435,14 +472,6 @@ static void emb6_task( void* p_params )
     /* Configure stack parameters */
     loc_stackConf( ps_params->ui_macAddr );
 
-    /* check demo configuration */
-    if( ps_params->p_demos == NULL )
-    {
-      /* no demos configured */
-      err = NETSTK_ERR_INIT;
-      emb6_errorHandler( &err );
-    }
-
     /* Initialize BSP */
     ret = bsp_init( &s_ns );
     if( ret != 0 )
@@ -452,13 +481,17 @@ static void emb6_task( void* p_params )
         emb6_errorHandler( &err );
     }
 
+    loc_demoAppsConf(&s_ns);
+
     /* Initialize stack */
-    emb6_init( &s_ns, ps_params->p_demos, &err );
+    emb6_init( &s_ns, &err );
     if( err != NETSTK_ERR_NONE )
     {
         /* no recovery possible, call global error handler. */
         emb6_errorHandler(&err);
     }
+
+    loc_demoAppsInit();
 
     /* Show that stack has been launched */
     bsp_led(HAL_LED0, EN_BSP_LED_OP_ON);
@@ -550,8 +583,7 @@ int main(void)
     }
     else
 #endif /* #if defined(MAIN_WITH_ARGS) */
-	  emb6_startupParams.ui_macAddr = loc_parseMac(NULL, MAC_ADDR_WORD);
-    emb6_startupParams.p_demos = loc_demoAppsSet();
+	emb6_startupParams.ui_macAddr = loc_parseMac(NULL, MAC_ADDR_WORD);
 
 #if USE_FREERTOS
     ledTaskParams.en = 1;

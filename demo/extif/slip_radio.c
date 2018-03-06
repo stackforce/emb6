@@ -136,7 +136,30 @@ slip_radio_cmd_handler(const uint8_t *data, int len)
       PRINTF("Rebooting\n");
       bsp_watchdog(EN_BSP_WD_RESET);
       return 1;
+
+    } else if(data[1] == 'C' && len == 3) {
+
+      e_nsErr_t p_err;
+
+      /* Set RF channel. */
+      PRINTF("Set RF channel\n");
+
+      ps_ns = emb6_get();
+
+      if (ps_ns != NULL) {
+          /* Execute configuration in layer. */
+          ps_ns->rf->ioctrl(NETSTK_CMD_RF_CHAN_NUM_SET, (void*) &data[2],  &p_err);
+          if ( p_err != NETSTK_ERR_NONE ) {
+            return 0;
+          }
+
+          return 1;
+      }else
+      {
+          return 0;
+      }
     }
+
   } else if(uip_buf[0] == '?') {
     PRINTF("Got request message of type %c\n", uip_buf[1]);
     if(data[1] == 'M' && len == 2) {
