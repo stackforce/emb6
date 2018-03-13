@@ -29,6 +29,14 @@
 #include <driverlib/rf_common_cmd.h>
 #include <driverlib/rf_prop_cmd.h>
 #include "bsp.h"
+
+
+#define CC13XX_50KBPS           1
+#define CC13XX_100KBPS          2
+#define CC13XX_150KBPS          3
+#define CC13XX_200KBPS          4
+#define CC13XX_250KBPS          5
+
 //#include <ti/drivers/rf/RF.h>
 
 
@@ -49,8 +57,8 @@ uint32_t pOverrides[] =
     0x10210000, // new CRC16 poly: CRC-16-CCITT normal form, 0x1021 is x^16 + x^15 + x^5 + 1
     0xC0040051, // CRC initialization (address)
     0x00000000, // CRC initialization (value)
-   //0xC0040061, // override to set the “crcXor” setting (4-byte value)
-   //0xFFFFFFFF, // new “crcXor” value to use (default is 0x00000000)
+   //0xC0040061, // override to set the ï¿½crcXorï¿½ setting (4-byte value)
+   //0xFFFFFFFF, // new ï¿½crcXorï¿½ value to use (default is 0x00000000)
 #endif
 // override_synth.xml
     ADI_HALFREG_OVERRIDE(0,61,0xF,0xD),
@@ -98,10 +106,34 @@ rfc_CMD_PROP_RADIO_DIV_SETUP_t RF_802_15_4_cmdPropRadioDivSetup =
     .condition.rule = 0x1,
     .condition.nSkip = 0x0,
     .modulation.modType = 0x1,
+#if CC13XX_DATARATE == CC13XX_50KBPS
     .modulation.deviation = 0x64,
-    .symbolRate.preScale = 0xf, // 0x6 Configuration for 250kbps
-    .symbolRate.rateWord = 0x8000, // 0x10000 Configuration for 250kbps
+    .symbolRate.preScale = 0xf,
+    .symbolRate.rateWord = 0x8000,
     .rxBw = 0x24,
+#elif CC13XX_DATARATE == CC13XX_100KBPS
+    .modulation.deviation = 0xC8,
+    .symbolRate.preScale = 0xf,
+    .symbolRate.rateWord = 0x10000,
+    .rxBw = 0x28,
+#elif CC13XX_DATARATE == CC13XX_150KBPS
+    .modulation.deviation = 0x12C,
+    .symbolRate.preScale = 0x5,
+    .symbolRate.rateWord = 0x8000,
+    .rxBw = 0x29,
+#elif CC13XX_DATARATE == CC13XX_200KBPS
+    .modulation.deviation = 0x190,
+    .symbolRate.preScale = 0xF,
+    .symbolRate.rateWord = 0x20000,
+    .rxBw = 0x2B,
+#elif CC13XX_DATARATE == CC13XX_250KBPS
+    .modulation.deviation = 0x1f4,
+    .symbolRate.preScale = 0x6,
+    .symbolRate.rateWord = 0x10000,
+    .rxBw = 0x2C,
+#else
+#error Invalid RF configuration
+#endif
     .preamConf.nPreamBytes = 0x3,
     .preamConf.preamMode = 0x0,
     .formatConf.nSwBits = 0x10,

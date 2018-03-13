@@ -111,6 +111,7 @@ SECTIONS
 
 
 	.bss:transactions_memb_memb_mem			:	> GPRAM
+	.bss:transactions_prio_memb_memb_mem	:	> GPRAM
 
     /*.bss:observers_memb_memb_mem			:	> GPRAM */
 
