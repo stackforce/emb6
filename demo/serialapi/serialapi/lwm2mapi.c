@@ -262,6 +262,15 @@ typedef enum
     * LWM2M2_RES_WR_RSP. */
   e_lwm2m_api_type_res_wr_rsp,
 
+  /** Read request initiated by the device. The Device calls this
+   * function whenever it receives an according request from the
+   * associated LWM2M server. */
+  e_lwm2m_api_type_inst_rd_req = 0x90,
+
+  /** The device/host has to answer to a LWM2M2_RES_RD_REQ using a
+    * LWM2M2_RES_RD_RSP. */
+  e_lwm2m_api_type_inst_rd_rsp,
+
   /** Write request to a LWM2M instance. Both device and host use this
     * command e.g. to set configurations or stored values. */
   e_lwm2m_api_type_inst_wr_req,
@@ -546,6 +555,8 @@ static void lwm2m_delete(void *request, void *response, uint8_t *buffer,
     uint16_t preferred_size, int32_t *offset, void* p_user);
 #endif /* #if LWM2M_SERIAL_API_SUPPORT_DYN_OBJ == TRUE */
 
+
+/** Write data to a resources depending on the command */
 static int32_t _wr_res( const lwm2m_resource_t* p_lwm2mRes, uint8_t** p_cmd,
     uint16_t* p_cmdLen, uint8_t* varLen );
 
@@ -2105,7 +2116,7 @@ static int32_t _hndl_inst_wr( uint8_t* p_cmd, uint16_t cmdLen,
     EMB6_ASSERT_RET( cmdLen >= sizeof(uint8_t), -2 );
     LWM2M_API_GET_FIELD( instId, p_data, cmdLen, uint8_t );
     EMB6_ASSERT_RET( cmdLen >= sizeof(uint16_t), -2 );
-    LWM2M_API_GET_FIELD( resNum, p_data, cmdLen, uint16_t );
+    LWM2M_API_GET_FIELD( resNum, p_data, cmdLen, uint8_t );
 
     objId = uip_ntohs( objId );
 
@@ -2154,7 +2165,7 @@ static int32_t _hndl_inst_wr( uint8_t* p_cmd, uint16_t cmdLen,
 
       p_lwm2mRes = p_lwm2mInst->p_resources;
       int j = 0;
-      for( j = 0; (j < p_lwm2mInst->count) && (p_lwm2mRes != NULL); i++ )
+      for( j = 0; (j < p_lwm2mInst->count) && (p_lwm2mRes != NULL); j++ )
       {
         if( p_lwm2mRes->id == resId )
           /* we found the according resource ID */
@@ -2172,6 +2183,8 @@ static int32_t _hndl_inst_wr( uint8_t* p_cmd, uint16_t cmdLen,
       {
         /* Resource was found. Write the resource value */
         ret = _wr_res( p_lwm2mRes, &p_data, &cmdLen, &resSize );
+        if(ret != 0)
+            break;
       }
     }
   }
