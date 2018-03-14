@@ -505,6 +505,7 @@ int8_t hal_pinGet(void * p_pin)
 int8_t hal_watchdogReset(void)
 {
     hal_watchdog_pending = 0;
+    WatchdogReloadSet(WATCHDOG_VAL);
     return 0;
 } /* hal_watchdogReset() */
 
