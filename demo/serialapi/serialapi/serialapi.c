@@ -593,14 +593,6 @@ static int8_t _rx_data( uint8_t* p_data, uint16_t len )
         SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
             e_serial_api_ret_error );
 
-        /* PWEB: Workaround for new SF protocol. */
-        EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
-        SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
-            0x01 );
-        /* PWEB: Workaround for new SF protocol. */
-        EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
-        SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
-            0xad );
         break;
     }
 
@@ -1110,15 +1102,6 @@ int8_t serialApiInput( uint8_t* p_data, uint16_t len, uint8_t valid )
       EMB6_ASSERT_RET( txBufLen >= sizeof(serialapi_frameID_t), -1 );
       SERIAL_API_SET_FIELD( p_txBuf, txBufLen, serialapi_frameID_t,
           e_serial_api_ret_error );
-
-      /* PWEB: Workaround for new SF protocol. */
-      EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
-      SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
-          0x01 );
-      /* PWEB: Workaround for new SF protocol. */
-      EMB6_ASSERT_RET( txBufLen >= sizeof(e_serial_api_ret_t), -1 );
-      SERIAL_API_SET_FIELD( p_txBuf, txBufLen, e_serial_api_ret_t,
-          0xad );
 
       EMB6_ASSERT_RET( _fn_tx != NULL, -1 );
       _fn_tx( (p_txBuf - _p_txBuf), _p_txParam );
