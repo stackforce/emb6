@@ -77,7 +77,7 @@
 #define OBLIG_EVENT_PRIOR                   ( 16U )
 
 /** Maximum amount of callbacks allowed */
-#define MAX_CALLBACK_COUNT                  ( 13U )
+#define MAX_CALLBACK_COUNT                  ( 5U )
 
 /** Maximum number of events that can be queued */
 #define EVPROC_QUEUE_SIZE                   ( 20U )
