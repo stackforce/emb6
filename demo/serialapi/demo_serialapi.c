@@ -173,7 +173,7 @@ static uint8_t* p_frameBufRx;
 static void* p_uart;
 
 /** Input ring buffer. */
-volatile uint8_t bufferRx[SERIALAPI_RX_BUF_LEN];
+volatile uint8_t bufferRx[UART_RX_BUF_LEN];
 /** Pointer to the Rx ring buffer's current write position */
 volatile uint8_t *bufferRxWrite;
 /** Pointer to the Rx ring buffer's current read position */
@@ -220,7 +220,7 @@ static void _rxDataCb( void* p_data )
   uint8_t data = *((uint8_t*)p_data);
 
   /** Check for space in the buffer */
-  if(SERIALAPI_RX_BUF_LEN > bufferRxLen)
+  if(UART_RX_BUF_LEN > bufferRxLen)
   {
     /* write data and increase length and write pointer */
     *bufferRxWrite = data;
@@ -228,7 +228,7 @@ static void _rxDataCb( void* p_data )
     bufferRxLen++;
 
     /** Check for an overflow of the read pointer and adjust if required. */
-    if(bufferRxWrite == &bufferRx[SERIALAPI_RX_BUF_LEN])
+    if(bufferRxWrite == &bufferRx[UART_RX_BUF_LEN])
     {
       bufferRxWrite = bufferRx;
     }
@@ -297,7 +297,7 @@ static uint16_t _readRxBuf( uint8_t *p_data, uint16_t len )
     /** Decrease the number of bytes in buffer. */
     bufferRxLen--;
     /** Check for an overflow of the read pointer and adjust if required. */
-    if(bufferRxRead == &bufferRx[SERIALAPI_RX_BUF_LEN])
+    if(bufferRxRead == &bufferRx[UART_RX_BUF_LEN])
     {
       bufferRxRead = bufferRx;
     } /* if */
