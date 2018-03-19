@@ -52,7 +52,7 @@
 #include "board_conf.h"
 
 #if (NETSTK_CFG_IEEE_802154G_EN == TRUE)
-static uint32_t crc32_table[256] = {
+static const uint32_t crc32_table[256] = {
     0x00000000u, 0x04c11db7u, 0x09823b6eu, 0x0d4326d9u,
     0x130476dcu, 0x17c56b6bu, 0x1a864db2u, 0x1e475005u,
     0x2608edb8u, 0x22c9f00fu, 0x2f8ad6d6u, 0x2b4bcb61u,
