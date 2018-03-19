@@ -94,11 +94,17 @@
 #endif
 
 /** Length of the input buffer */
+#ifndef SERIALAPI_RX_BUF_LEN
 #define SERIALAPI_RX_BUF_LEN                SERIALAPI_FRAMEBUF_MAX
+#endif
 /** Length of the output buffer */
+#ifndef SERIALAPI_TX_BUF_LEN
 #define SERIALAPI_TX_BUF_LEN                SERIALAPI_FRAMEBUF_MAX
-
-
+#endif
+/** Length of the output buffer */
+#ifndef UART_RX_BUF_LEN
+#define UART_RX_BUF_LEN                     SERIALAPI_FRAMEBUF_MAX
+#endif
 /*
  *  --- Local Function Prototypes ------------------------------------------ *
  */
