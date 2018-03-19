@@ -365,7 +365,7 @@ static void _serialmac_rxbuf_evt( void* mac_context, uint8_t* frame_buffer,
   /* Start the receive procedure and provide a buffer for the
    * payload of the frame. */
   enum sf_serialmac_return ret = sf_serialmac_rx_frame( mac_context, p_frameBufRx,
-      SERIALAPI_FRAMEBUF_MAX );
+                                                        SERIALAPI_RX_BUF_LEN );
 
   if( (ret == SF_SERIALMAC_RETURN_ERROR_BUFFER) ||
       (ret == SF_SERIALMAC_RETURN_ERROR_RW_PENDING) ||
