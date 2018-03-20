@@ -244,6 +244,11 @@ static uint16_t loc_parseMac( const char* mac, uint16_t defaultMac );
  * function definition. */
 static void loc_stackConf(uint16_t mac_addr_word);
 
+/**
+ * callback function for a EMB6 event. For more information please refer to the
+ * function definition. */
+static  void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data );
+
 
 /**
  * emb6 task.
@@ -439,6 +444,27 @@ static void loc_demoAppsConf(s_ns_t* s_ns)
 }
 
 /**
+ * \brief   Callback function for emb6 event.
+ *
+ *          This function is called every time a new event was generated
+ *          that this module has registered to before.
+ *
+ * \param   ev    The type of the event.
+ * \param   data  Extra data.
+ */
+void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data )
+{
+    if( c_event == EVENT_TYPE_STATUS_CHANGE )
+    {
+        if( (*(e_stack_status_t*)p_data) == STACK_STATUS_ACTIVE )
+        {
+            loc_demoAppsInit();
+        }
+    }
+}
+
+
+/**
  * \brief   Main emb6 task.
  *
  *          This function represents the main emb6 tasks. FIrst of all
@@ -490,8 +516,8 @@ static void emb6_task( void* p_params )
         /* no recovery possible, call global error handler. */
         emb6_errorHandler(&err);
     }
-
-    loc_demoAppsInit();
+    //register callback function to emb6 change status event
+    evproc_regCallback( EVENT_TYPE_STATUS_CHANGE, loc_Emb6_evt_Callback );
 
     /* Show that stack has been launched */
     bsp_led(HAL_LED0, EN_BSP_LED_OP_ON);
