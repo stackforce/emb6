@@ -605,7 +605,7 @@ static uint16_t _serverPort = LWM2MAPI_SERVER_PORT;
 static lwm2mapi_cfg_cliname_t _epName = LWM2MAPI_ENDPOINT;
 
 /** Registrated module pointer. */
-static fn_lwm2m_ApiInit_t fn_lwm2mModule;
+static fn_lwm2m_ApiInit_t fn_lwm2mModule = NULL;
 
 
 /*
