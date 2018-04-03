@@ -1,8 +1,8 @@
 [submodule "serial-interface-mac"]
 	path = demo/serialapi/serial-interface-mac
-	url = https://github.com/hso-esk/serial-interface-mac.git
+	url = https://github.com/stackforce/serial-interface-mac.git
 
 
 [submodule "crc"]
 	path = demo/serialapi/crc
-	url = https://github.com/hso-esk/crc.git
+	url = https://github.com/stackforce/crc.git
