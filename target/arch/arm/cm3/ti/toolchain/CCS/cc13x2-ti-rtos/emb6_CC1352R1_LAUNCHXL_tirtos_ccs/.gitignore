@@ -1,0 +1,9 @@
+/cc26xx_udp_client/
+.config
+.launches
+.xdchelp
+src/
+/Debug/*
+/Debug/
+/cc13x2_udp_client/
+/cc13x2_udp_server/
