@@ -12,7 +12,7 @@
 #define SLIP_RADIO_H_
 
 
-int8_t demo_extifInit(void);
+int8_t extifInit(void);
 
 /*============================================================================*/
 /*!
@@ -21,6 +21,6 @@ int8_t demo_extifInit(void);
     \return  0 on success, otherwise -1
 */
 /*============================================================================*/
-int8_t demo_extifConf(s_ns_t* pst_netStack);
+int8_t extifConf(s_ns_t* pst_netStack);
 
 #endif /* SLIP_RADIO_H_ */

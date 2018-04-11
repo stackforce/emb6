@@ -191,7 +191,7 @@ slip_input_callback(void)
   uip_len = 0;
 }
 /*---------------------------------------------------------------------------*/
-int8_t demo_extifInit(void)
+int8_t extifInit(void)
 {
     bsp_periphIRQRegister( EN_HAL_PERIPHIRQ_SLIPUART_RX, slip_input_byte, NULL );
     slip_set_input_callback(slip_input_callback);
@@ -200,7 +200,7 @@ int8_t demo_extifInit(void)
     return 0;
 }
 
-int8_t demo_extifConf(s_ns_t* p_netstk)
+int8_t extifConf(s_ns_t* p_netstk)
 {
   int8_t ret = -1;
 
