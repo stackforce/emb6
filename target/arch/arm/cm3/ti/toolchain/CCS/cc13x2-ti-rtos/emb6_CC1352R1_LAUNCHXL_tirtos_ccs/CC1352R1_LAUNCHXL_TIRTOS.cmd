@@ -108,6 +108,24 @@ SECTIONS
     .sysmem         :   > SRAM
     .stack          :   > SRAM (HIGH)
     .nonretenvar    :   > SRAM
+
+    .bss:transactions_memb_memb_mem			:	> GPRAM
+	.bss:transactions_prio_memb_memb_mem	:	> GPRAM
+
+    /*.bss:observers_memb_memb_mem			:	> GPRAM */
+
+    .bss:lwm2mresource_storage_memb_mem		:	> GPRAM
+    .bss:lwm2mresource_storage_memb_count	:	> GPRAM
+
+    .bss:lwm2mdata_storage_memb_mem			:	> GPRAM
+    .bss:lwm2mdata_storage_memb_count		:	> GPRAM
+
+    /*.bss:lwm2mobject_storage_memb_mem		:	> GPRAM
+    .bss:lwm2mobject_storage_memb_count		:	> GPRAM
+
+    .bss:lwm2minstance_storage_memb_mem		:	> GPRAM
+    .bss:lwm2minstance_storage_memb_count	:	> GPRAM*/
+
     /* Heap buffer used by HeapMem */
     .priheap   : {
         __primary_heap_start__ = .;

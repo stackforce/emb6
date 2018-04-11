@@ -89,7 +89,7 @@
 		<link>
 			<name>demo/serialapi</name>
 			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
+			<locationURI>REPO_ROOT_DIR/demo/serialapi</locationURI>
 		</link>
 		<link>
 			<name>demo/udp_alive</name>
@@ -283,31 +283,6 @@
 		</link>
 		<link>
 			<name>demo/mdns/server</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/SConscript</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/demo_serialapi.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/demo_serialapi.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/demo_serialapi.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/demo_serialapi.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serial-interface-mac</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -985,31 +960,6 @@
 			<name>demo/mdns/server/demo_mdns_srv.h</name>
 			<type>1</type>
 			<locationURI>PARENT-9-PROJECT_LOC/demo/mdns/server/demo_mdns_srv.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects</name>
-			<type>2</type>
-			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2mapi.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2mapi.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2mapi.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2mapi.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/serialapi.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/serialapi.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/serialapi.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/serialapi.h</locationURI>
 		</link>
 		<link>
 			<name>demo/udp_socket/client/SConscript</name>
@@ -1740,116 +1690,6 @@
 			<name>demo/coap/server/resources/res-tick.c</name>
 			<type>1</type>
 			<locationURI>PARENT-9-PROJECT_LOC/demo/coap/server/resources/res-tick.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-airpressure.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-airpressure.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-airpressure.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-airpressure.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-humidity.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-humidity.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-humidity.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-humidity.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-temp.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-temp.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-temp.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-bme280-temp.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-counter.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-counter.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-counter.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-counter.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-barometer.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-barometer.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-barometer.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-barometer.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-current.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-current.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-current.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-current.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-humidity.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-humidity.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-humidity.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-humidity.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-illuminance.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-illuminance.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-illuminance.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-illuminance.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-temperature.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-temperature.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-temperature.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-temperature.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-voltage.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-voltage.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-voltage.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-ipso-voltage.h</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-temp.c</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-temp.c</locationURI>
-		</link>
-		<link>
-			<name>demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-temp.h</name>
-			<type>1</type>
-			<locationURI>PARENT-9-PROJECT_LOC/demo/serialapi/serialapi/lwm2m-objects/lwm2m-object-temp.h</locationURI>
 		</link>
 		<link>
 			<name>emb6/inc/apl/dns/resolv.h</name>
