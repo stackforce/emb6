@@ -104,11 +104,12 @@
 #endif /* #if DEMO_USE_MDNS */
 
 #if USE_SERIALAPI_SERVICE
-#include "demo_serialapi.h"
+#include "serialapi_core.h"
+#include "serialapi.h"
 #endif /* #if DEMO_USE_SERIALAPI */
 
 #if USE_UDPALIVE_SERVICE
-#include "demo_udp_alive.h"
+#include "udp_alive.h"
 #endif /* #if DEMO_USE_UDPALIVE */
 
 #if USE_LWM2MAPI_SERVICE
@@ -393,7 +394,7 @@ static void loc_demoAppsInit(void)
 #endif /* #if DEMO_USE_6TISCH */
 
 #if DEMO_USE_DTLS
-    EMB6_DEMO_INIT(dtls;
+    EMB6_DEMO_INIT(dtls);
 #endif /* #if DEMO_USE_DTLS */
 
 }
@@ -457,12 +458,12 @@ static void loc_serviceInit(void)
 
 #if USE_LWM2MAPI_SERVICE
     serialApiRegister( 0xE1, lwm2mApiInit, lwm2mApiInput );
-#endif /* #if DEMO_USE_SERIALAPI */
+#endif /* #if USE_LWM2MAPI_SERVICE */
 
 #endif /* #if DEMO_USE_SERIALAPI */
 
 #if USE_UDPALIVE_SERVICE
-    udpAliveInit();
+    udpAliveServiceInit();
 #endif /* #if DEMO_USE_UDPALIVE */
 
 }
@@ -477,12 +478,12 @@ static void loc_serviceInit(void)
 static void loc_serviceConf(s_ns_t* s_ns)
 {
 
-#if DEMO_USE_SERIALAPI
+#if USE_SERIALAPI_SERVICE
     serialApiServiceConf(s_ns);
 #endif /* #if DEMO_USE_SERIALAPI */
 
-#if DEMO_USE_UDPALIVE
-    udpAliveConf(s_ns);
+#if USE_UDPALIVE_SERVICE
+    udpAliveServiceConf(s_ns);
 #endif /* #if DEMO_USE_UDPALIVE */
 
 }

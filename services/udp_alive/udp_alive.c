@@ -63,7 +63,7 @@
 
 #include "emb6.h"
 #include "bsp.h"
-#include "demo_udp_alive.h"
+#include "udp_alive.h"
 #include "etimer.h"
 #include "evproc.h"
 #include "tcpip.h"

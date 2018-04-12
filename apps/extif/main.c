@@ -302,10 +302,7 @@ void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data )
     {
         if( (*(e_stack_status_t*)p_data) == STACK_STATUS_ACTIVE )
         {
-            #if USE_EXTIF
-            //init extif application
-            extifInit();
-            #endif /* #if USE_EXTIF */
+            //no services to intiate
         }
     }
 
@@ -372,7 +369,12 @@ static void emb6_task( void* p_params )
     }
 
     //register callback function to emb6 change status event
-    evproc_regCallback( EVENT_TYPE_STATUS_CHANGE, loc_Emb6_evt_Callback );
+    //evproc_regCallback( EVENT_TYPE_STATUS_CHANGE, loc_Emb6_evt_Callback );
+
+    #if USE_EXTIF
+    //init extif application
+    extifInit();
+    #endif /* #if USE_EXTIF */
 
     /* Show that stack has been launched */
     bsp_led(HAL_LED0, EN_BSP_LED_OP_ON);

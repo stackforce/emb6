@@ -134,7 +134,7 @@ s_mac_phy_conf_t mac_phy_config = {
     /* by default the configuration is not yet saved */
     .is_saved  = FALSE,
 
-#if DEMO_USE_EXTIF
+#if USE_EXTIF
     /* set extif mac address */
     .mac_address = {0x00, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff},
 #else

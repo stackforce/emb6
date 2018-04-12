@@ -73,7 +73,7 @@
 #include "emb6.h"
 #include "bsp.h"
 #include "evproc.h"
-#include "demo_serialapi.h"
+#include "serialapi_core.h"
 #include "sf_serialmac.h"
 #include "serialapi.h"
 
