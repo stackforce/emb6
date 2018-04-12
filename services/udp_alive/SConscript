@@ -60,7 +60,7 @@ udp_alive = {
 
     # C global defines
     'CPPDEFINES' : [
-        ('DEMO_USE_UDPALIVE',1),
+        ('USE_UDPALIVE_SERVICE',1),
     ],
 
     # GCC flags

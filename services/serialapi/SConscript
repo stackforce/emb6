@@ -66,7 +66,7 @@ serialapi = {
 
     # C global defines
     'CPPDEFINES' : [
-        ('DEMO_USE_SERIALAPI', 1),
+        ('USE_SERIALAPI_SERVICE', 1),
         ('LOGGER_LEVEL', 3),
         ('HAL_SUPPORT_SLIPUART', 1),
         ('HAL_SUPPORT_PERIPHIRQ_SLIPUART_RX', 1),

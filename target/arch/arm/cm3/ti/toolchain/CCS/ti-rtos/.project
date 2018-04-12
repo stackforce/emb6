@@ -6272,9 +6272,9 @@
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.c</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.h</name>
+			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_4x4.h</name>

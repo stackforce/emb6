@@ -176,7 +176,7 @@
           <state>LOGGER_LEVEL=0</state>
           <state>LOGGER_DEMO_COAP=1</state>
           <state>DEMO_USE_COAP=1</state>
-          <state>DEMO_USE_UDPALIVE=1</state>
+          <state>USE_UDPALIVE_SERVICE=1</state>
           <state>DEMO_USE_UDP_SOCKET=1</state>
           <state>DEMO_UDP_SOCKET_ROLE_CLIENT=1</state>
           <state>CONF_USE_SERVER=1</state>
@@ -1216,7 +1216,7 @@
           <state>LOGGER_LEVEL=0</state>
           <state>LOGGER_DEMO_COAP=1</state>
           <state>DEMO_USE_COAP=1</state>
-          <state>DEMO_USE_UDPALIVE=1</state>
+          <state>USE_UDPALIVE_SERVICE=1</state>
           <state>DEMO_USE_UDP_SOCKET=1</state>
           <state>DEMO_UDP_SOCKET_ROLE_CLIENT=1</state>
           <state>CONF_USE_SERVER=1</state>

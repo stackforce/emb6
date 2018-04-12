@@ -106,11 +106,11 @@
 #if USE_SERIALAPI_SERVICE
 #include "serialapi_core.h"
 #include "serialapi.h"
-#endif /* #if DEMO_USE_SERIALAPI */
+#endif /* #if USE_SERIALAPI_SERVICE */
 
 #if USE_UDPALIVE_SERVICE
 #include "udp_alive.h"
-#endif /* #if DEMO_USE_UDPALIVE */
+#endif /* #if USE_UDPALIVE_SERVICE */
 
 #if USE_LWM2MAPI_SERVICE
 #include "lwm2mapi.h"
@@ -460,11 +460,11 @@ static void loc_serviceInit(void)
     serialApiRegister( 0xE1, lwm2mApiInit, lwm2mApiInput );
 #endif /* #if USE_LWM2MAPI_SERVICE */
 
-#endif /* #if DEMO_USE_SERIALAPI */
+#endif /* #if USE_SERIALAPI_SERVICE */
 
 #if USE_UDPALIVE_SERVICE
     udpAliveServiceInit();
-#endif /* #if DEMO_USE_UDPALIVE */
+#endif /* #if USE_UDPALIVE_SERVICE */
 
 }
 
@@ -480,11 +480,11 @@ static void loc_serviceConf(s_ns_t* s_ns)
 
 #if USE_SERIALAPI_SERVICE
     serialApiServiceConf(s_ns);
-#endif /* #if DEMO_USE_SERIALAPI */
+#endif /* #if USE_SERIALAPI_SERVICE */
 
 #if USE_UDPALIVE_SERVICE
     udpAliveServiceConf(s_ns);
-#endif /* #if DEMO_USE_UDPALIVE */
+#endif /* #if USE_UDPALIVE_SERVICE */
 
 }
 
@@ -504,10 +504,11 @@ void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data )
     {
         if( (*(e_stack_status_t*)p_data) == STACK_STATUS_ACTIVE )
         {
+            //services init
             loc_serviceInit();
 
+            //demo init
             loc_demoAppsInit();
-
         }
     }
 }

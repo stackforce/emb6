@@ -61,7 +61,7 @@
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/ccfg.c</locationURI>
 		</link>
 		<link>
-			<name>emb6</name>
+			<name>core</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -86,32 +86,32 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/SConscript</name>
+			<name>core/SConscript</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/SConscript</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/SConscript</locationURI>
 		</link>
 		<link>
-			<name>emb6/emb6.c</name>
+			<name>core/emb6.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/emb6.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/emb6.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/emb6.h</name>
+			<name>core/emb6.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/emb6.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/emb6.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/emb6_conf.h</name>
+			<name>core/emb6_conf.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/emb6_conf.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/emb6_conf.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc</name>
+			<name>core/inc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src</name>
+			<name>core/src</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -206,52 +206,52 @@
 			<locationURI>REPO_ROOT_DIR/apps/extif/slip_radio.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl</name>
+			<name>core/inc/apl</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll</name>
+			<name>core/inc/dll</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net</name>
+			<name>core/inc/net</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/phy</name>
+			<name>core/inc/phy</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/sock</name>
+			<name>core/inc/sock</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl</name>
+			<name>core/src/apl</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll</name>
+			<name>core/src/dll</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net</name>
+			<name>core/src/net</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/phy</name>
+			<name>core/src/phy</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/sock</name>
+			<name>core/src/sock</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
@@ -646,209 +646,209 @@
 			<locationURI>REPO_ROOT_DIR/utils/src/timer.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/dns</name>
+			<name>core/inc/apl/dns</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap</name>
+			<name>core/inc/apl/er-coap</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m</name>
+			<name>core/inc/apl/oma-lwm2m</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/rest-engine</name>
+			<name>core/inc/apl/rest-engine</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/dllc</name>
+			<name>core/inc/dll/dllc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/dllsec</name>
+			<name>core/inc/dll/dllsec</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/framer</name>
+			<name>core/inc/dll/framer</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/mac</name>
+			<name>core/inc/dll/mac</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/readme</name>
+			<name>core/inc/dll/readme</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/readme</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/readme</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch</name>
+			<name>core/inc/dll/tsch</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls</name>
+			<name>core/inc/net/dtls</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6</name>
+			<name>core/inc/net/ipv6</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/link-stats.h</name>
+			<name>core/inc/net/link-stats.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/link-stats.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/link-stats.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/net-debug.h</name>
+			<name>core/inc/net/net-debug.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/net-debug.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/net-debug.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/rpl</name>
+			<name>core/inc/net/rpl</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/sicslowpan</name>
+			<name>core/inc/net/sicslowpan</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/phy/phy_framer_802154.h</name>
+			<name>core/inc/phy/phy_framer_802154.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/phy/phy_framer_802154.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/phy/phy_framer_802154.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/phy/readme</name>
+			<name>core/inc/phy/readme</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/phy/readme</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/phy/readme</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/sock/tcp-socket.h</name>
+			<name>core/inc/sock/tcp-socket.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/sock/tcp-socket.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/sock/tcp-socket.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/sock/udp-socket.h</name>
+			<name>core/inc/sock/udp-socket.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/sock/udp-socket.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/sock/udp-socket.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/dns</name>
+			<name>core/src/apl/dns</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap</name>
+			<name>core/src/apl/er-coap</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m</name>
+			<name>core/src/apl/oma-lwm2m</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/rest-engine</name>
+			<name>core/src/apl/rest-engine</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/dllc</name>
+			<name>core/src/dll/dllc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/dllsec</name>
+			<name>core/src/dll/dllsec</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/framer</name>
+			<name>core/src/dll/framer</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/mac</name>
+			<name>core/src/dll/mac</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch</name>
+			<name>core/src/dll/tsch</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls</name>
+			<name>core/src/net/dtls</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6</name>
+			<name>core/src/net/ipv6</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/link-stats.c</name>
+			<name>core/src/net/link-stats.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/link-stats.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/link-stats.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/net-debug.c</name>
+			<name>core/src/net/net-debug.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/net-debug.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/net-debug.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl</name>
+			<name>core/src/net/rpl</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/sicslowpan</name>
+			<name>core/src/net/sicslowpan</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/slip</name>
+			<name>core/src/net/slip</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/phy/phy_802154.c</name>
+			<name>core/src/phy/phy_802154.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/phy/phy_802154.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/phy/phy_802154.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/phy/phy_framer_802154.c</name>
+			<name>core/src/phy/phy_framer_802154.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/phy/phy_framer_802154.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/phy/phy_framer_802154.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/phy/phy_null.c</name>
+			<name>core/src/phy/phy_null.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/phy/phy_null.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/phy/phy_null.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/sock/tcp-socket.c</name>
+			<name>core/src/sock/tcp-socket.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/sock/tcp-socket.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/sock/tcp-socket.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/sock/udp-socket.c</name>
+			<name>core/src/sock/udp-socket.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/sock/udp-socket.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/sock/udp-socket.c</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm0plus</name>
@@ -1296,874 +1296,874 @@
 			<locationURI>REPO_ROOT_DIR/target/mcu/template/hal_template.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/dns/resolv.h</name>
+			<name>core/inc/apl/dns/resolv.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/dns/resolv.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/dns/resolv.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-block1.h</name>
+			<name>core/inc/apl/er-coap/er-coap-block1.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-block1.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-block1.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-conf.h</name>
+			<name>core/inc/apl/er-coap/er-coap-conf.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-conf.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-conf.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-constants.h</name>
+			<name>core/inc/apl/er-coap/er-coap-constants.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-constants.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-constants.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-engine.h</name>
+			<name>core/inc/apl/er-coap/er-coap-engine.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-engine.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-engine.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-observe-client.h</name>
+			<name>core/inc/apl/er-coap/er-coap-observe-client.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-observe-client.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-observe-client.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-observe.h</name>
+			<name>core/inc/apl/er-coap/er-coap-observe.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-observe.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-observe.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-separate.h</name>
+			<name>core/inc/apl/er-coap/er-coap-separate.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-separate.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-separate.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap-transactions.h</name>
+			<name>core/inc/apl/er-coap/er-coap-transactions.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap-transactions.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap-transactions.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/er-coap/er-coap.h</name>
+			<name>core/inc/apl/er-coap/er-coap.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/er-coap/er-coap.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/er-coap/er-coap.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/lwm2m-device.h</name>
+			<name>core/inc/apl/oma-lwm2m/lwm2m-device.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/lwm2m-device.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/lwm2m-device.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/lwm2m-engine.h</name>
+			<name>core/inc/apl/oma-lwm2m/lwm2m-engine.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/lwm2m-engine.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/lwm2m-engine.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/lwm2m-json.h</name>
+			<name>core/inc/apl/oma-lwm2m/lwm2m-json.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/lwm2m-json.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/lwm2m-json.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/lwm2m-object.h</name>
+			<name>core/inc/apl/oma-lwm2m/lwm2m-object.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/lwm2m-object.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/lwm2m-object.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/lwm2m-plain-text.h</name>
+			<name>core/inc/apl/oma-lwm2m/lwm2m-plain-text.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/lwm2m-plain-text.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/lwm2m-plain-text.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/lwm2m-server.h</name>
+			<name>core/inc/apl/oma-lwm2m/lwm2m-server.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/lwm2m-server.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/lwm2m-server.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/oma-tlv-reader.h</name>
+			<name>core/inc/apl/oma-lwm2m/oma-tlv-reader.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/oma-tlv-reader.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/oma-tlv-reader.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/oma-tlv-writer.h</name>
+			<name>core/inc/apl/oma-lwm2m/oma-tlv-writer.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/oma-tlv-writer.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/oma-tlv-writer.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/oma-lwm2m/oma-tlv.h</name>
+			<name>core/inc/apl/oma-lwm2m/oma-tlv.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/oma-lwm2m/oma-tlv.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/oma-lwm2m/oma-tlv.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/rest-engine/rest-constants.h</name>
+			<name>core/inc/apl/rest-engine/rest-constants.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/rest-engine/rest-constants.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/rest-engine/rest-constants.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/apl/rest-engine/rest-engine.h</name>
+			<name>core/inc/apl/rest-engine/rest-engine.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/apl/rest-engine/rest-engine.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/apl/rest-engine/rest-engine.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/dllc/linkaddr.h</name>
+			<name>core/inc/dll/dllc/linkaddr.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/dllc/linkaddr.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/dllc/linkaddr.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/dllsec/dllsec.h</name>
+			<name>core/inc/dll/dllsec/dllsec.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/dllsec/dllsec.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/dllsec/dllsec.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/dllsec/dllsec_null.h</name>
+			<name>core/inc/dll/dllsec/dllsec_null.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/dllsec/dllsec_null.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/dllsec/dllsec_null.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/framer/framer.h</name>
+			<name>core/inc/dll/framer/framer.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/framer/framer.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/framer/framer.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/framer/framer_802154.h</name>
+			<name>core/inc/dll/framer/framer_802154.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/framer/framer_802154.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/framer/framer_802154.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/framer/framer_802154_ll.h</name>
+			<name>core/inc/dll/framer/framer_802154_ll.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/framer/framer_802154_ll.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/framer/framer_802154_ll.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/framer/framer_smartmac.h</name>
+			<name>core/inc/dll/framer/framer_smartmac.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/framer/framer_smartmac.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/framer/framer_smartmac.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/mac/mac.h</name>
+			<name>core/inc/dll/mac/mac.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/mac/mac.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/mac/mac.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/frame802154e-ie.h</name>
+			<name>core/inc/dll/tsch/frame802154e-ie.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/frame802154e-ie.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/frame802154e-ie.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/mac-sequence.h</name>
+			<name>core/inc/dll/tsch/mac-sequence.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/mac-sequence.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/mac-sequence.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-adaptive-timesync.h</name>
+			<name>core/inc/dll/tsch/tsch-adaptive-timesync.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-adaptive-timesync.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-adaptive-timesync.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-asn.h</name>
+			<name>core/inc/dll/tsch/tsch-asn.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-asn.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-asn.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-conf.h</name>
+			<name>core/inc/dll/tsch/tsch-conf.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-conf.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-conf.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-log.h</name>
+			<name>core/inc/dll/tsch/tsch-log.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-log.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-log.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-packet.h</name>
+			<name>core/inc/dll/tsch/tsch-packet.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-packet.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-packet.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-private.h</name>
+			<name>core/inc/dll/tsch/tsch-private.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-private.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-private.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-queue.h</name>
+			<name>core/inc/dll/tsch/tsch-queue.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-queue.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-queue.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-rpl.h</name>
+			<name>core/inc/dll/tsch/tsch-rpl.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-rpl.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-rpl.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-schedule.h</name>
+			<name>core/inc/dll/tsch/tsch-schedule.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-schedule.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-schedule.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-security.h</name>
+			<name>core/inc/dll/tsch/tsch-security.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-security.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-security.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch-slot-operation.h</name>
+			<name>core/inc/dll/tsch/tsch-slot-operation.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch-slot-operation.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch-slot-operation.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch.h</name>
+			<name>core/inc/dll/tsch/tsch.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/dll/tsch/tsch_null_adaptive.h</name>
+			<name>core/inc/dll/tsch/tsch_null_adaptive.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/dll/tsch/tsch_null_adaptive.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/dll/tsch/tsch_null_adaptive.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/aes</name>
+			<name>core/inc/net/dtls/aes</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/alert.h</name>
+			<name>core/inc/net/dtls/alert.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/alert.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/alert.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/ccm.h</name>
+			<name>core/inc/net/dtls/ccm.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/ccm.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/ccm.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/crypto.h</name>
+			<name>core/inc/net/dtls/crypto.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/crypto.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/crypto.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/debug.h</name>
+			<name>core/inc/net/dtls/debug.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/debug.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/debug.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/dtls.h</name>
+			<name>core/inc/net/dtls/dtls.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/dtls.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/dtls.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/dtls_config.h</name>
+			<name>core/inc/net/dtls/dtls_config.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/dtls_config.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/dtls_config.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/dtls_time.h</name>
+			<name>core/inc/net/dtls/dtls_time.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/dtls_time.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/dtls_time.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/ecc</name>
+			<name>core/inc/net/dtls/ecc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/global.h</name>
+			<name>core/inc/net/dtls/global.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/global.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/global.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/hmac.h</name>
+			<name>core/inc/net/dtls/hmac.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/hmac.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/hmac.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/netq.h</name>
+			<name>core/inc/net/dtls/netq.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/netq.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/netq.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/numeric.h</name>
+			<name>core/inc/net/dtls/numeric.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/numeric.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/numeric.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/peer.h</name>
+			<name>core/inc/net/dtls/peer.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/peer.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/peer.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/platform.h</name>
+			<name>core/inc/net/dtls/platform.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/platform.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/platform.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/prng.h</name>
+			<name>core/inc/net/dtls/prng.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/prng.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/prng.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/session.h</name>
+			<name>core/inc/net/dtls/session.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/session.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/session.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/sha2</name>
+			<name>core/inc/net/dtls/sha2</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/state.h</name>
+			<name>core/inc/net/dtls/state.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/state.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/state.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/t_list.h</name>
+			<name>core/inc/net/dtls/t_list.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/t_list.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/t_list.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/tinydtls.h</name>
+			<name>core/inc/net/dtls/tinydtls.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/tinydtls.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/tinydtls.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/uthash.h</name>
+			<name>core/inc/net/dtls/uthash.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/uthash.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/uthash.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/utlist.h</name>
+			<name>core/inc/net/dtls/utlist.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/utlist.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/utlist.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast</name>
+			<name>core/inc/net/ipv6/multicast</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/nbr-table.h</name>
+			<name>core/inc/net/ipv6/nbr-table.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/nbr-table.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/nbr-table.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/rime.h</name>
+			<name>core/inc/net/ipv6/rime.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/rime.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/rime.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/tcpip.h</name>
+			<name>core/inc/net/ipv6/tcpip.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/tcpip.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/tcpip.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-debug.h</name>
+			<name>core/inc/net/ipv6/uip-debug.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-debug.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-debug.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-ds6-nbr.h</name>
+			<name>core/inc/net/ipv6/uip-ds6-nbr.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-ds6-nbr.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-ds6-nbr.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-ds6-route.h</name>
+			<name>core/inc/net/ipv6/uip-ds6-route.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-ds6-route.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-ds6-route.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-ds6.h</name>
+			<name>core/inc/net/ipv6/uip-ds6.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-ds6.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-ds6.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-fw.h</name>
+			<name>core/inc/net/ipv6/uip-fw.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-fw.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-fw.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-icmp6.h</name>
+			<name>core/inc/net/ipv6/uip-icmp6.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-icmp6.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-icmp6.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-nameserver.h</name>
+			<name>core/inc/net/ipv6/uip-nameserver.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-nameserver.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-nameserver.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-nd6.h</name>
+			<name>core/inc/net/ipv6/uip-nd6.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-nd6.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-nd6.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-packetqueue.h</name>
+			<name>core/inc/net/ipv6/uip-packetqueue.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-packetqueue.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-packetqueue.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-split.h</name>
+			<name>core/inc/net/ipv6/uip-split.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-split.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-split.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip-udp-packet.h</name>
+			<name>core/inc/net/ipv6/uip-udp-packet.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip-udp-packet.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip-udp-packet.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip.h</name>
+			<name>core/inc/net/ipv6/uip.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uip_arch.h</name>
+			<name>core/inc/net/ipv6/uip_arch.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uip_arch.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uip_arch.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uiplib.h</name>
+			<name>core/inc/net/ipv6/uiplib.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uiplib.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uiplib.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/uipopt.h</name>
+			<name>core/inc/net/ipv6/uipopt.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/uipopt.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/uipopt.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/rpl/rpl-ns.h</name>
+			<name>core/inc/net/rpl/rpl-ns.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/rpl/rpl-ns.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/rpl/rpl-ns.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/rpl/rpl-private.h</name>
+			<name>core/inc/net/rpl/rpl-private.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/rpl/rpl-private.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/rpl/rpl-private.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/rpl/rpl.h</name>
+			<name>core/inc/net/rpl/rpl.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/rpl/rpl.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/rpl/rpl.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/sicslowpan/framer-802154.h</name>
+			<name>core/inc/net/sicslowpan/framer-802154.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/sicslowpan/framer-802154.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/sicslowpan/framer-802154.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/sicslowpan/sicslowpan.h</name>
+			<name>core/inc/net/sicslowpan/sicslowpan.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/sicslowpan/sicslowpan.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/sicslowpan/sicslowpan.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/dns/resolv.c</name>
+			<name>core/src/apl/dns/resolv.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/dns/resolv.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/dns/resolv.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-block1.c</name>
+			<name>core/src/apl/er-coap/er-coap-block1.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-block1.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-block1.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-engine.c</name>
+			<name>core/src/apl/er-coap/er-coap-engine.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-engine.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-engine.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-observe-client.c</name>
+			<name>core/src/apl/er-coap/er-coap-observe-client.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-observe-client.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-observe-client.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-observe.c</name>
+			<name>core/src/apl/er-coap/er-coap-observe.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-observe.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-observe.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-res-well-known-core.c</name>
+			<name>core/src/apl/er-coap/er-coap-res-well-known-core.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-res-well-known-core.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-res-well-known-core.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-separate.c</name>
+			<name>core/src/apl/er-coap/er-coap-separate.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-separate.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-separate.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap-transactions.c</name>
+			<name>core/src/apl/er-coap/er-coap-transactions.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap-transactions.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap-transactions.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/er-coap/er-coap.c</name>
+			<name>core/src/apl/er-coap/er-coap.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/er-coap/er-coap.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/er-coap/er-coap.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-device.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-device.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-device.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-device.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-engine.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-engine.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-engine.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-engine.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-json.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-json.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-json.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-json.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-object.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-object.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-object.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-object.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-plain-text.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-plain-text.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-plain-text.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-plain-text.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-security.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-security.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-security.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-security.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/lwm2m-server.c</name>
+			<name>core/src/apl/oma-lwm2m/lwm2m-server.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/lwm2m-server.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/lwm2m-server.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/oma-tlv-reader.c</name>
+			<name>core/src/apl/oma-lwm2m/oma-tlv-reader.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/oma-tlv-reader.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/oma-tlv-reader.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/oma-tlv-writer.c</name>
+			<name>core/src/apl/oma-lwm2m/oma-tlv-writer.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/oma-tlv-writer.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/oma-tlv-writer.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/oma-lwm2m/oma-tlv.c</name>
+			<name>core/src/apl/oma-lwm2m/oma-tlv.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/oma-lwm2m/oma-tlv.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/oma-lwm2m/oma-tlv.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/apl/rest-engine/rest-engine.c</name>
+			<name>core/src/apl/rest-engine/rest-engine.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/apl/rest-engine/rest-engine.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/apl/rest-engine/rest-engine.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/dllc/dllc_802154.c</name>
+			<name>core/src/dll/dllc/dllc_802154.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/dllc/dllc_802154.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/dllc/dllc_802154.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/dllc/dllc_null.c</name>
+			<name>core/src/dll/dllc/dllc_null.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/dllc/dllc_null.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/dllc/dllc_null.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/dllc/linkaddr.c</name>
+			<name>core/src/dll/dllc/linkaddr.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/dllc/linkaddr.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/dllc/linkaddr.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/dllsec/dllsec_null.c</name>
+			<name>core/src/dll/dllsec/dllsec_null.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/dllsec/dllsec_null.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/dllsec/dllsec_null.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/framer/framer_802154.c</name>
+			<name>core/src/dll/framer/framer_802154.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/framer/framer_802154.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/framer/framer_802154.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/framer/framer_802154_ll.c</name>
+			<name>core/src/dll/framer/framer_802154_ll.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/framer/framer_802154_ll.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/framer/framer_802154_ll.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/framer/framer_no.c</name>
+			<name>core/src/dll/framer/framer_no.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/framer/framer_no.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/framer/framer_no.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/framer/framer_null.c</name>
+			<name>core/src/dll/framer/framer_null.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/framer/framer_null.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/framer/framer_null.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/framer/framer_smartmac.c</name>
+			<name>core/src/dll/framer/framer_smartmac.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/framer/framer_smartmac.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/framer/framer_smartmac.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/mac/mac_802154.c</name>
+			<name>core/src/dll/mac/mac_802154.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/mac/mac_802154.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/mac/mac_802154.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/mac/mac_null.c</name>
+			<name>core/src/dll/mac/mac_null.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/mac/mac_null.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/mac/mac_null.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/mac/mac_smartmac.c</name>
+			<name>core/src/dll/mac/mac_smartmac.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/mac/mac_smartmac.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/mac/mac_smartmac.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/frame802154e-ie.c</name>
+			<name>core/src/dll/tsch/frame802154e-ie.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/frame802154e-ie.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/frame802154e-ie.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/mac-sequence.c</name>
+			<name>core/src/dll/tsch/mac-sequence.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/mac-sequence.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/mac-sequence.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-adaptive-timesync.c</name>
+			<name>core/src/dll/tsch/tsch-adaptive-timesync.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-adaptive-timesync.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-adaptive-timesync.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-log.c</name>
+			<name>core/src/dll/tsch/tsch-log.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-log.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-log.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-packet.c</name>
+			<name>core/src/dll/tsch/tsch-packet.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-packet.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-packet.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-queue.c</name>
+			<name>core/src/dll/tsch/tsch-queue.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-queue.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-queue.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-rpl.c</name>
+			<name>core/src/dll/tsch/tsch-rpl.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-rpl.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-rpl.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-schedule.c</name>
+			<name>core/src/dll/tsch/tsch-schedule.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-schedule.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-schedule.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-security.c</name>
+			<name>core/src/dll/tsch/tsch-security.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-security.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-security.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch-slot-operation.c</name>
+			<name>core/src/dll/tsch/tsch-slot-operation.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch-slot-operation.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch-slot-operation.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch.c</name>
+			<name>core/src/dll/tsch/tsch.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/dll/tsch/tsch_null_adaptive.c</name>
+			<name>core/src/dll/tsch/tsch_null_adaptive.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/dll/tsch/tsch_null_adaptive.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/tsch/tsch_null_adaptive.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/aes</name>
+			<name>core/src/net/dtls/aes</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/ccm.c</name>
+			<name>core/src/net/dtls/ccm.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/ccm.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/ccm.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/crypto.c</name>
+			<name>core/src/net/dtls/crypto.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/crypto.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/crypto.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/debug.c</name>
+			<name>core/src/net/dtls/debug.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/debug.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/debug.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/dtls.c</name>
+			<name>core/src/net/dtls/dtls.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/dtls.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/dtls.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/dtls_time.c</name>
+			<name>core/src/net/dtls/dtls_time.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/dtls_time.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/dtls_time.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/ecc</name>
+			<name>core/src/net/dtls/ecc</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/hmac.c</name>
+			<name>core/src/net/dtls/hmac.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/hmac.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/hmac.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/netq.c</name>
+			<name>core/src/net/dtls/netq.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/netq.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/netq.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/peer.c</name>
+			<name>core/src/net/dtls/peer.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/peer.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/peer.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/session.c</name>
+			<name>core/src/net/dtls/session.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/session.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/session.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/sha2</name>
+			<name>core/src/net/dtls/sha2</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/multicast</name>
+			<name>core/src/net/ipv6/multicast</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/nbr-table.c</name>
+			<name>core/src/net/ipv6/nbr-table.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/nbr-table.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/nbr-table.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/tcpip.c</name>
+			<name>core/src/net/ipv6/tcpip.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/tcpip.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/tcpip.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-debug.c</name>
+			<name>core/src/net/ipv6/uip-debug.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-debug.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-debug.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-ds6-nbr.c</name>
+			<name>core/src/net/ipv6/uip-ds6-nbr.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-ds6-nbr.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-ds6-nbr.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-ds6-route.c</name>
+			<name>core/src/net/ipv6/uip-ds6-route.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-ds6-route.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-ds6-route.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-ds6.c</name>
+			<name>core/src/net/ipv6/uip-ds6.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-ds6.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-ds6.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-icmp6.c</name>
+			<name>core/src/net/ipv6/uip-icmp6.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-icmp6.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-icmp6.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-nameserver.c</name>
+			<name>core/src/net/ipv6/uip-nameserver.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-nameserver.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-nameserver.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-nd6.c</name>
+			<name>core/src/net/ipv6/uip-nd6.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-nd6.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-nd6.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-packetqueue.c</name>
+			<name>core/src/net/ipv6/uip-packetqueue.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-packetqueue.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-packetqueue.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-split.c</name>
+			<name>core/src/net/ipv6/uip-split.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-split.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-split.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip-udp-packet.c</name>
+			<name>core/src/net/ipv6/uip-udp-packet.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip-udp-packet.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip-udp-packet.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uip6.c</name>
+			<name>core/src/net/ipv6/uip6.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uip6.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uip6.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/uiplib.c</name>
+			<name>core/src/net/ipv6/uiplib.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/uiplib.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/uiplib.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-dag.c</name>
+			<name>core/src/net/rpl/rpl-dag.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-dag.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-dag.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-ext-header.c</name>
+			<name>core/src/net/rpl/rpl-ext-header.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-ext-header.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-ext-header.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-icmp6.c</name>
+			<name>core/src/net/rpl/rpl-icmp6.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-icmp6.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-icmp6.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-mrhof.c</name>
+			<name>core/src/net/rpl/rpl-mrhof.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-mrhof.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-mrhof.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-nbr-policy.c</name>
+			<name>core/src/net/rpl/rpl-nbr-policy.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-nbr-policy.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-nbr-policy.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-ns.c</name>
+			<name>core/src/net/rpl/rpl-ns.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-ns.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-ns.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-of0.c</name>
+			<name>core/src/net/rpl/rpl-of0.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-of0.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-of0.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl-timers.c</name>
+			<name>core/src/net/rpl/rpl-timers.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl-timers.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl-timers.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/rpl/rpl.c</name>
+			<name>core/src/net/rpl/rpl.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/rpl/rpl.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/rpl/rpl.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/sicslowpan/framer-802154.c</name>
+			<name>core/src/net/sicslowpan/framer-802154.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/sicslowpan/framer-802154.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/sicslowpan/framer-802154.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/sicslowpan/sicslowpan.c</name>
+			<name>core/src/net/sicslowpan/sicslowpan.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/sicslowpan/sicslowpan.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/sicslowpan/sicslowpan.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/slip/slip_net.c</name>
+			<name>core/src/net/slip/slip_net.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/slip/slip_net.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/slip/slip_net.c</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm0plus/atmel</name>
@@ -2196,94 +2196,94 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/aes/rijndael.h</name>
+			<name>core/inc/net/dtls/aes/rijndael.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/aes/rijndael.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/aes/rijndael.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/ecc/ecc.h</name>
+			<name>core/inc/net/dtls/ecc/ecc.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/ecc/ecc.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/ecc/ecc.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/dtls/sha2/sha2.h</name>
+			<name>core/inc/net/dtls/sha2/sha2.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/dtls/sha2/sha2.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/sha2/sha2.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/esmrf.h</name>
+			<name>core/inc/net/ipv6/multicast/esmrf.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/esmrf.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/esmrf.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/roll-tm.h</name>
+			<name>core/inc/net/ipv6/multicast/roll-tm.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/roll-tm.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/roll-tm.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/smrf.h</name>
+			<name>core/inc/net/ipv6/multicast/smrf.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/smrf.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/smrf.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/uip-mcast6-engines.h</name>
+			<name>core/inc/net/ipv6/multicast/uip-mcast6-engines.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/uip-mcast6-engines.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/uip-mcast6-engines.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/uip-mcast6-route.h</name>
+			<name>core/inc/net/ipv6/multicast/uip-mcast6-route.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/uip-mcast6-route.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/uip-mcast6-route.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/uip-mcast6-stats.h</name>
+			<name>core/inc/net/ipv6/multicast/uip-mcast6-stats.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/uip-mcast6-stats.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/uip-mcast6-stats.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/inc/net/ipv6/multicast/uip-mcast6.h</name>
+			<name>core/inc/net/ipv6/multicast/uip-mcast6.h</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/inc/net/ipv6/multicast/uip-mcast6.h</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/inc/net/ipv6/multicast/uip-mcast6.h</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/aes/rijndael.c</name>
+			<name>core/src/net/dtls/aes/rijndael.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/aes/rijndael.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/aes/rijndael.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/ecc/ecc.c</name>
+			<name>core/src/net/dtls/ecc/ecc.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/ecc/ecc.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/ecc/ecc.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/dtls/sha2/sha2.c</name>
+			<name>core/src/net/dtls/sha2/sha2.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/dtls/sha2/sha2.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/dtls/sha2/sha2.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/multicast/esmrf.c</name>
+			<name>core/src/net/ipv6/multicast/esmrf.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/multicast/esmrf.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/multicast/esmrf.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/multicast/roll-tm.c</name>
+			<name>core/src/net/ipv6/multicast/roll-tm.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/multicast/roll-tm.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/multicast/roll-tm.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/multicast/smrf.c</name>
+			<name>core/src/net/ipv6/multicast/smrf.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/multicast/smrf.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/multicast/smrf.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/multicast/uip-mcast6-route.c</name>
+			<name>core/src/net/ipv6/multicast/uip-mcast6-route.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/multicast/uip-mcast6-route.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/multicast/uip-mcast6-route.c</locationURI>
 		</link>
 		<link>
-			<name>emb6/src/net/ipv6/multicast/uip-mcast6-stats.c</name>
+			<name>core/src/net/ipv6/multicast/uip-mcast6-stats.c</name>
 			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/emb6/src/net/ipv6/multicast/uip-mcast6-stats.c</locationURI>
+			<locationURI>REPO_ROOT_DIR/core/src/net/ipv6/multicast/uip-mcast6-stats.c</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm0plus/atmel/CMSIS</name>
@@ -6121,16 +6121,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.c</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.c</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.h</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp.h</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_4x4.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_4x4.h</locationURI>
@@ -6164,6 +6154,16 @@
 			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_led.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_led.h</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_ti.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_ti.c</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/io_pin_int.c</name>
