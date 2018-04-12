@@ -173,32 +173,9 @@
 		</project-mappings>
 	</storageModule>
 	<storageModule moduleId="refreshScope" versionNumber="2">
-		<configuration configurationName="coap-server">
-			<resource resourceType="PROJECT" workspacePath="/CC13xx_RTOS"/>
-		</configuration>
-		<configuration configurationName="serial-api-sensorsim-static"/>
-		<configuration configurationName="6tisch PAN + udp server"/>
-		<configuration configurationName="coap-server1">
-			<resource resourceType="PROJECT" workspacePath="/CC13xx_RTOS"/>
-		</configuration>
-		<configuration configurationName="udp-socket-client">
-			<resource resourceType="PROJECT" workspacePath="/CC13xx_RTOS"/>
-		</configuration>
-		<configuration configurationName="6tisch PAN"/>
-		<configuration configurationName="serial-api-ameli"/>
-		<configuration configurationName="serial-api-parsifal-apollo"/>
-		<configuration configurationName="udp-socket-server">
-			<resource resourceType="PROJECT" workspacePath="/CC13xx_RTOS"/>
-		</configuration>
-		<configuration configurationName="serial-api-niki-eis"/>
-		<configuration configurationName="6tisch simple node"/>
-		<configuration configurationName="serial-api-sensorsim"/>
 		<configuration configurationName="extif">
 			<resource resourceType="PROJECT" workspacePath="/CC13xx_RTOS"/>
 		</configuration>
-		<configuration configurationName="6tisch simple node + udp client 2"/>
-		<configuration configurationName="6tisch simple node + udp client 1"/>
-		<configuration configurationName="serial-api-niki-emeter"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 	<storageModule moduleId="scannerConfiguration"/>
