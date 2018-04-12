@@ -288,9 +288,9 @@ static    void _udpAlive_callback(c_event_t c_event, p_data_t p_data) {
  ============================================================================*/
 
 /*---------------------------------------------------------------------------*/
-/*  demo_udpAliveInit()                                                      */
+/*  udpAliveServiceConf()                                                      */
 /*---------------------------------------------------------------------------*/
-int8_t demo_udpAliveConf(s_ns_t* p_netstk)
+int8_t udpAliveServiceConf(s_ns_t* p_netstk)
 {
   int8_t ret = -1;
 
@@ -317,14 +317,14 @@ int8_t demo_udpAliveConf(s_ns_t* p_netstk)
   }
 
   return ret;
-}/* demo_udpAliveConf */
+}/* udpAliveServiceConf */
 
 /*---------------------------------------------------------------------------*/
-/*    demo_udpAliveInit()                                                    */
+/*    udpAliveServiceInit()                                                    */
 /*---------------------------------------------------------------------------*/
-int8_t demo_udpAliveInit(void)
+int8_t udpAliveServiceInit(void)
 {
-    LOG2_INFO( "Enter demo_udpAliveInit() function" );
+    LOG2_INFO( "Enter udpAliveInit() function" );
     memset( &st_udp_socket, 0, sizeof(st_udp_socket) );
 
     /* set the pointer to the udp-socket */
@@ -334,9 +334,9 @@ int8_t demo_udpAliveInit(void)
     etimer_set( &e_udpAliveTmr,SEND_INTERVAL * bsp_getTRes(),
                 _udpAlive_callback);
 
-    LOG2_INFO( "Leave demo_udpAliveInit() function" );
+    LOG2_INFO( "Leave udpAliveInit() function" );
     return 0;
-}/* demo_udpAliveInit()  */
+}/* udpAliveServiceInit()  */
 /** @} */
 /** @} */
 /** @} */

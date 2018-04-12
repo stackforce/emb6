@@ -72,20 +72,20 @@
  *  --- Global Functions Definition ------------------------------------------*
  */
 /**
- * \brief   Initializes the Serial API demo application.
+ * \brief   Initializes the Serial API service
  *
  * \return  0 on success, otherwise -1
  */
-int8_t demo_serialApiInit(void);
+int8_t serialApiServiceInit(void);
 
 
 /**
- * \brief   Configures the Serial API demo application
+ * \brief   Configures the Serial API service
  *
  * \param   p_netStack  Pointer to the network stack
  *
  * \return  0 on success, otherwise -1
  */
-int8_t demo_serialApiConf(s_ns_t *p_netStack);
+int8_t serialApiServiceConf(s_ns_t *p_netStack);
 
 #endif /* __DEMO_SERIALAPI_H__ */

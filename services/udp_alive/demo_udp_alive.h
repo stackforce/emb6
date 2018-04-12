@@ -1,5 +1,5 @@
-#ifndef _DEMO_UDP_ALIVE_H_
-#define _DEMO_UDP_ALIVE_H_
+#ifndef _UDP_ALIVE_H_
+#define _UDP_ALIVE_H_
 /**
  *      \addtogroup emb6
  *      @{
@@ -54,7 +54,7 @@
  *
  */
 /*============================================================================*/
-/*! \file   demo_udp_alive.h
+/*! \file   udp_alive.h
 
     \author Peter Lehmann, peter.lehmann@hs-offenburg.de
 
@@ -76,7 +76,7 @@
 
 */
 /*----------------------------------------------------------------------------*/
-int8_t demo_udpAliveInit(void);
+int8_t udpAliveServiceInit(void);
 
 /*----------------------------------------------------------------------------*/
 /*!
@@ -85,7 +85,7 @@ int8_t demo_udpAliveInit(void);
     \return  0 on success, otherwise -1
 */
 /*----------------------------------------------------------------------------*/
-int8_t demo_udpAliveConf(s_ns_t* pst_netStack);
+int8_t udpAliveServiceConf(s_ns_t* pst_netStack);
 
 #endif /* _DEMO_UDP_ALIVE_H_ */
 /** @} */

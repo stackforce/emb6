@@ -463,9 +463,9 @@ void _event_callback( c_event_t ev, p_data_t data )
 
 /*---------------------------------------------------------------------------*/
 /*
-* demo_serialAPIInit()
+* serialApiServiceInit()
 */
-int8_t demo_serialApiInit( void )
+int8_t serialApiServiceInit( void )
 {
   /* Init the Rx-buffer variables. */
   _bufInit();
@@ -497,14 +497,14 @@ int8_t demo_serialApiInit( void )
   /* Always success */
   return 0;
 
-} /* demo_serialAPIInit() */
+} /* serialApiServiceInit() */
 
 
 /*---------------------------------------------------------------------------*/
 /*
-* demo_serialApiCfg()
+* serialApiServiceConf()
 */
-int8_t demo_serialApiConf( s_ns_t *p_netstk )
+int8_t serialApiServiceConf( s_ns_t *p_netstk )
 {
   int8_t ret = -1;
 
@@ -526,4 +526,4 @@ int8_t demo_serialApiConf( s_ns_t *p_netstk )
     }
   }
   return ret;
-} /* demo_serialApiCfg() */
+} /* serialApiServiceConf() */
