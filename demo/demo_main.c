@@ -103,13 +103,17 @@
 #endif /* #if CONF_USE_SERVER */
 #endif /* #if DEMO_USE_MDNS */
 
-#if DEMO_USE_SERIALAPI
+#if USE_SERIALAPI_SERVICE
 #include "demo_serialapi.h"
 #endif /* #if DEMO_USE_SERIALAPI */
 
-#if DEMO_USE_UDPALIVE
+#if USE_UDPALIVE_SERVICE
 #include "demo_udp_alive.h"
 #endif /* #if DEMO_USE_UDPALIVE */
+
+#if USE_LWM2MAPI_SERVICE
+#include "lwm2mapi.h"
+#endif /* #if DEMO_USE_LWM2MAPI */
 
 #if DEMO_USE_APTB
 #include "demo_aptb.h"
@@ -245,6 +249,25 @@ static uint16_t loc_parseMac( const char* mac, uint16_t defaultMac );
 static void loc_stackConf(uint16_t mac_addr_word);
 
 /**
+ * \brief   Configure the services.
+ *
+ *          This function Configures the services
+ *          according to the build configuration.
+ *
+ */
+static void loc_serviceConf(s_ns_t* s_ns);
+
+/**
+ * \brief   initialize the services.
+ *
+ *          This function initializes the services
+ *          according to the build configuration.
+ *
+ */
+static void loc_serviceInit(void);
+
+
+/**
  * callback function for a EMB6 event. For more information please refer to the
  * function definition. */
 static  void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data );
@@ -341,10 +364,6 @@ static void loc_stackConf( uint16_t mac_addr_word )
 static void loc_demoAppsInit(void)
 {
 
-#if DEMO_USE_EXTIF
-    EMB6_DEMO_INIT(extif);
-#endif /* #if DEMO_USE_EXTIF */
-
 #if DEMO_USE_COAP
     EMB6_DEMO_INIT(coap);
 #endif /* #if DEMO_USE_COAP */
@@ -356,14 +375,6 @@ static void loc_demoAppsInit(void)
 #if DEMO_USE_MDNS
     EMB6_DEMO_INIT(mdns);
 #endif /* #if DEMO_USE_MDNS */
-
-#if DEMO_USE_SERIALAPI
-    EMB6_DEMO_INIT(serialApi);
-#endif /* #if DEMO_USE_SERIALAPI */
-
-#if DEMO_USE_UDPALIVE
-    EMB6_DEMO_INIT(udpAlive);
-#endif /* #if DEMO_USE_UDPALIVE */
 
 #if DEMO_USE_UDP_SOCKET
     EMB6_DEMO_INIT(udpSocket);
@@ -397,10 +408,6 @@ static void loc_demoAppsInit(void)
 static void loc_demoAppsConf(s_ns_t* s_ns)
 {
 
-#if DEMO_USE_EXTIF
-    EMB6_DEMO_CONF(extif, s_ns);
-#endif /* #if DEMO_USE_EXTIF */
-
 #if DEMO_USE_COAP
     EMB6_DEMO_CONF(coap, s_ns);
 #endif /* #if DEMO_USE_COAP */
@@ -412,14 +419,6 @@ static void loc_demoAppsConf(s_ns_t* s_ns)
 #if DEMO_USE_MDNS
     EMB6_DEMO_CONF(mdns, s_ns);
 #endif /* #if DEMO_USE_MDNS */
-
-#if DEMO_USE_SERIALAPI
-    EMB6_DEMO_CONF(serialApi, s_ns);
-#endif /* #if DEMO_USE_SERIALAPI */
-
-#if DEMO_USE_UDPALIVE
-    EMB6_DEMO_CONF(udpAlive, s_ns);
-#endif /* #if DEMO_USE_UDPALIVE */
 
 #if DEMO_USE_UDP_SOCKET
     EMB6_DEMO_CONF(udpSocket, s_ns);
@@ -444,6 +443,52 @@ static void loc_demoAppsConf(s_ns_t* s_ns)
 }
 
 /**
+ * \brief   initialize the services.
+ *
+ *          This function initializes the services
+ *          according to the build configuration.
+ *
+ */
+static void loc_serviceInit(void)
+{
+
+#if USE_SERIALAPI_SERVICE
+    serialApiServiceInit();
+
+#if USE_LWM2MAPI_SERVICE
+    serialApiRegister( 0xE1, lwm2mApiInit, lwm2mApiInput );
+#endif /* #if DEMO_USE_SERIALAPI */
+
+#endif /* #if DEMO_USE_SERIALAPI */
+
+#if USE_UDPALIVE_SERVICE
+    udpAliveInit();
+#endif /* #if DEMO_USE_UDPALIVE */
+
+}
+
+/**
+ * \brief   Configure the services.
+ *
+ *          This function Configures the services
+ *          according to the build configuration.
+ *
+ */
+static void loc_serviceConf(s_ns_t* s_ns)
+{
+
+#if DEMO_USE_SERIALAPI
+    serialApiServiceConf(s_ns);
+#endif /* #if DEMO_USE_SERIALAPI */
+
+#if DEMO_USE_UDPALIVE
+    udpAliveConf(s_ns);
+#endif /* #if DEMO_USE_UDPALIVE */
+
+}
+
+
+/**
  * \brief   Callback function for emb6 event.
  *
  *          This function is called every time a new event was generated
@@ -458,7 +503,10 @@ void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data )
     {
         if( (*(e_stack_status_t*)p_data) == STACK_STATUS_ACTIVE )
         {
+            loc_serviceInit();
+
             loc_demoAppsInit();
+
         }
     }
 }
@@ -506,6 +554,8 @@ static void emb6_task( void* p_params )
         err = NETSTK_ERR_INIT;
         emb6_errorHandler( &err );
     }
+
+    loc_serviceConf(&s_ns);
 
     loc_demoAppsConf(&s_ns);
 
