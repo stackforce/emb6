@@ -32,7 +32,7 @@
 #include "driverlib/prcm.h"
 #include "driverlib/ioc.h"
 /* bsp includes */
-#include "bsp/srf06eb_cc26xx/drivers/source/bsp.h"
+#include "bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h"
 
 #include "hal.h"
 
@@ -292,7 +292,7 @@ bool sf_uart_init(void)
 
   /* Enable the uart */
   UARTEnable(UART0_BASE);
-  
+
   /* Disable the FIFO. In RX case we need to get an interrupt after each
      received byte (not possible with fifo). */
   UARTFIFODisable(UART0_BASE);

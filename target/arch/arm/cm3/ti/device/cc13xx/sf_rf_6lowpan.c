@@ -59,7 +59,7 @@ extern "C" {
 #include "sf_mcu_sleep.h"
 #else
 /* BoardSupportPacket */
-#include "bsp/srf06eb_cc26xx/drivers/source/bsp.h"
+#include "bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h"
 #include "rtimer.h"
 #endif
 /*==============================================================================
