@@ -37,6 +37,7 @@ extern "C"
 #include <driverlib/rf_ieee_cmd.h>
 #include <driverlib/rf_data_entry.h>
 
+#include "bsp.h"
 /* RF register settings. */
 #include "smart_rf/IEEE_settings.h"
 
@@ -247,6 +248,10 @@ static void rxDoneCallback(RF_Handle rfHandle, RF_CmdHandle cmdHandle, RF_EventM
   if ((evtMask & RF_EventRxOk) ||
       (evtMask & RF_EventRxNOk))
   {
+#if CC13X2_RX_LED_ENABLED
+     bsp_led( HAL_LED3, EN_BSP_LED_OP_BLINK );
+#endif /* #if CC13X2_RX_LED_ENABLED */
+
     if (evtMask & RF_EventRxEntryDone)
     {
       if (!gb_unhandledFrame)
@@ -666,6 +671,10 @@ static void cc13x2_Send (uint8_t      *p_data,
   }
   LOG_RAW("\r\n");
   #endif
+
+#if CC13X2_TX_LED_ENABLED
+         bsp_led( HAL_LED2, EN_BSP_LED_OP_BLINK );
+#endif /* #if CC13X2_TX_LED_ENABLED */
 
   txParam.priority = RF_PriorityNormal;
   txParam.endTime = 0;
