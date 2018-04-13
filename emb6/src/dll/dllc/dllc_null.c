@@ -195,8 +195,8 @@ static void dllc_send(uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
 
   /* write footer */
   p_mfr = p_data + len;
-#if (NETSTK_CFG_IEEE_802154G_EN == TRUE)
   fcs_len = packetbuf_attr(PACKETBUF_ATTR_MAC_FCS_LEN);
+#if (NETSTK_CFG_IEEE_802154G_EN == TRUE)
   if (fcs_len == 4) {
     /* 32-bit CRC */
     fcs = crc_32_calc(p_data, len);
