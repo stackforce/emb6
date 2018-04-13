@@ -5702,21 +5702,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/.settings/org.eclipse.cdt.codan.core.prefs</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/.settings/org.eclipse.cdt.codan.core.prefs</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/.settings/org.eclipse.cdt.debug.core.prefs</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/.settings/org.eclipse.cdt.debug.core.prefs</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/.settings/org.eclipse.core.resources.prefs</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/.settings/org.eclipse.core.resources.prefs</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/targetConfigs/CC1310F128.ccxml</name>
 			<type>1</type>
 			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/targetConfigs/CC1310F128.ccxml</locationURI>
@@ -5740,21 +5725,6 @@
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/sources.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/sources.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/subdir_vars.mk</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target</name>
@@ -6112,16 +6082,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -6327,16 +6287,6 @@
 			<locationURI>PARENT-1-PROJECT_LOC/tirtos_builds_CC1352R1_LAUNCHXL_release_ccs/src/sysbios/rom_sysbios.obj</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/demo/udp_socket/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/demo/udp_socket/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/demo/udp_socket/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/demo/udp_socket/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -6360,16 +6310,6 @@
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/bsp/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/bsp/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/bsp/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/bsp/subdir_vars.mk</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/bsp/ti_cc13xx</name>
@@ -6607,36 +6547,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/phy/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/phy/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/phy/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/phy/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/sock/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/sock/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/sock/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/sock/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -6807,79 +6717,9 @@
 			<locationURI>PARENT-1-PROJECT_LOC/tirtos_builds_CC1352R1_LAUNCHXL_release_ccs/Debug/configPkg/package/rel/configPkg.xdc.ninc</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/dllc/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/dllc/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/dllc/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/dllc/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/dllsec/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/dllsec/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/dllsec/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/dllsec/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/framer/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/framer/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/framer/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/framer/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/mac/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/mac/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/dll/mac/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/dll/mac/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/ipv6/multicast</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/ipv6/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/ipv6/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/ipv6/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/ipv6/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/rpl/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/rpl/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/rpl/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/rpl/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/sicslowpan/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/sicslowpan/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/sicslowpan/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/sicslowpan/subdir_vars.mk</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti</name>
@@ -6905,16 +6745,6 @@
 			<name>emb6/target/arch/arm/cm3/ti/toolchain/CCS/cc26xx-ti-rtos/cc26xx_udp_client/target/arch/arm/cm3/ti</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/ipv6/multicast/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/ipv6/multicast/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/emb6/src/net/ipv6/multicast/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/emb6/src/net/ipv6/multicast/subdir_vars.mk</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device</name>
@@ -6962,16 +6792,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/ti-rtos/cc13xx_udp_client/target/arch/arm/cm3/ti/device/cc13xx/rflib</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
@@ -7002,64 +6822,14 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rflib/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rflib/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rflib/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rflib/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/driverlib/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/driverlib/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/driverlib/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/driverlib/subdir_vars.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/subdir_vars.mk</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/subdir_rules.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/subdir_rules.mk</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/toolchain/CCS/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/subdir_vars.mk</name>
-			<type>1</type>
-			<locationURI>PARENT-2-PROJECT_LOC/no-rtos/udp-socket-server/target/arch/arm/cm3/ti/device/cc13xx/bsp/srf06eb_cc26xx/drivers/source/subdir_vars.mk</locationURI>
 		</link>
 	</linkedResources>
 	<variableList>
