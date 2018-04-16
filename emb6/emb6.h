@@ -738,6 +738,7 @@ extern const s_nsRF_t rf_driver_at212b;
 extern const s_nsRF_t rf_driver_ticc112x;
 extern const s_nsRF_t rf_driver_ticc120x;
 extern const s_nsRF_t rf_driver_ticc13xx;
+extern const s_nsRF_t rf_driver_ticc13x2;
 
 
 /*
