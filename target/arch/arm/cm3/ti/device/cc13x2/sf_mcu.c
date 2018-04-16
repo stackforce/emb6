@@ -33,6 +33,8 @@
 #include "driverlib/pwr_ctrl.h"
 #include "driverlib/sys_ctrl.h"
 #include "driverlib/interrupt.h"
+#include "driverlib/flash.h"
+#include "driverlib/vims.h"
 
 
 #if !USE_TI_RTOS
@@ -75,6 +77,103 @@ void sf_mcu_reset(void)
 {
   SysCtrlSystemReset();
 } /* sf_mcu_reset() */
+
+/*============================================================================*/
+/*! sf_mcu_datamemory_write() */
+/*============================================================================*/
+uint16_t sf_mcu_datamemory_write(uint8_t *pc_data, uint16_t i_len, uint32_t l_addr)
+{
+  /* Counter variable. */
+  uint16_t i;
+  /* Start of the segment to write into. */
+  uint8_t *pc_memory;
+  /* Number of written bytes */
+  uint16_t i_return = 0x00U;
+  /* Array to save the flash content before erasing the flash */
+  static uint8_t ac_flashPage[MCU_INFOFLASH_SIZE];
+  /* Address of the first segment. */
+  uint32_t l_addrSegmStart;
+  /* Current Mode */
+  uint32_t VIMCurrentMode;
+
+  /* Check the input parameters */
+  if((i_len > 0x00U) && (NULL != pc_data) &&
+     ((l_addr + i_len) <= MCU_INFOFLASH_SIZE))
+  {
+    /* Find the start of the flash page. */
+    l_addrSegmStart = l_addr + TARGET_NVM_START_ADDR;
+    while((l_addrSegmStart % SECTOR_SIZE) != 0)
+    {
+      l_addrSegmStart--;
+    } /* while */
+
+    /* Calculates the start address to write in.*/
+    l_addr %= SECTOR_SIZE;
+
+    /* Disable the cache */
+    VIMCurrentMode = VIMSModeGet(VIMS_BASE);
+    if (VIMCurrentMode == VIMS_MODE_ENABLED)
+    {
+        VIMSModeSet(VIMS_BASE, VIMS_MODE_DISABLED);
+        while(VIMSModeGet(VIMS_BASE) != VIMS_MODE_DISABLED);
+    }
+
+    /* Check if the flash is protected */
+    if(FlashProtectionGet(l_addr) != FLASH_WRITE_PROTECT)
+    {
+      /* Set the local pointer to the start of the flash page */
+      pc_memory = (uint8_t*) l_addrSegmStart;
+
+      /* Store the flash data in local array */
+      for(i = 0x00U; i < MCU_INFOFLASH_SIZE; i++)
+      {
+        ac_flashPage[i] = pc_memory[i];
+      } /* for */
+
+      /* Updates the current flash page. */
+      for(i = 0x00U; i < i_len; i++)
+      {
+        ac_flashPage[(l_addr + i)] = pc_data[i];
+      } /* for */
+
+      /* Erase and rewrite the flash */
+      if (FlashSectorErase(l_addrSegmStart) == FAPI_STATUS_SUCCESS)
+      {
+        if(FlashProgram(ac_flashPage, l_addrSegmStart, MCU_INFOFLASH_SIZE) == FAPI_STATUS_SUCCESS)
+        {
+          i_return = i_len;
+        }/* if */
+      }
+    }/* if  */
+    /* Re-enable the cache */
+    if (VIMCurrentMode == VIMS_MODE_ENABLED)
+    {
+        VIMSModeSet(VIMS_BASE, VIMS_MODE_ENABLED);
+    }
+  }/* if */
+
+  return i_return;
+} /* sf_mcu_datamemory_write() */
+
+/*============================================================================*/
+/*! sf_mcu_datamemory_read() */
+/*============================================================================*/
+uint16_t sf_mcu_datamemory_read(uint8_t *pc_data, uint16_t i_len, uint32_t l_addr)
+{
+  /* Counter variable. */
+  uint16_t i;
+  /* Pointer to the segment to read from. */
+  uint8_t *pc_memory;
+
+  pc_memory = ((uint8_t*) (TARGET_NVM_START_ADDR)) + l_addr;
+
+   for(i = 0x00U; i < i_len ;i++)
+   {
+     pc_data[i] = pc_memory[i];
+   } /* for */
+
+  return i_len;
+} /* sf_mcu_datamemory_read() */
 
 /*============================================================================*/
 /*! sf_mcu_interrutpEnable() */
