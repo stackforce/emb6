@@ -53,7 +53,7 @@
 /******************************************************************************
 * INCLUDES
 */
-#include "bsp/srf06eb_cc26xx/drivers/source/bsp.h"
+#include "bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h"
 #include "lcd_dogm128_6.h"
 
 #include "driverlib/cpu.h"

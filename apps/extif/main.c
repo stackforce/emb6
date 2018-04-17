@@ -64,78 +64,15 @@
 #include "board_conf.h"
 #include "bsp.h"
 #include "etimer.h"
+#include "evproc.h"
 
 #define  LOGGER_ENABLE        LOGGER_MAIN
 #include "logger.h"
 
-#if DEMO_USE_UDP
-#include "demo_udp.h"
-#endif /* #if DEMO_USE_UDP */
-
-#if DEMO_USE_UDP_SOCKET
-#include "demo_udp_socket.h"
-#endif /* #if DEMO_USE_UDP_SOCKET */
-
-#if DEMO_USE_UDP_SOCKET_SIMPLE
-#include "demo_udp_socket_simple.h"
-#endif /* #if DEMO_USE_UDP_SOCKET_SIMPLE */
-
-#if DEMO_USE_LWM2M
-#if CONF_USE_SERVER
-#else
-#include "demo_lwm2m_cli.h"
-#endif /* #if CONF_USE_SERVER */
-#endif /* #if DEMO_USE_LWM2M */
-
-#if DEMO_USE_COAP
-#if CONF_USE_SERVER
-#include "demo_coap_srv.h"
-#else
-#include "demo_coap_cli.h"
-#endif /* #if CONF_USE_SERVER */
-#endif /* #if DEMO_USE_COAP */
-
-#if DEMO_USE_MDNS
-#if CONF_USE_SERVER
-#include "demo_mdns_srv.h"
-#else
-#include "demo_mdns_cli.h"
-#endif /* #if CONF_USE_SERVER */
-#endif /* #if DEMO_USE_MDNS */
-
-#if USE_SERIALAPI_SERVICE
-#include "serialapi_core.h"
-#include "serialapi.h"
-#endif /* #if USE_SERIALAPI_SERVICE */
-
-#if USE_UDPALIVE_SERVICE
-#include "udp_alive.h"
-#endif /* #if USE_UDPALIVE_SERVICE */
-
-#if USE_LWM2MAPI_SERVICE
-#include "lwm2mapi.h"
-#endif /* #if DEMO_USE_LWM2MAPI */
-
-#if DEMO_USE_APTB
-#include "demo_aptb.h"
-#endif /* #if DEMO_USE_APTB */
-
-#if DEMO_USE_EXTIF
+#if USE_EXTIF
 #include "slip_radio.h"
 #include "slip.h"
 #endif /* #if DEMO_USE_EXTIF */
-
-#if DEMO_USE_DTLS
-#if CONF_USE_SERVER
-#include "demo_dtls_srv.h"
-#else
-#include "demo_dtls_cli.h"
-#endif /* #if CONF_USE_SERVER */
-#endif /* #if DEMO_USE_DTLS */
-
-#if DEMO_USE_6TISCH
-#include "demo_6tisch.h"
-#endif /* #if DEMO_USE_6TISCH */
 
 #if UIP_CONF_IPV6_RPL
 #include "rpl.h"
@@ -186,15 +123,6 @@
 #define mainLED_TASK_PRIORITY           ( tskIDLE_PRIORITY + 2 )
 #endif /* #if USE_FREERTOS */
 
-#define EMB6_DEMO_INIT(name)  do{ \
-                                 demo_##name##Init(); \
-                                 }while(0);
-
-#define EMB6_DEMO_CONF(name, ns)  do{ \
-                                 demo_##name##Conf(ns); \
-                                 }while(0);
-
-
 #if USE_FREERTOS & USE_TI_RTOS
 #error Please choose only one RTOS
 #endif
@@ -209,6 +137,7 @@ typedef struct
 {
   /** MAC address */
   uint16_t ui_macAddr;
+
 }s_emb6_startup_params_t;
 
 #if USE_FREERTOS
@@ -227,6 +156,7 @@ typedef struct
 /*
  *  --- Local Variables ---------------------------------------------------- *
  */
+
 
 /** parameters for emb6 startup */
 static s_emb6_startup_params_t emb6_startupParams;
@@ -250,29 +180,14 @@ static uint16_t loc_parseMac( const char* mac, uint16_t defaultMac );
 static void loc_stackConf(uint16_t mac_addr_word);
 
 /**
- * \brief   Configure the services.
- *
- *          This function Configures the services
- *          according to the build configuration.
- *
- */
-static void loc_serviceConf(s_ns_t* s_ns);
-
-/**
- * \brief   initialize the services.
- *
- *          This function initializes the services
- *          according to the build configuration.
- *
- */
-static void loc_serviceInit(void);
-
+ * Configure the current application. For more information please refer to the
+ * function definition. */
+static  int8_t  loc_appConf(s_ns_t *p_netstk);
 
 /**
  * callback function for a EMB6 event. For more information please refer to the
  * function definition. */
 static  void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data );
-
 
 /**
  * emb6 task.
@@ -354,140 +269,23 @@ static void loc_stackConf( uint16_t mac_addr_word )
     mac_phy_config.modulation = MODULATION;
 }
 
-
 /**
- * \brief   initialize the demo applications.
+ * \brief   Configure the current application
  *
- *          This function initializes the demo applications according
- *          according to the build configuration.
+ * \param   p_netStack Pointer to the network stack
  *
+ * \return  0 on success, otherwise -1
  */
-static void loc_demoAppsInit(void)
+static  int8_t  loc_appConf(s_ns_t *p_netstk)
 {
+    int8_t ret = -1;
 
-#if DEMO_USE_COAP
-    EMB6_DEMO_INIT(coap);
-#endif /* #if DEMO_USE_COAP */
+    #if USE_EXTIF
+    ret = extifConf(p_netstk);
+    #endif /* #if USE_EXTIF */
 
-#if DEMO_USE_LWM2M
-    EMB6_DEMO_INIT(lwm2m);
-#endif /* #if DEMO_USE_LWM2M */
-
-#if DEMO_USE_MDNS
-    EMB6_DEMO_INIT(mdns);
-#endif /* #if DEMO_USE_MDNS */
-
-#if DEMO_USE_UDP_SOCKET
-    EMB6_DEMO_INIT(udpSocket);
-#endif /* #if DEMO_USE_UDP_SOCKET */
-
-#if DEMO_USE_UDP_SOCKET_SIMPLE
-    EMB6_DEMO_INIT(udpSocketSimple);
-#endif /* #if DEMO_USE_UDP_SOCKET_SIMPLE */
-
-#if DEMO_USE_APTB
-    EMB6_DEMO_INIT(aptb);
-#endif /* #if DEMO_USE_APTB */
-
-#if DEMO_USE_6TISCH
-    EMB6_DEMO_INIT(6tisch);
-#endif /* #if DEMO_USE_6TISCH */
-
-#if DEMO_USE_DTLS
-    EMB6_DEMO_INIT(dtls);
-#endif /* #if DEMO_USE_DTLS */
-
-}
-
-
-/**
- * \brief   Configure the demo applications.
- *
- *          This function Configures the demo applications.according
- *          according to the build configuration.
- */
-static void loc_demoAppsConf(s_ns_t* s_ns)
-{
-
-#if DEMO_USE_COAP
-    EMB6_DEMO_CONF(coap, s_ns);
-#endif /* #if DEMO_USE_COAP */
-
-#if DEMO_USE_LWM2M
-    EMB6_DEMO_CONF(lwm2m, s_ns);
-#endif /* #if DEMO_USE_LWM2M */
-
-#if DEMO_USE_MDNS
-    EMB6_DEMO_CONF(mdns, s_ns);
-#endif /* #if DEMO_USE_MDNS */
-
-#if DEMO_USE_UDP_SOCKET
-    EMB6_DEMO_CONF(udpSocket, s_ns);
-#endif /* #if DEMO_USE_UDP_SOCKET */
-
-#if DEMO_USE_UDP_SOCKET_SIMPLE
-    EMB6_DEMO_CONF(udpSocketSimple, s_ns);
-#endif /* #if DEMO_USE_UDP_SOCKET_SIMPLE */
-
-#if DEMO_USE_APTB
-    EMB6_DEMO_CONF(aptb, s_ns);
-#endif /* #if DEMO_USE_APTB */
-
-#if DEMO_USE_6TISCH
-    EMB6_DEMO_CONF(6tisch, s_ns);
-#endif /* #if DEMO_USE_6TISCH */
-
-#if DEMO_USE_DTLS
-    EMB6_DEMO_CONF(dtls, s_ns);
-#endif /* #if DEMO_USE_DTLS */
-
-}
-
-/**
- * \brief   initialize the services.
- *
- *          This function initializes the services
- *          according to the build configuration.
- *
- */
-static void loc_serviceInit(void)
-{
-
-#if USE_SERIALAPI_SERVICE
-    serialApiServiceInit();
-
-#if USE_LWM2MAPI_SERVICE
-    serialApiRegister( 0xE1, lwm2mApiInit, lwm2mApiInput );
-#endif /* #if USE_LWM2MAPI_SERVICE */
-
-#endif /* #if USE_SERIALAPI_SERVICE */
-
-#if USE_UDPALIVE_SERVICE
-    udpAliveServiceInit();
-#endif /* #if USE_UDPALIVE_SERVICE */
-
-}
-
-/**
- * \brief   Configure the services.
- *
- *          This function Configures the services
- *          according to the build configuration.
- *
- */
-static void loc_serviceConf(s_ns_t* s_ns)
-{
-
-#if USE_SERIALAPI_SERVICE
-    serialApiServiceConf(s_ns);
-#endif /* #if USE_SERIALAPI_SERVICE */
-
-#if USE_UDPALIVE_SERVICE
-    udpAliveServiceConf(s_ns);
-#endif /* #if USE_UDPALIVE_SERVICE */
-
-}
-
+    return ret;
+  } /* loc_AppConf() */
 
 /**
  * \brief   Callback function for emb6 event.
@@ -504,24 +302,21 @@ void loc_Emb6_evt_Callback(c_event_t c_event, p_data_t p_data )
     {
         if( (*(e_stack_status_t*)p_data) == STACK_STATUS_ACTIVE )
         {
-            //services init
-            loc_serviceInit();
-
-            //demo init
-            loc_demoAppsInit();
+            //no services to intiate
         }
     }
-}
 
+
+}/* loc_regCallback() */
 
 /**
  * \brief   Main emb6 task.
  *
  *          This function represents the main emb6 tasks. FIrst of all
  *          the board support package will be initialized to provide
- *          a well working hardware. As next steps the stack and demo
+ *          a well working hardware. As next steps the stack and the
  *          applications will be configured before the stack is
- *          initialized. Finally the demo applications will be initialized
+ *          initialized. Finally the applications will be initialized
  *          and the stack is operating.
  *
  * \param   p_params      Parameters used to execute the stack.
@@ -557,9 +352,13 @@ static void emb6_task( void* p_params )
         emb6_errorHandler( &err );
     }
 
-    loc_serviceConf(&s_ns);
-
-    loc_demoAppsConf(&s_ns);
+    ret = loc_appConf( &s_ns );
+    if( ret != NETSTK_ERR_NONE )
+    {
+        /* no recovery possible, call global error handler. */
+        err = NETSTK_ERR_INIT;
+        emb6_errorHandler(&err);
+    }
 
     /* Initialize stack */
     emb6_init( &s_ns, &err );
@@ -568,8 +367,14 @@ static void emb6_task( void* p_params )
         /* no recovery possible, call global error handler. */
         emb6_errorHandler(&err);
     }
+
     //register callback function to emb6 change status event
-    evproc_regCallback( EVENT_TYPE_STATUS_CHANGE, loc_Emb6_evt_Callback );
+    //evproc_regCallback( EVENT_TYPE_STATUS_CHANGE, loc_Emb6_evt_Callback );
+
+    #if USE_EXTIF
+    //init extif application
+    extifInit();
+    #endif /* #if USE_EXTIF */
 
     /* Show that stack has been launched */
     bsp_led(HAL_LED0, EN_BSP_LED_OP_ON);
@@ -659,9 +464,9 @@ int main(void)
     if (argc > 1) {
       emb6_startupParams.ui_macAddr = loc_parseMac(argv[1], MAC_ADDR_WORD);
     }
-    else
 #endif /* #if defined(MAIN_WITH_ARGS) */
-	emb6_startupParams.ui_macAddr = loc_parseMac(NULL, MAC_ADDR_WORD);
+    emb6_startupParams.ui_macAddr = loc_parseMac(NULL, MAC_ADDR_WORD);
+    //emb6_startupParams.p_demos = loc_demoAppsSet();
 
 #if USE_FREERTOS
     ledTaskParams.en = 1;
