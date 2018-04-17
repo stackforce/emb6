@@ -52,7 +52,7 @@ extern "C"
 /******************************************************************************
 * INCLUDES
 */
-#include "bsp/srf06eb_cc26xx/drivers/source/bsp.h" // Contains BSP key definitions
+#include "bsp/srf06eb_cc26xx/drivers/source/bsp_ti.h" // Contains BSP key definitions
 #include "driverlib/gpio.h"     // Bitmask defines (e.g. GPIO_FALLING_EDGE)
 
 /******************************************************************************
