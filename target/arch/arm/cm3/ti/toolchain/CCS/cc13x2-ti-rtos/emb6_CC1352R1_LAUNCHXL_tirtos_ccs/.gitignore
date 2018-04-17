@@ -1,0 +1,11 @@
+/cc26xx_udp_client/
+.config
+.launches
+.xdchelp
+src/
+/Debug/*
+/Debug/
+/cc13x2_udp_client/
+/cc13x2_udp_server/
+/cc13x2_extif/
+/cc13x2_serial-api-sensorsim/
