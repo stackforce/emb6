@@ -37,22 +37,6 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.INCLUDE_PATH.1201982810" name="Add dir to #include search path (--include_path, -I)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.INCLUDE_PATH" valueType="includePath">
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core/"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/dll"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/dll/framer"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/phy"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/dll/dllc"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/dll/dllsec"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/dll/mac"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/net"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/net/ipv6"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/net/ipv6/multicast"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/net/rpl"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/net/sicslowpan"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/sock"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/apl/er-coap"/>
-									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core//inc/apl/rest-engine"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/bsp"/>
@@ -152,7 +136,7 @@
 						</tool>
 					</fileInfo>
 					<sourceEntries>
-						<entry excluding="core/src/net/ipv6/multicast/esmrf.c|core/src/net/dtls|core/src/dll/tsch|core/src/apl|target/mcu/efm32lg840f256|target/bsp/native|target/mcu/atmega1281|target/bsp/ti_trxeb_cc112x|target/bsp/atany900_basic|target/if/native|src|target/mcu/msp430f5438a|target/arch/native|target/arch/arm/cm3/ti/device/cc13xx/ti_rtos_src|target/arch/msp430|target/bsp/efm32stk3600_cc112x|target/if/at86rf212b|target/mcu/template|target/bsp/ti_trxeb_cc120x|target/arch/arm/cm3/silabs|target/bsp/efm32stk3600_rf212b|target/bsp/mosesstick|target/mcu/native|target/bsp/moses|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/ccfg.c|target/arch/avr|target/bsp/efm32stk3600_cc120x|target/bsp/samd20xpro_rf212b|target/if/cc120x|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_gcc.c|target/mcu/efm32lg990f256|target/mcu/samd20|target/arch/arm/cm0plus|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_iar.c|target/bsp/atany900_pro5|CC1310DK_7XD.cmd|target/bsp/samd20xpro_rf212|target/if/cc112x|target/bsp/template|target/bsp/atany900|target/mcu/samd21|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_keil.s|target/if/at86rf212|target/if/at86rf230" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="core/src/net/ipv6/multicast/esmrf.c|core/src/net/dtls|core/src/dll/tsch|core/src/apl|src|target/arch/arm/cm3/ti/device/cc13xx/ti_rtos_src|target/arch/arm/cm3/silabs|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/ccfg.c|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_gcc.c|target/arch/arm/cm0plus|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_iar.c|CC1310DK_7XD.cmd|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_keil.s" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
