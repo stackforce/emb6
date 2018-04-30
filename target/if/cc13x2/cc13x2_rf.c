@@ -306,7 +306,7 @@ static void loc_startRx( void )
   RF_cmdIeeeRx.pRxQ = &dataQueue;
   RF_cmdIeeeRx.pOutput = &rxStatistics;
 
-  if( !RF_HANDLE_IS_VALID( gRxCmdHandle ) )
+  if( !RF_HANDLE_IS_VALID( gRxCmdHandle ) && gRfHandle )
   {
     /* Set RX parameters */
     rxParam.priority = RF_PriorityNormal;
@@ -619,7 +619,16 @@ static void cc13x2_Off (e_nsErr_t *p_err)
   }
   #endif
 
+  if(gRfHandle != NULL)
+  {
+      RF_Stat stat = RF_flushCmd(gRfHandle, gRxCmdHandle, 0);
+      if ( stat == RF_StatSuccess ){
+          RF_close(gRfHandle);
+          gRfHandle = NULL;
+      }
+  }
   *p_err = NETSTK_ERR_NONE;
+
 }
 
 
