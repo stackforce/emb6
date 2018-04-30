@@ -444,7 +444,7 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
 
   /* Check if the requested channel is allowed. */
   if( (channel >= CHANNEL_LOWER_LIMIT) &&
-      (channel >= CHANNEL_UPPER_LIMIT) )
+      (channel <= CHANNEL_UPPER_LIMIT) )
   {
     if( RF_HANDLE_IS_VALID( gRxCmdHandle ) )
     {
