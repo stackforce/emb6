@@ -9,7 +9,7 @@
  *   protocols. Files which a started from demo are using for
  *   demonstrate functionality of a protocol.
  *   @{
- *   \defgroup demo_udp_alive    UDP-Alive for 6LBR
+ *   \defgroup udp_alive    UDP-Alive for 6LBR
  *
  *   UDP Client Header for DODAG visualization on Cetic 6LBR
  *   @{
@@ -87,7 +87,7 @@ int8_t udpAliveServiceInit(void);
 /*----------------------------------------------------------------------------*/
 int8_t udpAliveServiceConf(s_ns_t* pst_netStack);
 
-#endif /* _DEMO_UDP_ALIVE_H_ */
+#endif /* _UDP_ALIVE_H_ */
 /** @} */
 /** @} */
 /** @} */

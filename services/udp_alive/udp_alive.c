@@ -3,7 +3,7 @@
  *      @{
  *      \addtogroup demo
  *      @{
- *      \addtogroup demo_udp_alive
+ *      \addtogroup udp_alive
  *      @{
 */
 /*
@@ -46,10 +46,10 @@
  *
  */
 /*============================================================================*/
-/*! \file   demo_udp_alive.c
+/*! \file   udp_alive.c
 
  \author Peter Lehmann, peter.lehmann@hs-offenburg.de
- \author Artem Yushev, 
+ \author Artem Yushev,
 
  \brief  UDP Client Source for DODAG visualization on Cetic 6LBR
 
@@ -73,7 +73,7 @@
 /*==============================================================================
                                          MACROS
  =============================================================================*/
-#define     LOGGER_ENABLE        LOGGER_DEMO_UDPIAA
+#define     LOGGER_ENABLE        LOGGER_UDPIAA
 #include    "logger.h"
 
 /** set the send interval */

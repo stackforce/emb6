@@ -1090,8 +1090,8 @@ void uip_log(char *msg);
  #endif
 
 /** DEMO UDP example                        (see demo_exudp.c) */
-#ifndef LOGGER_DEMO_UDPIAA
-#define LOGGER_DEMO_UDPIAA                  FALSE
+#ifndef LOGGER_UDPIAA
+#define LOGGER_UDPIAA                  FALSE
 #endif
 
 /** DEMO APTB example                       (see demo_aptb_xxx.c) */
