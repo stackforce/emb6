@@ -306,7 +306,7 @@ static void loc_startRx( void )
   RF_cmdIeeeRx.pRxQ = &dataQueue;
   RF_cmdIeeeRx.pOutput = &rxStatistics;
 
-  if( !RF_HANDLE_IS_VALID( gRxCmdHandle ) )
+  if( !RF_HANDLE_IS_VALID( gRxCmdHandle ) && gRfHandle )
   {
     /* Set RX parameters */
     rxParam.priority = RF_PriorityNormal;
@@ -444,7 +444,7 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
 
   /* Check if the requested channel is allowed. */
   if( (channel >= CHANNEL_LOWER_LIMIT) &&
-      (channel >= CHANNEL_UPPER_LIMIT) )
+      (channel <= CHANNEL_UPPER_LIMIT) )
   {
     if( RF_HANDLE_IS_VALID( gRxCmdHandle ) )
     {
@@ -619,7 +619,16 @@ static void cc13x2_Off (e_nsErr_t *p_err)
   }
   #endif
 
+  if(gRfHandle != NULL)
+  {
+      RF_Stat stat = RF_flushCmd(gRfHandle, gRxCmdHandle, 0);
+      if ( stat == RF_StatSuccess ){
+          RF_close(gRfHandle);
+          gRfHandle = NULL;
+      }
+  }
   *p_err = NETSTK_ERR_NONE;
+
 }
 
 
@@ -687,6 +696,10 @@ static void cc13x2_Send (uint8_t      *p_data,
   {
     *p_err = NETSTK_ERR_RF_SEND;
   }
+
+  //Temporarily to avoid losing fragments.
+  bsp_delayUs(100000); //Todo Remove this delay and fix loss of fragment issue
+
 }
 
 /*!
