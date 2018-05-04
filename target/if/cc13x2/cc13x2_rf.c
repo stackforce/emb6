@@ -37,6 +37,8 @@ extern "C"
 #include <driverlib/rf_ieee_cmd.h>
 #include <driverlib/rf_data_entry.h>
 
+#include "RFQueue.h"
+
 #include "bsp.h"
 /* RF register settings. */
 #include "smart_rf/IEEE_settings.h"
