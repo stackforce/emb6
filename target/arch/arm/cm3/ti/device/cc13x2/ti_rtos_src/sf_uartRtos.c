@@ -37,6 +37,11 @@
 #define UART_BUFFER_RX_LEN            40U
 /*! Number od bytes to read before calling the rx callback  */
 #define UART_RX_LEN                    1U
+
+/*! baudrate used for the uart */
+#ifndef UART_DEFAULT_BAUD
+#define UART_DEFAULT_BAUD           115200U
+#endif /* #ifndef UART_DEFAULT_BAUD */
 /*==============================================================================
                             VARIABLES
 ==============================================================================*/
@@ -149,7 +154,7 @@ bool sf_uart_init(void)
   uartParams.readDataMode = UART_DATA_BINARY;
   uartParams.readReturnMode = UART_RETURN_FULL;
   uartParams.readEcho = UART_ECHO_OFF;
-  uartParams.baudRate = 115200;
+  uartParams.baudRate = UART_DEFAULT_BAUD;
   uartParams.dataLength = UART_LEN_8;
   uartParams.stopBits = UART_STOP_ONE;
   uartParams.parityType = UART_PAR_NONE;

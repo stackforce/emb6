@@ -87,6 +87,7 @@
 									<listOptionValue builtIn="false" value="USE_TI_RTOS=0"/>
 									<listOptionValue builtIn="false" value="HAL_SUPPORT_SLIPUART=1"/>
 									<listOptionValue builtIn="false" value="MAC_ADDR_WORD=0xcafe"/>
+									<listOptionValue builtIn="false" value="UART_DEFAULT_BAUD=230400"/>
 									<listOptionValue builtIn="false" value="UART_BUFFER_RX_LEN=512"/>
 									<listOptionValue builtIn="false" value="UART_BUFFER_TX_LEN=512"/>
 								</option>
@@ -136,7 +137,7 @@
 						</tool>
 					</fileInfo>
 					<sourceEntries>
-						<entry excluding="core/src/net/ipv6/multicast/esmrf.c|core/src/net/dtls|core/src/dll/tsch|core/src/apl|src|target/arch/arm/cm3/ti/device/cc13xx/ti_rtos_src|target/arch/arm/cm3/silabs|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/ccfg.c|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_gcc.c|target/arch/arm/cm0plus|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_iar.c|CC1310DK_7XD.cmd|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_keil.s" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="core/src/net/ipv6/multicast/esmrf.c|core/src/net/dtls|core/src/dll/tsch|core/src/apl|src|target/arch/arm/cm3/ti/device/cc13xx/ti_rtos_src|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/ccfg.c|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_gcc.c|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_iar.c|CC1310DK_7XD.cmd|target/arch/arm/cm3/ti/device/cc13xx/rf_noRtos_lib/startup_files/startup_keil.s" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
