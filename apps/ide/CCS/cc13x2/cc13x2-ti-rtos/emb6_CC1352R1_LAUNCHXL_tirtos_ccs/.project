@@ -1667,6 +1667,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/rflib</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13x2/sf_mcu.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/sf_mcu.c</locationURI>
@@ -1700,6 +1705,16 @@
 			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.c</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.h</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.h</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/Board.h</name>

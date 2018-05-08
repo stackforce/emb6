@@ -570,7 +570,7 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
                         rxBuffer,
                         sizeof(rxBuffer),
                         NUM_DATA_ENTRIES,
-                        MAX_DATA_BUF_SIZE))
+                        MAX_DATA_LENGTH_ENTRY))
   {
     /* Failed to allocate space for all data entries */
       return;

@@ -367,11 +367,6 @@
 			<locationURI>REPO_ROOT_DIR/services/serialapi/serialapi_core.h</locationURI>
 		</link>
 		<link>
-			<name>services/udp_alive/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/services/udp_alive/SConscript</locationURI>
-		</link>
-		<link>
 			<name>services/udp_alive/udp_alive.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/services/udp_alive/udp_alive.c</locationURI>
@@ -822,11 +817,6 @@
 			<locationURI>REPO_ROOT_DIR/core/src/sock/udp-socket.c</locationURI>
 		</link>
 		<link>
-			<name>demo/aptb/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/aptb/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/aptb/client/demo_aptb.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/aptb/client/demo_aptb.h</locationURI>
@@ -835,11 +825,6 @@
 			<name>demo/aptb/client/demo_aptb_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/aptb/client/demo_aptb_cli.c</locationURI>
-		</link>
-		<link>
-			<name>demo/aptb/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/aptb/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/aptb/server/demo_aptb.h</name>
@@ -852,11 +837,6 @@
 			<locationURI>REPO_ROOT_DIR/demo/aptb/server/demo_aptb_srv.c</locationURI>
 		</link>
 		<link>
-			<name>demo/coap/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/coap/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/coap/client/demo_coap_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/coap/client/demo_coap_cli.c</locationURI>
@@ -865,11 +845,6 @@
 			<name>demo/coap/client/demo_coap_cli.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/coap/client/demo_coap_cli.h</locationURI>
-		</link>
-		<link>
-			<name>demo/coap/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/coap/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/coap/server/demo_coap_srv.c</name>
@@ -887,11 +862,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>demo/dtls/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/dtls/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/dtls/client/demo_dtls_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/dtls/client/demo_dtls_cli.c</locationURI>
@@ -900,11 +870,6 @@
 			<name>demo/dtls/client/demo_dtls_cli.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/dtls/client/demo_dtls_cli.h</locationURI>
-		</link>
-		<link>
-			<name>demo/dtls/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/dtls/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/dtls/server/demo_dtls_srv.c</name>
@@ -917,11 +882,6 @@
 			<locationURI>REPO_ROOT_DIR/demo/dtls/server/demo_dtls_srv.h</locationURI>
 		</link>
 		<link>
-			<name>demo/lwm2m/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/lwm2m/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/lwm2m/client/demo_lwm2m_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/lwm2m/client/demo_lwm2m_cli.c</locationURI>
@@ -930,11 +890,6 @@
 			<name>demo/lwm2m/client/demo_lwm2m_cli.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/lwm2m/client/demo_lwm2m_cli.h</locationURI>
-		</link>
-		<link>
-			<name>demo/mdns/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/mdns/client/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/mdns/client/demo_mdns_cli.c</name>
@@ -947,11 +902,6 @@
 			<locationURI>REPO_ROOT_DIR/demo/mdns/client/demo_mdns_cli.h</locationURI>
 		</link>
 		<link>
-			<name>demo/mdns/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/mdns/server/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/mdns/server/demo_mdns_srv.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/mdns/server/demo_mdns_srv.c</locationURI>
@@ -960,26 +910,6 @@
 			<name>demo/mdns/server/demo_mdns_srv.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/mdns/server/demo_mdns_srv.h</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket/client/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket/server/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket_simple/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket_simple/client/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket_simple/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket_simple/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>services/lwm2mapi/lwm2m-objects/lwm2m-object-bme280-airpressure.c</name>
@@ -2212,6 +2142,11 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/rflib</name>
+			<type>2</type>
+			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13x2/sf_mcu.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/sf_mcu.c</locationURI>
@@ -2245,6 +2180,16 @@
 			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.c</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.h</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/rflib/RFQueue.h</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/Board.h</name>

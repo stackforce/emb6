@@ -181,6 +181,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket_simple"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket"/>
@@ -218,6 +219,7 @@
 									<listOptionValue builtIn="false" value="${INHERITED_SYMBOLS}"/>
 									<listOptionValue builtIn="false" value="LOGGER_LEVEL=3"/>
 									<listOptionValue builtIn="false" value="LOGGER_DEMO_UDP_SOCKET=1"/>
+									<listOptionValue builtIn="false" value="LOGGER_PHY=1"/>
 									<listOptionValue builtIn="false" value="DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="DEVICE_FAMILY=DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="NETSTK_CFG_IEEE_802154G_EN=0"/>
@@ -327,6 +329,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/serialapi"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/serialapi/serialapi"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/lwm2mapi/lwm2m-objects"/>

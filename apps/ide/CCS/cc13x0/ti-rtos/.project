@@ -2142,11 +2142,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/SConscript</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/device</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
