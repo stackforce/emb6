@@ -219,7 +219,6 @@
 									<listOptionValue builtIn="false" value="${INHERITED_SYMBOLS}"/>
 									<listOptionValue builtIn="false" value="LOGGER_LEVEL=3"/>
 									<listOptionValue builtIn="false" value="LOGGER_DEMO_UDP_SOCKET=1"/>
-									<listOptionValue builtIn="false" value="LOGGER_PHY=1"/>
 									<listOptionValue builtIn="false" value="DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="DEVICE_FAMILY=DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="NETSTK_CFG_IEEE_802154G_EN=0"/>
