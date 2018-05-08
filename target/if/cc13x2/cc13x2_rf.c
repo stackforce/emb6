@@ -696,10 +696,6 @@ static void cc13x2_Send (uint8_t      *p_data,
   {
     *p_err = NETSTK_ERR_RF_SEND;
   }
-
-  //Temporarily to avoid losing fragments.
-  bsp_delayUs(100000); //Todo Remove this delay and fix loss of fragment issue
-
 }
 
 /*!
