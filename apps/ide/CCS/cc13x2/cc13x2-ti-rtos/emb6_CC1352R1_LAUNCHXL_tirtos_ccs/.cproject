@@ -84,6 +84,7 @@
 									<listOptionValue builtIn="false" value="DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="DEVICE_FAMILY=DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="NETSTK_CFG_IEEE_802154G_EN=0"/>
+									<listOptionValue builtIn="false" value="UART_DEFAULT_BAUD=230400"/>
 									<listOptionValue builtIn="false" value="USE_TI_RTOS=1"/>
 								</option>
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.SILICON_VERSION.539186330" name="Target processor version (--silicon_version, -mv)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.SILICON_VERSION" value="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.SILICON_VERSION.7M4" valueType="enumerated"/>
