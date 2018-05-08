@@ -35,6 +35,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket_simple"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket"/>
@@ -181,6 +182,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket_simple"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket"/>
@@ -327,6 +329,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/serialapi"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/serialapi/serialapi"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/lwm2mapi/lwm2m-objects"/>
@@ -387,10 +390,10 @@
 									<listOptionValue builtIn="false" value="LWM2M_DEVICE_MANUFACTURER=\&quot;ivESK/HSG\&quot;"/>
 									<listOptionValue builtIn="false" value="LWM2M_DEVICE_TYPE=\&quot;GENERIC\&quot;"/>
 									<listOptionValue builtIn="false" value="LWM2M_DEVICE_MODEL_NUMBER=\&quot;SENSORSIM\&quot;"/>
-									<listOptionValue builtIn="false" value="LWM2M_DEVICE_SERIAL_NO=\&quot;20180417-0001\&quot;"/>
-									<listOptionValue builtIn="false" value="LWM2M_DEVICE_HW_VERSION=\&quot;R1\&quot;"/>
-									<listOptionValue builtIn="false" value="LWM2M_DEVICE_FIRMWARE_VERSION=\&quot;v2.0.0\&quot;"/>
-									<listOptionValue builtIn="false" value="LWM2M_DEVICE_SW_VERSION=\&quot;v2.0.0\&quot;"/>
+									<listOptionValue builtIn="false" value="LWM2M_DEVICE_SERIAL_NO=\&quot;20180508-0001\&quot;"/>
+									<listOptionValue builtIn="false" value="LWM2M_DEVICE_HW_VERSION=\&quot;CC13X2-R1\&quot;"/>
+									<listOptionValue builtIn="false" value="LWM2M_DEVICE_FIRMWARE_VERSION=\&quot;v2.0.2\&quot;"/>
+									<listOptionValue builtIn="false" value="LWM2M_DEVICE_SW_VERSION=\&quot;v2.0.2\&quot;"/>
 									<listOptionValue builtIn="false" value="LWM2M_ENGINE_CONF_MAX_OBJECTS=20"/>
 									<listOptionValue builtIn="false" value="COAP_MAX_OBSERVERS=40"/>
 									<listOptionValue builtIn="false" value="COAP_OBSERVE_REFRESH_INTERVAL=0"/>

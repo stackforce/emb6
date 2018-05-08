@@ -35,6 +35,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/apps/extif"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/core/inc/apl/dns"/>
