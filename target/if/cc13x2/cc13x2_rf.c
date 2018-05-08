@@ -316,8 +316,19 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
   /* Check if it is the right event. */
   if (c_event == EVENT_TYPE_RF)
   {
-    if (gb_unhandledFrame)
+    /* Read out data entry. */
+    while (gb_unhandledFrame && currentDataEntry->status == DATA_ENTRY_FINISHED)
     {
+      /* Store the length of the received packet. */
+      rxPacket.len = *(uint8_t *)(&currentDataEntry->data);
+      /* Copy the payload into RF buffer.
+         The offset of 1 is to skip the length field which has already been stored. */
+      memcpy(&rxPacket.payload, (&currentDataEntry->data + 1), rxPacket.len);
+      /* Store the RSSI of the received packet. */
+      rxPacket.rssi = rxStatistics.lastRssi;
+
+      RFQueue_nextEntry();
+
       #if LOGGER_ENABLE
       uint8_t temp = rxPacket.len;
       uint8_t *p_temp = rxPacket.payload;
@@ -334,8 +345,11 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
 
       /* Forward the call to the PHY layer. */
       gpRfNetstk->phy->recv(rxPacket.payload, rxPacket.len, &err);
-      gb_unhandledFrame = false;
+
+      /* Read out data entry for the next iteration. */
+      currentDataEntry = RFQueue_getDataEntry();
     }
+    gb_unhandledFrame = false;
   }
 }
 
