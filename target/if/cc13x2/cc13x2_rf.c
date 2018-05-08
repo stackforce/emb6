@@ -63,6 +63,7 @@ static void loc_startRx(void);
 /*============================================================================*/
 #define MAX_ADDR_SIZE 8
 #define MAX_DATA_LENGTH 128
+#define MAX_DATA_LENGTH_ENTRY 153
 
 /* This is the minimum value which can be disbplayed using a signed 8 bit
  * integer =-127dBm */
@@ -70,6 +71,11 @@ static void loc_startRx(void);
 #define CC13X2_MIN_RSSI_SIGNED     -128
 /* Number of RSSI checks that must be lower than the defined threshold */
 #define CC13X2_NUM_OFF_RSSI_CHECKS 5U
+
+#define NUM_DATA_ENTRIES       4 /* NOTE: Only two data entries supported at the moment */
+
+
+#define RX_BUFF_SIZE                          NUM_DATA_ENTRIES * (MAX_DATA_LENGTH_ENTRY + RF_QUEUE_DATA_ENTRY_HEADER_SIZE + RF_QUEUE_QUEUE_ALIGN_PADDING(MAX_DATA_LENGTH_ENTRY))
 
 /* Power level:   5 dBm */
 #define TX_POWER_5_DBM              5
@@ -189,11 +195,12 @@ const txPwrTbl_t txPwrTbl_ieee[] =
 /*============================================================================*/
 
 /* Rx buffer includes data entry structure, hdr (len=1byte), dst addr (max of 8 bytes) and data. */
-uint8_t rxBuffer[sizeof(rfc_dataEntryGeneral_t) + 1 + MAX_ADDR_SIZE + MAX_DATA_LENGTH];
-/* Rx data queue. */
+uint8_t rxBuffer[RX_BUFF_SIZE];
+/* Receive dataQueue for RF Core to fill in data */
 static dataQueue_t dataQueue;
+static rfc_dataEntryGeneral_t* currentDataEntry;
 /* Rx statistics. */
-rfc_ieeeRxOutput_t rxStatistics;
+static rfc_ieeeRxOutput_t rxStatistics;
 
 //Handle for last Async command, which is needed by EasyLink_abort
 static RF_CmdHandle gRxCmdHandle = RF_INVALID_RF_HANDLE;
@@ -239,13 +246,8 @@ static int8_t gTxPower;
  * */
 static void rxDoneCallback(RF_Handle rfHandle, RF_CmdHandle cmdHandle, RF_EventMask evtMask)
 {
-  /* Read out data entry. */
-  rfc_dataEntryGeneral_t *pDataEntry;
-  /* This call may be shifted since it does not make sense here. */
-  pDataEntry = (rfc_dataEntryGeneral_t *)rxBuffer;
-
-  /* Indicates if RX must be restarted. */
-  bool b_restartRx = true;
+    /* Indicates if RX must be restarted. */
+    bool b_restartRx = true;
 
   if ((evtMask & RF_EventRxOk) ||
       (evtMask & RF_EventRxNOk))
@@ -256,20 +258,14 @@ static void rxDoneCallback(RF_Handle rfHandle, RF_CmdHandle cmdHandle, RF_EventM
 
     if (evtMask & RF_EventRxEntryDone)
     {
-      if (!gb_unhandledFrame)
-      {
-        /* Store the length of the recived packet. */
-        rxPacket.len = *(uint8_t *)(&pDataEntry->data);
-        /* Copy the payload into RF buffer.
-           The offset of 1 is to skip the length field which has already been stored. */
-        memcpy(&rxPacket.payload, (&pDataEntry->data + 1), rxPacket.len);
-        /* Store the RSSI of the received packet. */
-        rxPacket.rssi = rxStatistics.lastRssi;
-        /* Trigger the execution of the RF event callback function. */
-        RF_SEM_POST(EVENT_TYPE_RF);
-        /* Indicate that there is an unhandled frame. */
-        gb_unhandledFrame = true;
-      }
+        if (!gb_unhandledFrame)
+        {
+            /* Read out data entry. */
+            currentDataEntry = RFQueue_getDataEntry();
+            /* Trigger the execution of the RF event callback function. */
+            RF_SEM_POST(EVENT_TYPE_RF);
+            gb_unhandledFrame = true;
+        }
     }
   }
   else if (evtMask & (RF_EventCmdAborted | RF_EventCmdStopped |
@@ -292,21 +288,7 @@ static void rxDoneCallback(RF_Handle rfHandle, RF_CmdHandle cmdHandle, RF_EventM
    - Start reception in case it is not already running. */
 static void loc_startRx( void )
 {
-  rfc_dataEntryGeneral_t *pDataEntry;
   RF_ScheduleCmdParams rxParam;
-
-  /* Clear the RX buffer. */
-  memset( rxBuffer, 0, sizeof(rxBuffer) );
-
-  /* Initialize the data entry, the data queue and the RX command. */
-  pDataEntry = (rfc_dataEntryGeneral_t*) rxBuffer;
-  pDataEntry->length = 1 + MAX_ADDR_SIZE + MAX_DATA_LENGTH;
-  pDataEntry->status = 0;
-  pDataEntry->config.lenSz = 1;
-  dataQueue.pCurrEntry = (uint8_t*) pDataEntry;
-  dataQueue.pLastEntry = NULL;
-  RF_cmdIeeeRx.pRxQ = &dataQueue;
-  RF_cmdIeeeRx.pOutput = &rxStatistics;
 
   if( !RF_HANDLE_IS_VALID( gRxCmdHandle ) && gRfHandle )
   {
@@ -314,9 +296,6 @@ static void loc_startRx( void )
     rxParam.priority = RF_PriorityNormal;
     rxParam.endTime = 0;
     rxParam.bIeeeBgCmd = true;
-
-    /* Clear the Rx statistics structure */
-    memset(&rxStatistics, 0, sizeof(rfc_ieeeRxOutput_t));
 
     /* Start the reception. */
     gRxCmdHandle = RF_scheduleCmd(gRfHandle, ( RF_Op* )&RF_cmdIeeeRx,
@@ -570,8 +549,27 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
   /* Store netstack pointer. */
   gpRfNetstk = p_netstk;
 
+  /* Clear the RX buffer. */
+  memset( rxBuffer, 0, sizeof(rxBuffer) );
+
+  if( RFQueue_defineQueue(&dataQueue,
+                        rxBuffer,
+                        sizeof(rxBuffer),
+                        NUM_DATA_ENTRIES,
+                        MAX_DATA_BUF_SIZE))
+  {
+    /* Failed to allocate space for all data entries */
+      return;
+  }
+
   RF_Params_init(&gRfParams);
 
+  /* Initialize the data entry, the data queue and the RX command.*/
+  RF_cmdIeeeRx.pRxQ = &dataQueue;
+  RF_cmdIeeeRx.pOutput = &rxStatistics;
+
+  /* Read out data entry. */
+  currentDataEntry = RFQueue_getDataEntry();
   if(gRfHandle == NULL)
   {
     gRfHandle = RF_open(&gRfObject, &RF_prop, (RF_RadioSetup*) &RF_cmdRadioSetup , &gRfParams);
