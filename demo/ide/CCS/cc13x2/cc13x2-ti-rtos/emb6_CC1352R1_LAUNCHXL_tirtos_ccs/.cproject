@@ -181,6 +181,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket_simple"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/demo/udp_socket"/>
@@ -327,6 +328,7 @@
 									<listOptionValue builtIn="false" value="${CG_TOOL_ROOT}/include"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src"/>
+									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/target/arch/arm/cm3/ti/device/cc13x2/rflib"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/serialapi"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/serialapi/serialapi"/>
 									<listOptionValue builtIn="false" value="${REPO_ROOT_DIR}/services/lwm2mapi/lwm2m-objects"/>
