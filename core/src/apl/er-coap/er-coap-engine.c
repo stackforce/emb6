@@ -346,6 +346,13 @@ coap_init_engine(void)
                       (udp_socket_input_callback_t)coap_receive);
 }
 /*---------------------------------------------------------------------------*/
+void
+coap_stop_engine(void)
+{
+  coap_init_transactions();
+  coap_close_connection();
+}
+/*---------------------------------------------------------------------------*/
 void 
 coap_engine_callback(c_event_t c_event, p_data_t p_data)
 {
@@ -447,6 +454,8 @@ const struct rest_implementation coap_rest_implementation = {
   "CoAP-18",
 
   coap_init_engine,
+  coap_stop_engine,
+
   coap_set_service_callback,
 
   coap_get_header_uri_path,
