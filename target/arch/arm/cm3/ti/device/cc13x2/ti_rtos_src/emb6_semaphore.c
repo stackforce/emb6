@@ -1,8 +1,8 @@
 /**
-  @file       wmbus_semaphore.c
+  @file       emb6_semaphore.c
   @copyright  STACKFORCE GmbH, Heitersheim, Germany, http://www.stackforce.de
   @author     STACKFORCE
-  @brief      General module to create a wmbus semaphore
+  @brief      General module to create a emb6 semaphore
 */
 
 /*==============================================================================
@@ -25,7 +25,7 @@
                             VARIABLES
 ==============================================================================*/
 /* Semaphore hanfle */
-Semaphore_Handle gs_wmbusSemaphore;
+Semaphore_Handle gs_emb6Semaphore;
 /*==============================================================================
                             FUNCTION PROTOTYPES
 ==============================================================================*/
@@ -38,7 +38,7 @@ Semaphore_Handle gs_wmbusSemaphore;
                             FUNCTIONS
 ==============================================================================*/
 /*============================================================================*/
-/*! wmbus_semaphore_init() */
+/*! emb6_semaphore_init() */
 /*============================================================================*/
 void semaphore_init(Error_Block* ps_eb)
 {
@@ -47,29 +47,29 @@ void semaphore_init(Error_Block* ps_eb)
 
   Semaphore_Params_init(&s_semParams);
   s_semParams.mode = Semaphore_Mode_BINARY;
-  gs_wmbusSemaphore =Semaphore_create(0, &s_semParams, ps_eb);
+  gs_emb6Semaphore =Semaphore_create(0, &s_semParams, ps_eb);
 
-}/* wmbus_semaphore_init() */
+}/* emb6_semaphore_init() */
 
 /*============================================================================*/
-/*! wmbus_semaphore_pend() */
+/*! emb6_semaphore_pend() */
 /*============================================================================*/
 void semaphore_pend(void)
 {
   /* Ensure that the stack task will be blocked here */
-  while(Semaphore_getCount(gs_wmbusSemaphore) > 0x00U)
+  while(Semaphore_getCount(gs_emb6Semaphore) > 0x00U)
   {
-    Semaphore_pend(gs_wmbusSemaphore, BIOS_WAIT_FOREVER);
+    Semaphore_pend(gs_emb6Semaphore, BIOS_WAIT_FOREVER);
   }/* while */
 
-  /* Block the wmbus_task until an event occured */
-  Semaphore_pend(gs_wmbusSemaphore, BIOS_WAIT_FOREVER);
-}/* wmbus_semaphore_pend */
+  /* Block the emb6_task until an event occured */
+  Semaphore_pend(gs_emb6Semaphore, BIOS_WAIT_FOREVER);
+}/* emb6_semaphore_pend */
 
 /*============================================================================*/
-/*! wmbus_semaphore_post() */
+/*! emb6_semaphore_post() */
 /*============================================================================*/
 void semaphore_post(void)
 {
-  Semaphore_post(gs_wmbusSemaphore);
-}/* wmbus_semaphore_post */
+  Semaphore_post(gs_emb6Semaphore);
+}/* emb6_semaphore_post */

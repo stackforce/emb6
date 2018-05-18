@@ -1,19 +1,19 @@
 #ifndef __EMB6_TASK_H__
 #define __EMB6_TASK_H__
-#ifndef __DECL_WMBUS_TASK_H__
-#define __DECL_WMBUS_TASK_H__ extern
+#ifndef __DECL_EMB6_TASK_H__
+#define __DECL_EMB6_TASK_H__ extern
 #else
-#define __DECL_WMBUS_TASK_H__
-#endif /* __WMBUS_TASK_H__ */
+#define __DECL_EMB6_TASK_H__
+#endif /* __EMB6_TASK_H__ */
 
 /**
   @file       emb6_task.h
   @copyright  STACKFORCE GmbH, Heitersheim, Germany, http://www.stackforce.de
   @author     STACKFORCE
-  @brief      Wmbus task module.
+  @brief      Emb6 task module.
 
               Include before:
-              - wmbus_typedefs.h
+              - emb6_typedefs.h
               - <ti/sysbios/knl/Task.h>
 */
 
@@ -35,4 +35,4 @@
 /*============================================================================*/
 void emb6_task_init(ti_sysbios_knl_Task_FuncPtr fp_fxn, Error_Block* ps_eb);
 
-#endif /* __WMBUS_TASK_H__ */
+#endif /* __EMB6_TASK_H__ */

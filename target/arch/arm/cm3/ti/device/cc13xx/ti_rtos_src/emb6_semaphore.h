@@ -1,19 +1,19 @@
-#ifndef __WMBUS_SEMAPHORE_H__
-#define __WMBUS_SEMAPHORE_H__
-#ifndef __DECL_WMBUS_SEMAPHORE_H__
-#define __DECL_WMBUS_SEMAPHORE_H__ extern
+#ifndef __EMB6_SEMAPHORE_H__
+#define __EMB6_SEMAPHORE_H__
+#ifndef __DECL_EMB6_SEMAPHORE_H__
+#define __DECL_EMB6_SEMAPHORE_H__ extern
 #else
-#define __DECL_WMBUS_SEMAPHORE_H__
-#endif /* __WMBUS_SEMAPHORE_H__ */
+#define __DECL_EMB6_SEMAPHORE_H__
+#endif /* __EMB6_SEMAPHORE_H__ */
 
 /**
-  @file       wmbus_semaphore.h
+  @file       emb6_semaphore.h
   @copyright  STACKFORCE GmbH, Heitersheim, Germany, http://www.stackforce.de
   @author     STACKFORCE
-  @brief      Wmbus semaphore module.
+  @brief      Emb6 semaphore module.
 
               Include before:
-              - wmbus_typedefs.h
+              - emb6_typedefs.h
               - <ti/sysbios/knl/Semaphore.h>
 */
 
@@ -27,7 +27,7 @@
 ==============================================================================*/
 /*============================================================================*/
 /*!
- * @brief  Creates a wmbus Semaphore
+ * @brief  Creates a emb6 Semaphore
  *
  * @param  ps_eb Pointer to the error handler
  */
@@ -50,4 +50,4 @@ void semaphore_pend(void);
 /*============================================================================*/
 void semaphore_post(void);
 
-#endif /* __WMBUS_SEMAPHORE_H__ */
+#endif /* __EMB6_SEMAPHORE_H__ */
