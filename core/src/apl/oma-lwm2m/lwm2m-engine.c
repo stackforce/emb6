@@ -1508,6 +1508,8 @@ void lwm2m_engine_init( char* epname, f_lwm2m_engine_statch_cb p_cb,
 */
 void lwm2m_engine_stop( void )
 {
+  /* stop REST engine */
+  rest_engine_stop();
   /* stop LWM2M event timer */
   etimer_stop(&_ctx.event_timer);
 } /* lwm2m_engine_stop() */
