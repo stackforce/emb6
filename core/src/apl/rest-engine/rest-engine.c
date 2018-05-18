@@ -91,6 +91,27 @@ rest_init_engine(void)
 
 }
 /*---------------------------------------------------------------------------*/
+/*- REST Engine API ---------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+/**
+ * \brief Stop the REST Engine process
+ *
+ * This function must be called by server processes to stop the REST Engine and
+ * remove the dedicated UDP connection.
+ */
+void
+rest_engine_stop(void)
+{
+
+  /* initialize list */
+  list_init(restful_services);
+
+  /* Stop the RESTful server implementation. */
+  REST.stop();
+
+
+}
+/*---------------------------------------------------------------------------*/
 /**
  * \brief Makes a resource available under the given URI path
  * \param resource A pointer to a resource implementation
