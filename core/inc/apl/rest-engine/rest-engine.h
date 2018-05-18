@@ -146,6 +146,9 @@ struct rest_implementation {
   /** Initialize the REST implementation. */
   void (*init)(void);
 
+  /** stop the REST engine. */
+  void (*stop)(void);
+
   /** Register the RESTful service callback at implementation. */
   void (*set_service_callback)(service_callback_t callback);
 

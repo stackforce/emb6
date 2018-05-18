@@ -296,6 +296,14 @@ coap_init_connection(uint16_t port, udp_socket_input_callback_t pf_coap_receive)
     current_mid = random_rand();
 }
 /*---------------------------------------------------------------------------*/
+/*- Internal API ------------------------------------------------------------*/
+/*---------------------------------------------------------------------------*/
+void
+coap_close_connection(void)
+{
+    udp_socket_close(pst_udp_socket);
+}
+/*---------------------------------------------------------------------------*/
 uint16_t
 coap_get_mid()
 {
@@ -783,6 +791,7 @@ coap_get_header_accept(void *packet, unsigned int *accept)
   if(!IS_OPTION(coap_pkt, COAP_OPTION_ACCEPT)) {
     return 0;
   }
+
   *accept = coap_pkt->accept;
   return 1;
 }
