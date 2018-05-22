@@ -1692,6 +1692,11 @@
 			<locationURI>REPO_ROOT_DIR/core/src/dll/dllc/linkaddr.c</locationURI>
 		</link>
 		<link>
+			<name>core/src/dll/dllsec/dllsec_802154.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/core/src/dll/dllsec/dllsec_802154.c</locationURI>
+		</link>
+		<link>
 			<name>core/src/dll/dllsec/dllsec_null.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/core/src/dll/dllsec/dllsec_null.c</locationURI>
