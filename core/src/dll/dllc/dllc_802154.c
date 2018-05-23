@@ -66,12 +66,6 @@
 #endif /* #if !defined(NETSTK_SUPPORT_HW_CRC) */
 
 
-#if LLSEC802154_ENABLED
-/** \brief Defines the Message Integrity Code (MIC) length as per the security level */
-#define LLSEC802154_MIC_LEN(a)                    (2 << (a & 3))
-#endif  /*LLSEC802154_ENABLED*/
-
-
 /*
 ********************************************************************************
 *                          LOCAL FUNCTION DECLARATIONS
