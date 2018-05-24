@@ -74,7 +74,7 @@
 #endif
 
 #ifdef RFC_INCLUDE_T_MODE
-#include <rflib/patch/rf_patch_mce_wmbus_ctmode.h>
+#include <rflib/patch/rf_patch_mce_emb6_ctmode.h>
 #endif
 
 
@@ -144,46 +144,46 @@ RFC_STATIC_INLINE rfc_returnValue_t RFC_initRadio_nb(rfc_radioOp_t *cmd);
 //*****************************************************************************
 rfc_returnValue_t
 RFC_enableRadio()
-{  
+{
   /* Step 1. Check if radio mode has been configured */
   if(rfc_config.rpid == NULL)
   {
     return(RFC_ERROR_RPID);
   }
-  
+
   /* Step 2. Enable the RF Core Power Domain */
   PRCMPowerDomainOn(PRCM_DOMAIN_RFCORE);
   while(PRCMPowerDomainStatus(PRCM_DOMAIN_RFCORE) != PRCM_DOMAIN_POWER_ON);
-  
+
   /* Step 3. Enable clocks inside RF Core */
-  RFCClockEnable(); 
-  
+  RFCClockEnable();
+
   /* Step 4. Init mailbox interface and callbacks */
   MB_Init();
- 
+
   /* Step 5: Setup interrupts */
-  /* 5.1 Multiplex all RF Core interrupts to CPE0 IRQ and enable the following interrupts: 
+  /* 5.1 Multiplex all RF Core interrupts to CPE0 IRQ and enable the following interrupts:
   *   -  IRQ_LAST_COMMAND_DONE - last command in chain done */
   HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEISL) = 0;
   HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIEN) = IRQ_LAST_COMMAND_DONE;
-  
+
   /* 5.2 Clear any pending interrupts, register interrupts handler and enable interrupts. */
   HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG) = 0x0;
   HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFACKIFG) = 0x0;
   IntPendClear(INT_RFC_CPE_0 | INT_RFC_CPE_1 | INT_RFC_CMD_ACK);
   IntPendClear(INT_RFC_CPE_0 | INT_RFC_CPE_1);
-  
+
   MB_RegisterIsrCback(RF_CPE_0_INTERRUPT, &RFC_cpe0Isr);
   MB_RegisterIsrCback(RF_CPE_1_INTERRUPT, &RFC_cpe1Isr);
-  
+
   IntEnable(INT_RFC_CPE_0);
-  
+
   /* Step 6: Patch CPE */
   if(RFC_patchCpe())
   {
     return(RFC_ERROR_PATCH);
   }
-  
+
   /* Step 7. Start RAT timer */
   uint8_t res = MB_SendCommand(CMDR_DIR_CMD(CMD_START_RAT));
   if(res == CMDSTA_Done)
@@ -198,10 +198,10 @@ RFC_enableRadio()
   {
     return(RFC_ERROR);
   }
-  
+
   /* Reset state */
   rfc_config.bTx = 3;
-  
+
   return(RFC_OK);
 }
 
@@ -216,31 +216,31 @@ RFC_enableRadio()
 //! \return rfc_returnValue_t
 //
 //*****************************************************************************
-rfc_returnValue_t 
+rfc_returnValue_t
 RFC_disableRadio()
 {
-  /* The proper thing to do here is to avoid switching off the digital part of 
+  /* The proper thing to do here is to avoid switching off the digital part of
   * Radio without switching off the analog parts first */
-  
+
   /* Check if RF core already off */
   if(((HWREG( PRCM_BASE + PRCM_O_PDCTL0) & PRCM_PDCTL0_RFC_ON) == 0x0) ||
      ((HWREG( PRCM_BASE + PRCM_O_PDCTL1) & PRCM_PDCTL1_RFC_ON) == 0x0))
   {
     return(RFC_ERROR);
   }
-  
+
   /* Step 2.1 Send ABORT, then wait until the command has completed */
   if(HWREG(0x210000EC) != NULL)
   {
     MB_SendCommand(CMDR_DIR_CMD(CMD_ABORT));
-    
+
     /* Wait until command is done executing */
     while(rfc_flag)
     {
       PRCMSleep();
     }
   }
-  
+
   /* Step 2.2 Configure powerdown command */
   // TODO. Check here if the synth needs power down or not
   rfc_tmp_cmd.cmdFsPowerDown.commandNo                = CMD_FS_POWERDOWN;
@@ -253,21 +253,21 @@ RFC_disableRadio()
   rfc_tmp_cmd.cmdFsPowerDown.startTrigger.pastTrig    = 0;
   rfc_tmp_cmd.cmdFsPowerDown.condition.rule           = COND_NEVER;
   rfc_tmp_cmd.cmdFsPowerDown.condition.nSkip          = 0;
-  
+
   /* 2.3 Turn of synth */
   RFC_sendRadioOp((rfc_radioOp_t *)&rfc_tmp_cmd.cmdFsPowerDown);
-  
+
   if(rfc_tmp_cmd.cmdFsPowerDown.status != DONE_OK)
   {
     return(RFC_ERROR);
   }
-  
+
   /* Step 3 Switch off the digital part */
   PRCMPowerDomainOff(PRCM_DOMAIN_RFCORE);
-  
+
   /* Reset state */
   rfc_config.bTx = 3;
-  
+
   return(RFC_OK);
 }
 
@@ -290,75 +290,75 @@ RFC_initRadio_nb(rfc_radioOp_t *cmd)
   /* Make sure really setup command */
   //  ASSERT(cmd->commandNo == CMD_PROP_RADIO_SETUP ||
   //         cmd->commandNo == CMD_RADIO_SETUP )
-  
+
   /* Step 1. MCE/RFE Patches (MCE/RFE) */
   switch(rfc_config.rpid)
   {
-    
+
 #ifdef RFC_INCLUDE_GFSK
   case RFC_GFSK:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_BLE
   case RFC_BLE:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_802_15_4
   case RFC_802_15_4:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_OOK
   case RFC_OOK:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_LRM
   case RFC_LRM:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_T_MODE
   case RFC_T_MODE:
-    
+
     /* Patch the RF Core */
     /* Force-enable the MCE and RFE RAM, used for patching */
     RFC_sendDirectCmd(CMDR_DIR_CMD_2BYTE(0x0607, RFC_PWR_PWMCLKEN_MDMRAM));
-  
+
     /* Patch MCE */
-    rf_patch_mce_wmbus_ctmode();
-    
+    rf_patch_mce_emb6_ctmode();
+
     /* Remove force-enable of the MCE and RFE RAM clocks */
     RFC_sendDirectCmd(CMDR_DIR_CMD_2BYTE(0x0607, 0));
-    
+
     /* Force bus  */
     RFC_sendDirectCmd(CMDR_DIR_CMD_1BYTE(0x040E, 1));
     break;
 #endif
-    
+
   default:
     return(RFC_ERROR_PATCH);
   }
-  
+
   /* Step 2. Radio_Setup */
   rfc_flag = 1;
-  
+
   /* Keep track of command execution */
   rfc_config.currentCmd = cmd;
-  
+
   /* Set current command to IDLE state */
   cmd->status = IDLE;
-  
+
   /* Send radio setup command */
   MB_SendCommand((uint32_t) cmd);
-  
+
   return(RFC_OK);
 }
 
@@ -377,36 +377,36 @@ RFC_initRadio_nb(rfc_radioOp_t *cmd)
 //*****************************************************************************
 rfc_returnValue_t
 RFC_setupRadio(rfc_radioOp_t *cmd)
-{ 
+{
   /* Make sure really rfc_radioOp_t */
   ASSERT((((cmd->commandNo) & 0x0800) == 0x0800));
-  
+
   OSCInterfaceEnable();
-  
+
   /* 1. Check that XOSC HF is used */
   if(OSCClockSourceGet(OSC_SRC_CLK_HF) != OSC_XOSC_HF)
   {
     return (RFC_ERROR);
   }
-  
+
   OSCInterfaceDisable();
-  
+
   /* 2. MCE/RFE Patches and submit setup command */
   rfc_returnValue_t retval = RFC_initRadio_nb(cmd);
-  
+
   if(retval)
   {
     return(retval);
   }
-  
+
   /* Step 2.1 Wait until command is done executing */
   while(rfc_flag);
-  
+
   if((cmd->status & 0xF00) != DONE_OK)
   {
     return(RFC_ERROR_SETUP);
-  } 
-  
+  }
+
   return(retval);
 }
 
@@ -425,19 +425,19 @@ RFC_setupRadio(rfc_radioOp_t *cmd)
 //*****************************************************************************
 rfc_returnValue_t
 RFC_setupRadio_nb(rfc_radioOp_t *cmd)
-{ 
+{
   /* Make sure really rfc_radioOp_t */
   ASSERT((((cmd->commandNo) & 0x0800) == 0x0800));
-  
+
   /* Only possible to send this if synth is not supposed to be powered up */
   if(((rfc_CMD_PROP_RADIO_SETUP_t *)cmd)->config.bNoFsPowerUp != 0x1)
   {
     return (RFC_ERROR);
   }
-  
+
   /* MCE/RFE Patches and submit setup command */
   rfc_returnValue_t retval = RFC_initRadio_nb(cmd);
-  
+
   return (retval);
 }
 
@@ -454,32 +454,32 @@ RFC_setupRadio_nb(rfc_radioOp_t *cmd)
 //! \return rfc_cmdStatus_t
 //
 //*****************************************************************************
-rfc_cmdStatus_t 
+rfc_cmdStatus_t
 RFC_sendRadioOp(rfc_radioOp_t *cmd)
 {
   rfc_cmdStatus_t retval;
-  
+
   /* Step 1. Run pre configuration for this command */
   RFC_trapCmd(cmd);
-  
+
   /* Keep track of command execution */
   rfc_flag = 1;
-  
+
   /* Keep track of command execution */
   rfc_config.currentCmd = cmd;
-  
+
   /* Set current command to IDLE state */
   cmd->status = IDLE;
-  
+
   /* Step 2. Send command to RF Core */
   retval = MB_SendCommand((uint32_t) cmd);
-  
+
   /* Step 3. Wait until command is done executing */
   while(rfc_flag)
   {
     PRCMSleep();
   }
-  
+
   /* Return status*/
   return(retval);
 }
@@ -499,15 +499,15 @@ RFC_sendRadioOp(rfc_radioOp_t *cmd)
 //! \return rfc_cmdStatus_t
 //
 //*****************************************************************************
-rfc_cmdStatus_t 
+rfc_cmdStatus_t
 RFC_sendRadioOp_nb(rfc_radioOp_t *cmd, void (*isr)(uint32_t))
 {
   /* Make sure really rfc_radioOp_t */
   ASSERT((((cmd->commandNo) & 0x0800) == 0x0800));
-  
+
   /* Step 1. Run pre configuration for this command */
   RFC_trapCmd(cmd);
-  
+
   if(isr == NULL)
   {
     /* Keep track of command execution */
@@ -518,13 +518,13 @@ RFC_sendRadioOp_nb(rfc_radioOp_t *cmd, void (*isr)(uint32_t))
     /* Register ISR */
     rfc_nbIsr = isr;
   }
-  
+
   /* Keep track of command execution */
   rfc_config.currentCmd = cmd;
-  
+
   /* Set current command to IDLE state */
   cmd->status = IDLE;
-  
+
   /* Step 2. Send command to RF Core */
   return(MB_SendCommand((uint32_t) cmd));
 }
@@ -538,9 +538,9 @@ RFC_sendRadioOp_nb(rfc_radioOp_t *cmd, void (*isr)(uint32_t))
 //! \return rfc_cmdStatus_t
 //
 //*****************************************************************************
-rfc_cmdStatus_t 
+rfc_cmdStatus_t
 RFC_sendDirectCmd(uint32_t cmd)
-{ 
+{
   /* Send command to RF Core */
   return(MB_SendCommand(cmd));
 }
@@ -570,16 +570,16 @@ RFC_isRadioOpCompleted()
 //*****************************************************************************
 rfc_returnValue_t
 RFC_selectRadioMode(rfc_RPID_t rpid)
-{ 
-  
+{
+
   if(rpid != NULL)
   {
     /* Calculate mode */
     uint8_t mode = 0xFF & RFC_GET_OTHERS(rpid);
-    
+
     /* Try to set mode */
     HWREG(PRCM_BASE + PRCM_O_RFCMODESEL) = mode;
-    
+
     /* Check if mode was set correctly */
     if(HWREG(PRCM_BASE + PRCM_O_RFCMODESEL) == mode)
     {
@@ -613,10 +613,10 @@ RFC_STATIC_INLINE void
 RFC_trapCmd(rfc_radioOp_t *cmd)
 {
   uint16_t cmdNo = cmd->commandNo;
-  
+
   /* Make sure really rfc_radioOp_t */
   ASSERT((((cmdNo) & 0x0800) == 0x0800));
-  
+
   switch(cmdNo)
   {
   case CMD_PROP_TX:
@@ -644,37 +644,37 @@ RFC_trapCmd(rfc_radioOp_t *cmd)
 //! \return rfc_returnValue_t
 //
 //*****************************************************************************
-rfc_returnValue_t 
+rfc_returnValue_t
 RFC_patchCpe()
 {
   /* CPE Patch */
   switch(rfc_config.rpid)
   {
-    
+
 #ifdef RFC_INCLUDE_GFSK
   case RFC_GFSK:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_BLE
   case RFC_BLE:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_802_15_4
   case RFC_802_15_4:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_OOK
   case RFC_OOK:
     /* No patch */
     break;
 #endif
-    
+
 #ifdef RFC_INCLUDE_LRM
   case RFC_LRM:
     /* No patch */
@@ -685,12 +685,12 @@ RFC_patchCpe()
   case RFC_T_MODE:
     /* No patch */
     break;
-#endif    
-    
+#endif
+
   default:
     return(RFC_ERROR_PATCH);
   }
-  
+
   return(RFC_OK);
 }
 
@@ -698,7 +698,7 @@ RFC_patchCpe()
 
 //*****************************************************************************
 //
-//! Enable CPE0 interrupt 
+//! Enable CPE0 interrupt
 //!
 //! \param mask Mask for enabling interrupt
 //!
@@ -710,14 +710,14 @@ void RFC_enableCpe0Interrupt(uint32_t mask)
   /* Multiplex RF Core interrupts to CPE0 IRQ and enable the masked interrupts */
   HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEISL ) &= ~mask;
   HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIEN ) |= mask;
-  
+
   /* Clear any pending interrupts and enable interrupts. */
   HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG ) = 0x0;
 }
 
 //*****************************************************************************
 //
-//! Enable CPE1 interrupt 
+//! Enable CPE1 interrupt
 //!
 //! \param mask Mask for enabling interrupt
 //!
@@ -729,7 +729,7 @@ void RFC_enableCpe1Interrupt(uint32_t mask)
   /* Multiplex RF Core interrupts to CPE1 IRQ and enable the masked interrupts */
   HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEISL ) |= mask;
   HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIEN ) |= mask;
-  
+
   /* Clear any pending interrupts and enable interrupts. */
   HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG ) = 0x0;
 }
@@ -737,7 +737,7 @@ void RFC_enableCpe1Interrupt(uint32_t mask)
 
 //*****************************************************************************
 //
-//! Disable CPE0 interrupt 
+//! Disable CPE0 interrupt
 //!
 //! \param mask Mask for disabling interrupt
 //!
@@ -750,7 +750,7 @@ void RFC_disableCpe0Interrupt(uint32_t mask)
   {
     /* Disable the masked interrupts */
     HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIEN ) &= ~mask;
-    
+
     /* Clear any pending interrupts and enable interrupts. */
     HWREG( RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG ) = 0x0;
   }
@@ -758,7 +758,7 @@ void RFC_disableCpe0Interrupt(uint32_t mask)
 
 //*****************************************************************************
 //
-//! Disable CPE1 interrupt 
+//! Disable CPE1 interrupt
 //!
 //! \param mask Mask for disabling interrupt
 //!
@@ -769,7 +769,7 @@ void RFC_disableCpe1Interrupt(uint32_t mask)
 {
   /* Disable the masked interrupts */
   HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIEN) &= ~mask;
-  
+
   /* Clear any pending interrupts and enable interrupts. */
   HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG) = 0x0;
 }
@@ -831,12 +831,12 @@ void RFC_cpe0Isr(void)
 {
   /* Read interrupt flags */
   uint32_t interruptFlags = HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG);
-  
+
   /* Handle interrupt */
   if(interruptFlags & IRQ_LAST_COMMAND_DONE)
   {
     rfc_flag = 0;
-    
+
     /* Command callback if there is one*/
     if(rfc_nbIsr != NULL)
     {
@@ -844,12 +844,12 @@ void RFC_cpe0Isr(void)
       rfc_nbIsr = NULL;
     }
   }
-  
+
   /*  Clear interrupt */
   do{
     HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG) = ~interruptFlags;
   }while(HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG) & interruptFlags);
-  
+
   if(rfc_cpe0Isr != NULL)
   {
     rfc_cpe0Isr(interruptFlags);
@@ -868,12 +868,12 @@ void RFC_cpe1Isr(void)
 {
   /* Read interrupt flags */
   uint32_t interruptFlags = HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG);
-  
+
   /*  Clear interrupt */
   do{
     HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG) = ~interruptFlags;
   }while(HWREG(RFC_DBELL_BASE + RFC_DBELL_O_RFCPEIFG) & interruptFlags);
-  
+
   if(rfc_cpe1Isr != NULL)
   {
     rfc_cpe1Isr(interruptFlags);

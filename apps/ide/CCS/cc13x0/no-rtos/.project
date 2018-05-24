@@ -666,11 +666,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>target/bsp/ti_cc13xx/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/bsp/ti_cc13xx/SConscript</locationURI>
-		</link>
-		<link>
 			<name>target/bsp/ti_cc13xx/board_conf.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/bsp/ti_cc13xx/board_conf.c</locationURI>

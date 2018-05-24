@@ -376,11 +376,6 @@
 			<locationURI>REPO_ROOT_DIR/services/serialapi/serialapi_core.h</locationURI>
 		</link>
 		<link>
-			<name>services/udp_alive/SConscript</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/udp_alive/SConscript</locationURI>
-		</link>
-		<link>
 			<name>services/udp_alive/udp_alive.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/services/udp_alive/udp_alive.c</locationURI>
@@ -831,11 +826,6 @@
 			<locationURI>REPO_ROOT_DIR/core/src/sock/udp-socket.c</locationURI>
 		</link>
 		<link>
-			<name>demo/aptb/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/aptb/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/aptb/client/demo_aptb.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/aptb/client/demo_aptb.h</locationURI>
@@ -844,11 +834,6 @@
 			<name>demo/aptb/client/demo_aptb_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/aptb/client/demo_aptb_cli.c</locationURI>
-		</link>
-		<link>
-			<name>demo/aptb/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/aptb/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/aptb/server/demo_aptb.h</name>
@@ -861,11 +846,6 @@
 			<locationURI>REPO_ROOT_DIR/demo/aptb/server/demo_aptb_srv.c</locationURI>
 		</link>
 		<link>
-			<name>demo/coap/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/coap/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/coap/client/demo_coap_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/coap/client/demo_coap_cli.c</locationURI>
@@ -874,11 +854,6 @@
 			<name>demo/coap/client/demo_coap_cli.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/coap/client/demo_coap_cli.h</locationURI>
-		</link>
-		<link>
-			<name>demo/coap/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/coap/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/coap/server/demo_coap_srv.c</name>
@@ -896,11 +871,6 @@
 			<locationURI>virtual:/virtual</locationURI>
 		</link>
 		<link>
-			<name>demo/dtls/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/dtls/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/dtls/client/demo_dtls_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/dtls/client/demo_dtls_cli.c</locationURI>
@@ -909,11 +879,6 @@
 			<name>demo/dtls/client/demo_dtls_cli.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/dtls/client/demo_dtls_cli.h</locationURI>
-		</link>
-		<link>
-			<name>demo/dtls/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/dtls/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/dtls/server/demo_dtls_srv.c</name>
@@ -926,11 +891,6 @@
 			<locationURI>REPO_ROOT_DIR/demo/dtls/server/demo_dtls_srv.h</locationURI>
 		</link>
 		<link>
-			<name>demo/lwm2m/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/lwm2m/client/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/lwm2m/client/demo_lwm2m_cli.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/lwm2m/client/demo_lwm2m_cli.c</locationURI>
@@ -939,11 +899,6 @@
 			<name>demo/lwm2m/client/demo_lwm2m_cli.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/lwm2m/client/demo_lwm2m_cli.h</locationURI>
-		</link>
-		<link>
-			<name>demo/mdns/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/mdns/client/SConscript</locationURI>
 		</link>
 		<link>
 			<name>demo/mdns/client/demo_mdns_cli.c</name>
@@ -956,11 +911,6 @@
 			<locationURI>REPO_ROOT_DIR/demo/mdns/client/demo_mdns_cli.h</locationURI>
 		</link>
 		<link>
-			<name>demo/mdns/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/mdns/server/SConscript</locationURI>
-		</link>
-		<link>
 			<name>demo/mdns/server/demo_mdns_srv.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/mdns/server/demo_mdns_srv.c</locationURI>
@@ -969,26 +919,6 @@
 			<name>demo/mdns/server/demo_mdns_srv.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/demo/mdns/server/demo_mdns_srv.h</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket/client/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket/server/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket_simple/client/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket_simple/client/SConscript</locationURI>
-		</link>
-		<link>
-			<name>demo/udp_socket_simple/server/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/demo/udp_socket_simple/server/SConscript</locationURI>
 		</link>
 		<link>
 			<name>services/lwm2mapi/lwm2m-objects/lwm2m-object-bme280-airpressure.c</name>
@@ -1101,54 +1031,14 @@
 			<locationURI>PARENT-5-PROJECT_LOC/services/lwm2mapi/lwm2m-objects/lwm2m-object-temp.h</locationURI>
 		</link>
 		<link>
-			<name>services/serialapi/crc/.git</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/.git</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/crc/.gitignore</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/.gitignore</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/crc/CMakeLists.txt</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/CMakeLists.txt</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/crc/LICENSE</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/LICENSE</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/crc/README.md</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/README.md</locationURI>
-		</link>
-		<link>
 			<name>services/serialapi/crc/sf_crc.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/sf_crc.c</locationURI>
+			<locationURI>PARENT-1-REPO_ROOT_DIR/services/serialService/crc/sf_crc.c</locationURI>
 		</link>
 		<link>
 			<name>services/serialapi/crc/sf_crc.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/crc/sf_crc.h</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/serial-interface-mac/.git</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/serial-interface-mac/.git</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/serial-interface-mac/.gitignore</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/serial-interface-mac/.gitignore</locationURI>
-		</link>
-		<link>
-			<name>services/serialapi/serial-interface-mac/.gitmodules</name>
-			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/serial-interface-mac/.gitmodules</locationURI>
+			<locationURI>PARENT-1-REPO_ROOT_DIR/services/serialService/crc/sf_crc.h</locationURI>
 		</link>
 		<link>
 			<name>services/serialapi/serial-interface-mac/src</name>
@@ -1169,11 +1059,6 @@
 			<name>target/arch/arm/cm3</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
-		</link>
-		<link>
-			<name>target/bsp/ti_cc13xx/SConscript</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/bsp/ti_cc13xx/SConscript</locationURI>
 		</link>
 		<link>
 			<name>target/bsp/ti_cc13xx/board_conf.c</name>
@@ -2108,12 +1993,12 @@
 		<link>
 			<name>services/serialapi/serial-interface-mac/src/sf_serialmac.c</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/serial-interface-mac/src/sf_serialmac.c</locationURI>
+			<locationURI>PARENT-2-CCS_INSTALL_ROOT/workspace/Sensor/src/services/serialService/serial-interface-mac/src/sf_serialmac.c</locationURI>
 		</link>
 		<link>
 			<name>services/serialapi/serial-interface-mac/src/sf_serialmac.h</name>
 			<type>1</type>
-			<locationURI>PARENT-5-PROJECT_LOC/services/serialapi/serial-interface-mac/src/sf_serialmac.h</locationURI>
+			<locationURI>PARENT-2-CCS_INSTALL_ROOT/workspace/Sensor/src/services/serialService/serial-interface-mac/src/sf_serialmac.h</locationURI>
 		</link>
 		<link>
 			<name>target/arch/arm/cm3/ti</name>

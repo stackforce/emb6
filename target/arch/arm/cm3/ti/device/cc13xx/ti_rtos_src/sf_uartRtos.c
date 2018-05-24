@@ -96,7 +96,7 @@ static void loc_uartReadCallback(UART_Handle handle, void *buf, size_t count)
   }/* for */
 
   loc_uartRead();
-  /* Unblock the wmbus_task if needed */
+  /* Unblock the emb6_task if needed */
   switch(sf_mcu_sleep_getMode())
   {
     case E_MCU_SLEEP_MODE_SLEEP:

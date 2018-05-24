@@ -120,7 +120,7 @@ void loc_timerIsr(UArg arg0)
     if(gfp_tick(arg0))
     {
       /* If the tick function returns with @ref true we have to check if we
-       * have to unblock the wmbus_task */
+       * have to unblock the emb6_task */
       switch(sf_mcu_sleep_getMode())
       {
         case E_MCU_SLEEP_MODE_SLEEP:

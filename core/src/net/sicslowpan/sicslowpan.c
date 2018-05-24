@@ -80,6 +80,7 @@
 //#include "sicslowmac.h"
 //#include "rdc.h"
 #include "framer-802154.h"
+#include "framer_802154.h"
 
 #include "uip-ds6-nbr.h"
 
@@ -1387,7 +1388,7 @@ static uint8_t output(const uip_lladdr_t *localdest)
 #else /* USE_FRAMER_HDRLEN */
   framer_hdrlen = SICSLOWPAN_FIXED_HDRLEN;
 #endif /* USE_FRAMER_HDRLEN */
-  max_payload = MAC_MAX_PAYLOAD - framer_hdrlen;
+  max_payload = MAC_MAX_PAYLOAD - LLSEC802154_MIC_LEN(LLSEC802154_SECURITY_LEVEL)- framer_hdrlen;
   if((int)uip_len - (int)uncomp_hdr_len > max_payload - (int)packetbuf_hdr_len) {
 #if SICSLOWPAN_CONF_FRAG
 	/* Number of bytes processed. */

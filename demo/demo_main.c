@@ -698,7 +698,7 @@ int main(void)
     emb6_task_init( (ti_sysbios_knl_Task_FuncPtr) &emb6_task, &eb);
     /* Initialize semaphore to pend task */
     semaphore_init(&eb);
-    /* Initialize the periodical clock source of the wmbus stack */
+    /* Initialize the periodical clock source of the emb6 stack */
     sf_mcu_timerRtos_init(2000U, &eb);
 
     /* Start BIOS */

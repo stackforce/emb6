@@ -102,6 +102,10 @@ static int8_t create_frame(int type, int do_create)
   /* Insert IEEE 802.15.4 version bits. */
   params.fcf.frame_version = FRAME802154_VERSION;
 
+#if LLSEC802154_ENABLED && LLSEC802154_SECURITY_LEVEL
+  packetbuf_set_attr(PACKETBUF_ATTR_SECURITY_LEVEL, LLSEC802154_SECURITY_LEVEL);
+#endif
+
 #if LLSEC802154_USES_AUX_HEADER
   if(packetbuf_attr(PACKETBUF_ATTR_SECURITY_LEVEL)) {
       params.fcf.security_enabled = 1;

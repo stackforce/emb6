@@ -137,6 +137,13 @@
 extern uint8_t frame802154_key[FRAME802154_SEC_KEY_SIZE];
 #endif /* #if LLSEC802154_ENABLED */
 
+#if LLSEC802154_ENABLED
+/** \brief Defines the Message Integrity Code (MIC) length as per the security level */
+#define LLSEC802154_MIC_LEN(a)                    (2 << (a & 3))
+#else
+#define LLSEC802154_MIC_LEN(a)                (0)
+#endif  /*LLSEC802154_ENABLED*/
+
 
 /**
  *    @brief  The IEEE 802.15.4 frame has a number of constant/fixed fields that
