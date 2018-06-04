@@ -1572,6 +1572,16 @@
 			<locationURI>REPO_ROOT_DIR/target/if/cc13x2/smart_rf/IEEE_settings.h</locationURI>
 		</link>
 		<link>
+			<name>target/if/cc13x2/smart_rf/smartrf_settings.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/if/cc13x2/smart_rf/smartrf_settings.c</locationURI>
+		</link>
+		<link>
+			<name>target/if/cc13x2/smart_rf/smartrf_settings.h</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/if/cc13x2/smart_rf/smartrf_settings.h</locationURI>
+		</link>
+		<link>
 			<name>core/inc/net/dtls/aes/rijndael.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/core/inc/net/dtls/aes/rijndael.h</locationURI>
