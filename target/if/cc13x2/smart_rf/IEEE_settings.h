@@ -8,19 +8,32 @@
 //
 //*********************************************************************************
 
-#include <ti/devices/cc13x2_cc26x2/driverlib/rf_mailbox.h>
-#include <ti/devices/cc13x2_cc26x2/driverlib/rf_common_cmd.h>
-#include <ti/devices/cc13x2_cc26x2/driverlib/rf_ieee_cmd.h>
+#include <ti/devices/DeviceFamily.h>
+#include DeviceFamily_constructPath(driverlib/rf_mailbox.h)
+#include DeviceFamily_constructPath(driverlib/rf_ieee_mailbox.h)
+#include DeviceFamily_constructPath(driverlib/rf_common_cmd.h)
+#include DeviceFamily_constructPath(driverlib/rf_ieee_cmd.h)
 #include <ti/drivers/rf/RF.h>
 
+#define rfPowerTable rfPowerTable_ieee
+#define rfPowerTableSize rfPowerTableSize_ieee
 
+/* TX Power dBm lookup table - values from SmartRF Studio */
+typedef struct
+{
+    int8_t dbm;
+    uint16_t txPower; /* Value for the PROP_DIV_RADIO_SETUP.txPower field */
+} rfPowerConfig_t;
+
+extern const rfPowerConfig_t rfPowerTable_ieee[];
+extern const uint8_t rfPowerTableSize_ieee;
 // TI-RTOS RF Mode Object
-extern RF_Mode RF_prop;
+extern RF_Mode RF_ieee;
 
 
 // RF Core API commands
 extern rfc_CMD_RADIO_SETUP_t RF_cmdRadioSetup;
-extern rfc_CMD_FS_t RF_cmdFs;
+extern rfc_CMD_FS_t RF_cmdIeeeFs;
 extern rfc_CMD_IEEE_TX_t RF_cmdIeeeTx;
 extern rfc_CMD_IEEE_RX_t RF_cmdIeeeRx;
 extern rfc_CMD_IEEE_CCA_REQ_t RF_cmdIeeeCca;

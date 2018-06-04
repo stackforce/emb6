@@ -15,6 +15,7 @@
 // TX Power: 5 dBm (requires define CCFG_FORCE_VDDR_HH = 0 in ccfg.c, see CC13xx/CC26xx Technical Reference Manual)
 
 #include <ti/devices/cc13x2_cc26x2/driverlib/rf_mailbox.h>
+#include <ti/devices/cc13x2_cc26x2/driverlib/rf_ieee_mailbox.h>
 #include <ti/devices/cc13x2_cc26x2/driverlib/rf_common_cmd.h>
 #include <ti/devices/cc13x2_cc26x2/driverlib/rf_ieee_cmd.h>
 #include <ti/drivers/rf/RF.h>
@@ -22,9 +23,22 @@
 #include <ti/devices/cc13x2_cc26x2/rf_patches/rf_patch_mce_ieee_802_15_4.h>
 #include "IEEE_settings.h"
 
+const rfPowerConfig_t rfPowerTable_ieee[] =
+{
+    {-10, 0x00D2 },
+    { -5, 0x00DC },
+    {  0, 0x00A0 },
+    {  1, 0x00A4 },
+    {  2, 0x00A9 },
+    {  3, 0x00AF },
+    {  4, 0x006E },
+    {  5, 0x001F },
+};
+
+const uint8_t rfPowerTableSize_ieee = (sizeof(rfPowerTable_ieee) / sizeof(rfPowerConfig_t));
 
 // TI-RTOS RF Mode Object
-RF_Mode RF_prop =
+RF_Mode RF_ieee =
 {
     .rfMode = RF_MODE_AUTO,
     .cpePatchFxn = &rf_patch_cpe_ieee_802_15_4,
@@ -74,7 +88,7 @@ rfc_CMD_RADIO_SETUP_t RF_cmdRadioSetup =
 
 // CMD_FS
 // Frequency Synthesizer Programming Command
-rfc_CMD_FS_t RF_cmdFs =
+rfc_CMD_FS_t RF_cmdIeeeFs =
 {
     .commandNo = 0x0803,
     .status = 0x0000,
@@ -110,7 +124,7 @@ rfc_CMD_IEEE_TX_t RF_cmdIeeeTx =
     .startTrigger.pastTrig = 0x0,
     .condition.rule = 0x1,
     .condition.nSkip = 0x0,
-    .txOpt.bIncludePhyHdr = 0x0,
+    .txOpt.bIncludePhyHdr = 0x1,
     .txOpt.bIncludeCrc = 0x0,
     .txOpt.payloadLenMsb = 0x0,
     .payloadLen = 0x1E,
@@ -132,13 +146,13 @@ rfc_CMD_IEEE_RX_t RF_cmdIeeeRx =
     .startTrigger.pastTrig = 0x0,
     .condition.rule = 0x1,
     .condition.nSkip = 0x0,
-    .channel = 0x00,
+    .channel = 0x1A,
     .rxConfig.bAutoFlushCrc = 0x0,
     .rxConfig.bAutoFlushIgn = 0x0,
-    .rxConfig.bIncludePhyHdr = 0x0,
-    .rxConfig.bIncludeCrc = 0x0,
+    .rxConfig.bIncludePhyHdr = 0x1,
+    .rxConfig.bIncludeCrc = 0x1,
     .rxConfig.bAppendRssi = 0x1,
-    .rxConfig.bAppendCorrCrc = 0x1,
+    .rxConfig.bAppendCorrCrc = 0x0,
     .rxConfig.bAppendSrcInd = 0x0,
     .rxConfig.bAppendTimestamp = 0x0,
     .pRxQ = 0, // INSERT APPLICABLE POINTER: (dataQueue_t*)&xxx
@@ -168,13 +182,13 @@ rfc_CMD_IEEE_RX_t RF_cmdIeeeRx =
      * IEEE 802.15.4 mode 3
      * and set threshold to -90 dBm.
      */
-    .ccaOpt.ccaEnEnergy = 0x1,
-    .ccaOpt.ccaEnCorr = 0x1,
+    .ccaOpt.ccaEnEnergy = 0x0,
+    .ccaOpt.ccaEnCorr = 0x0,
     .ccaOpt.ccaEnSync = 0x0,
     .ccaOpt.ccaCorrOp = 0x1,
     .ccaOpt.ccaSyncOp = 0x1,
     .ccaOpt.ccaCorrThr = 0x0,
-    .ccaRssiThr = 0xA6,
+    .ccaRssiThr = 0x64,
     .__dummy0 = 0x00,
     .numExtEntries = 0x00,
     .numShortEntries = 0x00,
