@@ -688,8 +688,11 @@ const PIN_Config BoardGpioInitTable[] = {
     CC1352R1_LAUNCHXL_SPI0_MOSI | PIN_INPUT_EN | PIN_PULLDOWN,                                            /* SPI master out - slave in */
     CC1352R1_LAUNCHXL_SPI0_MISO | PIN_INPUT_EN | PIN_PULLDOWN,                                            /* SPI master in - slave out */
     CC1352R1_LAUNCHXL_SPI0_CLK | PIN_INPUT_EN | PIN_PULLDOWN,                                             /* SPI clock */
+#if NETSTK_CFG_2_4_EN == 1
     CC1352R1_LAUNCHXL_DIO30_RFSW | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MAX,     /* RF SW Switch to 2.4GHz path*/
-
+#elif NETSTK_CFG_2_4_EN == 0
+    CC1352R1_LAUNCHXL_DIO30_RFSW | PIN_GPIO_OUTPUT_EN | PIN_GPIO_HIGH | PIN_PUSHPULL | PIN_DRVSTR_MAX,     /* RF SW Switch to Sub-1GHz path*/
+#endif
     PIN_TERMINATE
 };
 
