@@ -646,10 +646,10 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
          * */
         rxPacket.len = (uint8_t)(currentDataEntry->data);
 
-        /* Store the RSSI of the received packet which is appended in the and of to the packet in the Rx queue. */
-        rxPacket.rssi = (int8_t) ((int8_t*)(&currentDataEntry->data)[rxPacket.len]);
+        /* Store the RSSI of the received packet which is appended to the end of the packet in the Rx queue. */
+        rxPacket.rssi = (int8_t) ((int8_t*)&(currentDataEntry->data))[rxPacket.len];
 
-        /* Substitute the rssi lengh from the total length of the packet in RX queue*/
+        /* Substitute the rssi length from the total length of the packet in RX queue*/
         rxPacket.len -= 1;
 
 #if NETSTK_CFG_IEEE_802154G_EN
