@@ -235,7 +235,7 @@ static RF_CmdHandle rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
 //Callback for Async Tx complete
 static void txDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
-    if (e & RF_EventLastCmdDone)
+    if ((e & RF_EventLastCmdDone | RF_EventLastFGCmdDone))
     {
 #if CC13X2_TX_LED_ENABLED
          bsp_led( HAL_LED2, EN_BSP_LED_OP_BLINK );
