@@ -43,6 +43,7 @@ extern "C" {
 #include <ti/drivers/PWM.h>
 #include <ti/drivers/SPI.h>
 #include <ti/drivers/UART.h>
+#include <ti/drivers/I2C.h>
 #include <ti/drivers/Watchdog.h>
 
 #include "CC1352R1_LAUNCHXL.h"
@@ -160,6 +161,7 @@ extern "C" {
 #define Board_initPWM()         PWM_init()
 #define Board_initSPI()         SPI_init()
 #define Board_initUART()        UART_init()
+#define Board_initI2C()         I2C_init()
 #define Board_initWatchdog()    Watchdog_init()
 
 /*
