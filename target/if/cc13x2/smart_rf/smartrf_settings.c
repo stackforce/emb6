@@ -237,7 +237,7 @@ rfc_CMD_PROP_TX_ADV_t RF_cmdPropTxAdv =
     .startConf.inputMode = 0x0,
     .startConf.source = 0x0,
 
-    .syncWord = 0x930B51DE,
+    .syncWord = 0x0000904e,
     .pPkt = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
 };
 
@@ -272,7 +272,7 @@ rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv =
   .rxConf.bAppendRssi = 0x1,        // If 1, append an RSSI byte to the packet in the RX queue
   .rxConf.bAppendTimestamp = 0x0,   // If 1, append a timestamp to the packet in the RX queue
   .rxConf.bAppendStatus = 0x0,      // If 1, append a status byte to the packet in the RX queue
-  .syncWord0 = 0x930B51DE,
+  .syncWord0 = 0x0000904e,
   .syncWord1 = 0x00000000,
   .maxPktLen = 0x7FF,               //!< \brief Packet length for fixed length, maximum packet length for variable length<br>
                                     //!<        0: Unlimited or unknown length
