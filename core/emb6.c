@@ -681,7 +681,8 @@ void emb6_stop( e_nsErr_t *p_err )
 void emb6_errorHandler( e_nsErr_t* p_err )
 {
     /* turns LEDs on to indicate error */
-    bsp_led(HAL_LED0, EN_BSP_LED_OP_ON);
+    bsp_led(HAL_LED3, EN_BSP_LED_OP_ON);
+    bsp_led(HAL_LED2, EN_BSP_LED_OP_ON);
     LOG_ERR("Program failed");
 
     /* set error status */
