@@ -75,7 +75,8 @@
 								<option id="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.DEFINE.1646878758" name="Pre-define NAME (--define, -D)" superClass="com.ti.ccstudio.buildDefinitions.TMS470_16.9.compilerID.DEFINE" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="${INHERITED_SYMBOLS}"/>
 									<listOptionValue builtIn="false" value="USE_EXTIF=1"/>
-									<listOptionValue builtIn="false" value="NETSTK_CFG_2_4_EN=1"/>
+									<listOptionValue builtIn="false" value="NETSTK_CFG_2_4_EN=0"/>
+									<listOptionValue builtIn="false" value="CC13X2_DATARATE=CC13X2_200KBPS"/>
 									<listOptionValue builtIn="false" value="HAL_SUPPORT_PERIPHIRQ_SLIPUART_RX=1"/>
 									<listOptionValue builtIn="false" value="HAL_SUPPORT_SLIPUART=1"/>
 									<listOptionValue builtIn="false" value="MAC_ADDR_WORD=0xcafe"/>
@@ -84,7 +85,7 @@
 									<listOptionValue builtIn="false" value="LOGGER_LEVEL=0"/>
 									<listOptionValue builtIn="false" value="DeviceFamily_CC13X2"/>
 									<listOptionValue builtIn="false" value="DEVICE_FAMILY=DeviceFamily_CC13X2"/>
-									<listOptionValue builtIn="false" value="NETSTK_CFG_IEEE_802154G_EN=0"/>
+									<listOptionValue builtIn="false" value="NETSTK_CFG_IEEE_802154G_EN=1"/>
 									<listOptionValue builtIn="false" value="UART_DEFAULT_BAUD=230400"/>
 									<listOptionValue builtIn="false" value="USE_TI_RTOS=1"/>
 								</option>

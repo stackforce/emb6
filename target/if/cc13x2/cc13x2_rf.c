@@ -873,9 +873,10 @@ static void cc13x2_Send (uint8_t      *p_data,
   *p_err = NETSTK_ERR_NONE;
 
 
+  RF_ScheduleCmdParams txParam;
+
   if (p_data!=NULL && len > 1 && configured)
   {
-
 #if NETSTK_CFG_IEEE_802154G_EN
     /* FIXME overwrite PHR */
     uint16_t transmitLen = len - PHY_HEADER_LEN;
@@ -923,13 +924,9 @@ static void cc13x2_Send (uint8_t      *p_data,
 #endif
 
 
-  cc13x2_rf_cmdTx.startTrigger.triggerType = TRIG_NOW;
-  cc13x2_rf_cmdTx.startTrigger.pastTrig = 1;
-  cc13x2_rf_cmdTx.startTime = 0;
 
 #if  (NETSTK_CFG_2_4_EN == 1)
 
-  RF_ScheduleCmdParams txParam;
   txParam.priority = RF_PriorityNormal;
   txParam.endTime = 0;
   txParam.bIeeeBgCmd = false;
@@ -944,6 +941,11 @@ static void cc13x2_Send (uint8_t      *p_data,
 
 #elif  (NETSTK_CFG_2_4_EN == 0)
   loc_cmdAbort(p_err);
+
+  cc13x2_rf_cmdTx.startTrigger.triggerType = TRIG_NOW;
+  cc13x2_rf_cmdTx.startTrigger.pastTrig = 1;
+  cc13x2_rf_cmdTx.startTime = 0;
+
   // Send packet
   RF_CmdHandle rf_cmdHandle = RF_postCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdTx,RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
   result = RF_pendCmd(rfHandle, rf_cmdHandle, RF_EventLastCmdDone);
