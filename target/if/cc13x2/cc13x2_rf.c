@@ -873,7 +873,7 @@ static void cc13x2_Send (uint8_t      *p_data,
   *p_err = NETSTK_ERR_NONE;
 
 
-  RF_ScheduleCmdParams txParam;
+
 
   if (p_data!=NULL && len > 1 && configured)
   {
@@ -926,6 +926,7 @@ static void cc13x2_Send (uint8_t      *p_data,
 
 
 #if  (NETSTK_CFG_2_4_EN == 1)
+  RF_ScheduleCmdParams txParam;
 
   txParam.priority = RF_PriorityNormal;
   txParam.endTime = 0;

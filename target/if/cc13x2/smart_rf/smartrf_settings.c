@@ -133,22 +133,22 @@ rfc_CMD_PROP_RADIO_DIV_SETUP_t RF_cmdPropRadioDivSetup =
     .modulation.deviation = 0x64,
     .symbolRate.preScale = 0xf,
     .symbolRate.rateWord = 0x8000,
-    .rxBw = 0x52,
+    .rxBw = 0x24,
 #elif CC13X2_DATARATE == CC13X2_100KBPS
-    .modulation.deviation = 0x64,
-    .symbolRate.preScale = 0xF,
+    .modulation.deviation = 0xC8,
+    .symbolRate.preScale = 0xf,
     .symbolRate.rateWord = 0x10000,
-    .rxBw = 0x54,
+    .rxBw = 0x28,
 #elif CC13X2_DATARATE == CC13X2_150KBPS
-    .modulation.deviation = 0x64,
-    .symbolRate.preScale = 0xF,
+    .modulation.deviation = 0x12C,
+    .symbolRate.preScale = 0xf,
     .symbolRate.rateWord = 0x18000,
-    .rxBw = 0x58,
+    .rxBw = 0x29,
 #elif CC13X2_DATARATE == CC13X2_200KBPS
-    .modulation.deviation = 0x64,
+    .modulation.deviation = 0x190,
     .symbolRate.preScale = 0xF,
     .symbolRate.rateWord = 0x20000,
-    .rxBw = 0x58,
+    .rxBw = 0x2B,
 #else
 #error Invalid RF configuration
 #endif
