@@ -478,7 +478,7 @@ static void cc13xx_Transmit(e_nsErr_t *p_err)
     *p_err = NETSTK_ERR_NONE;
   }
   else
-	 *p_err = NETSTK_ERR_RF_XXX;
+	 *p_err = NETSTK_ERR_RF_ERROR;
 }
 
 /*!

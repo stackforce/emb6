@@ -218,8 +218,17 @@ typedef enum
     /*
      * RF error codes
      */
-    NETSTK_ERR_RF_XXX                       = 400U,
-    NETSTK_ERR_RF_SEND                      = 401U,
+    NETSTK_ERR_RF_ERROR           = 400U,
+    NETSTK_ERR_RF_CONFIG_ERROR    = 401U, //!< Configuration error
+    NETSTK_ERR_RF_PARAM_ERROR     = 402U, //!< Param error
+    NETSTK_ERR_RF_MEM_ERROR       = 403U, //!< Memory Error
+    NETSTK_ERR_RF_CMD_ERROR       = 404U, //!< Memory Error
+    NETSTK_ERR_RF_TX_ERROR        = 405U, //!< Tx Error
+    NETSTK_ERR_RF_RX_ERROR        = 406U, //!< Rx Error
+    NETSTK_ERR_RF_RX_TIMEOUT      = 407U, //!< Rx Error
+    NETSTK_ERR_RF_RX_BUFFER_ERROR = 408U, //!< Rx Buffer Error
+    NETSTK_ERR_RF_BUSY_ERROR      = 409U, //!< Busy Error
+    NETSTK_ERR_RF_ABORTED         = 410U, //!< Command stopped or aborted
 
 } e_nsErr_t;
 

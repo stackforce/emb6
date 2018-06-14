@@ -43,6 +43,9 @@
 #define NETSTK_CFG_RF_SW_AUTOACK_EN         TRUE
 #endif
 
+/** transceiver supports standard-specific checksum algorithm */
+#define NETSTK_SUPPORT_HW_CRC               TRUE
+
 /* radio transceiver does not support standard-specified checksum */
 #ifndef NETSTK_CFG_RF_CRC_EN
 #define NETSTK_CFG_RF_CRC_EN                TRUE

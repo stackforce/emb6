@@ -119,7 +119,7 @@ rfc_CMD_PROP_RADIO_DIV_SETUP_t RF_802_15_4_cmdPropRadioDivSetup =
 #elif CC13XX_DATARATE == CC13XX_150KBPS
     .modulation.deviation = 0x12C,
     .symbolRate.preScale = 0x5,
-    .symbolRate.rateWord = 0x8000,
+    .symbolRate.rateWord = 0x18000,
     .rxBw = 0x29,
 #elif CC13XX_DATARATE == CC13XX_200KBPS
     .modulation.deviation = 0x190,
