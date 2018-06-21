@@ -736,8 +736,6 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
   }
 
   RF_Params_init(&rfParams);
-  if (!firstInit)
-  {
 #if  (NETSTK_CFG_2_4_EN == 1)
         memcpy(&cc13x2_rf_cmdRadioSetup.setup, &RF_cmdRadioSetup, sizeof(rfc_CMD_RADIO_SETUP_t));
         memcpy(&cc13x2_rf_cmdFs, &RF_cmdIeeeFs, sizeof(rfc_CMD_FS_t));
@@ -751,8 +749,6 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
         memcpy(&cc13x2_rf_cmdRx, &RF_cmdPropRxAdv, sizeof(rfc_CMD_PROP_RX_ADV_t));
         memcpy(&cc13x2_rf_cmdTx, &RF_cmdPropTxAdv, sizeof(rfc_CMD_PROP_TX_ADV_t));
 #endif
-        firstInit = 1;
-  }
 
   /* Clear the RX buffer. */
   memset( rxBuffer, 0, sizeof(rxBuffer) );
