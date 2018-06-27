@@ -33,6 +33,7 @@
 
 #include "sf_mcu.h"
 #include "sf_mcu_timer.h"
+#include "sf_mcu_aes.h"
 #include "sf_uart.h"
 #include "driverlib/interrupt.h"
 #include "rt_tmr.h"
@@ -332,6 +333,8 @@ int8_t hal_init(void)
   /* Initialize hal_ticks */
   hal_ticks = 0x00U;
 
+  /* Initialize AES hardware */
+  sf_mcu_aes_init();
   return 0U;
 }/* hal_init() */
 
