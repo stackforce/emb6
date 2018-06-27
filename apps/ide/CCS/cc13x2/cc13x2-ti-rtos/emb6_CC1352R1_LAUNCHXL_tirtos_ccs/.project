@@ -1767,6 +1767,16 @@
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/emb6_task.h</locationURI>
 		</link>
 		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/sf_mcu_aes.c</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/sf_mcu_aes.c</locationURI>
+		</link>
+		<link>
+			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/sf_mcu_aes.h</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/sf_mcu_aes.h</locationURI>
+		</link>
+		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/sf_mcu_sleep.c</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/ti_rtos_src/sf_mcu_sleep.c</locationURI>
