@@ -70,16 +70,15 @@ static uint16_t loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, u
   uint16_t b_return = 0;
   int i_status;
   uint16_t cipher_len = 0;
+  CryptoCC26XX_AESCBC_Transaction trans;
+  CryptoCC26XX_Operation c_cryptOperation;
+  int i_keyIndex;
 
   if ((length%KEY_BLENGTH) == 0)
     cipher_len = (length / KEY_BLENGTH) * KEY_BLENGTH;
   else
     cipher_len = ((length / KEY_BLENGTH)+1) * KEY_BLENGTH;
 
-  uint8_t temp_buffer[cipher_len];
-  CryptoCC26XX_AESCBC_Transaction trans;
-  CryptoCC26XX_Operation c_cryptOperation;
-  int i_keyIndex;
 
   if(b_encrypt == true)
   {
@@ -105,7 +104,7 @@ static uint16_t loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, u
     trans.keyIndex        = i_keyIndex;
     trans.nonce           = nonce;
     trans.msgIn           = (uint8_t*) pc_in;
-    trans.msgOut          = temp_buffer;
+    trans.msgOut          = pc_out;
     trans.msgInLength     = length;
 
 
@@ -117,7 +116,6 @@ static uint16_t loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, u
       b_return = 0;
     }else
     {
-        memcpy(pc_out ,temp_buffer, cipher_len);
         b_return = cipher_len;
     }
 
