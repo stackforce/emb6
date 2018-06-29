@@ -29,8 +29,11 @@
  */
 /******************************************************************************/
 
+#define AES_BLOCK_SIZE 16
+
 /*!@} end of SF_MCU_AES */
 /******************************************************************************/
+
 
 /**
  * Structure of AES drivers.
@@ -72,10 +75,11 @@ bool sf_mcu_aes_init(void);
           AES module. Basically the key will be maintained by the stack and
           given to the AES  odule for maintaing the underlying hardware.
           There is no need to call this function by user application.
-  @param  pc_key    Pointer to the buffer which is holding the key.
+  @param  pc_key        Pointer to the buffer which is holding the key.
+  @param  key_length    Length of the key.
   @return true, if key was set successfully, false otherwise
 */
-bool sf_mcu_aes_setKey( uint8_t* pc_key);
+bool sf_mcu_aes_setKey( uint8_t* pc_key, uint8_t key_length );
 
 /*!
   @brief  Encrypts a single block only.
@@ -88,7 +92,7 @@ bool sf_mcu_aes_setKey( uint8_t* pc_key);
   @return Returns @c true if data has been encrypted successfully. In case of
           any problem (e.g. missing key) it'll return @c false.
 */
-uint16_t sf_mcu_aes_cbc_encrypt( uint8_t* pc_in, uint8_t*  pc_out, uint16_t length, uint8_t* nonce);
+bool sf_mcu_aes_cbc_encrypt( uint8_t* pc_in, uint8_t*  pc_out, uint16_t length, uint8_t* nonce);
 
 /**
   @brief  Decrypts a single block only.
@@ -101,7 +105,7 @@ uint16_t sf_mcu_aes_cbc_encrypt( uint8_t* pc_in, uint8_t*  pc_out, uint16_t leng
   @return Returns @c true if data has been decrypted successfully. In case of
           any problem (e.g. missing key) it'll return @c false.
 */
-uint16_t sf_mcu_aes_cbc_decrypt( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce);
+bool sf_mcu_aes_cbc_decrypt( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce);
 
 /*!
   @brief  Encrypts a single block only.

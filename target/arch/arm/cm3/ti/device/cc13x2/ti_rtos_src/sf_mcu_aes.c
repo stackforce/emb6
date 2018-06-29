@@ -26,33 +26,13 @@ extern "C" {
 #include "sf_mcu_aes.h"
 
 #include "Board.h"
-#include <ti/drivers/crypto/CryptoCC26XX.h>
-
+#include <ti/drivers/AESECB.h>
+#include <ti/drivers/cryptoutils/cryptokey/CryptoKeyPlaintext.h>
 
 /*==============================================================================
                           LOCAL FUNCTION PROTOTYPES
 ==============================================================================*/
-static uint16_t loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce, bool b_encrypt);
-static bool loc_aes_ecb( uint8_t* pc_in, uint8_t* pc_out, bool b_encrypt);
-static void setKey( uint8_t *key);
-static void encrypt(uint8_t *pld);
 
-/*==============================================================================
-                            Global VARIABLES
-==============================================================================*/
-/** Module global variable for storing the encryption key. */
-static uint8_t gac_key[KEY_BLENGTH];
-CryptoCC26XX_Handle gs_cryptoHandle;
-
- struct aes_128_driver aes_cc1352_driver = {
-    setKey,
-    encrypt
-};
-
-
-/*==============================================================================
-                          LOCAL FUNCTION
-==============================================================================*/
 /**
   @brief  Decrypts/Encrypts multiple blocks
           Decrypts/Encrypts a single block only, using the key that is currently
@@ -65,65 +45,7 @@ CryptoCC26XX_Handle gs_cryptoHandle;
   @return Returns @c length of the ciphertext if data has been decrypted/encrypted successfully.
           In case of any problem (e.g. missing key) it'll return @c 0.
 */
-static uint16_t loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce, bool b_encrypt)
-{
-  uint16_t b_return = 0;
-  int i_status;
-  uint16_t cipher_len = 0;
-  CryptoCC26XX_AESCBC_Transaction trans;
-  CryptoCC26XX_Operation c_cryptOperation;
-  int i_keyIndex;
-
-  if ((length%KEY_BLENGTH) == 0)
-    cipher_len = (length / KEY_BLENGTH) * KEY_BLENGTH;
-  else
-    cipher_len = ((length / KEY_BLENGTH)+1) * KEY_BLENGTH;
-
-
-  if(b_encrypt == true)
-  {
-    c_cryptOperation = CRYPTOCC26XX_OP_AES_CBC_ENCRYPT;
-  }/* if */
-  else
-  {
-    c_cryptOperation = CRYPTOCC26XX_OP_AES_CBC_DECRYPT;
-  }/* else */
-
-  i_keyIndex = CryptoCC26XX_allocateKey(gs_cryptoHandle, CRYPTOCC26XX_KEY_0,
-                                        ( uint32_t *) gac_key);
-  if (i_keyIndex == CRYPTOCC26XX_STATUS_ERROR)
-  {
-    b_return = false;
-  }/* if */
-  else
-  {
-    /* Initialize transaction */
-    CryptoCC26XX_Transac_init((CryptoCC26XX_Transaction *) &trans, c_cryptOperation);
-
-    /* Setup transaction */
-    trans.keyIndex        = i_keyIndex;
-    trans.nonce           = nonce;
-    trans.msgIn           = (uint8_t*) pc_in;
-    trans.msgOut          = pc_out;
-    trans.msgInLength     = length;
-
-
-    /* Encrypt the plaintext with AES CCB */
-    i_status = CryptoCC26XX_transact(gs_cryptoHandle, (CryptoCC26XX_Transaction *) &trans);
-
-    if(i_status != CRYPTOCC26XX_STATUS_SUCCESS)
-    {
-      b_return = 0;
-    }else
-    {
-        b_return = cipher_len;
-    }
-
-    CryptoCC26XX_releaseKey(gs_cryptoHandle, &i_keyIndex);
-  }/* if */
-
-  return b_return;
-}/* loc_aes */
+static bool loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce, bool b_encrypt);
 
 /**
   @brief  Decrypts/Encrypts a single block only.
@@ -135,64 +57,178 @@ static uint16_t loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, u
   @return Returns @c true if data has been decrypted/encrypted successfully.
           In case of any problem (e.g. missing key) it'll return @c false.
 */
+static bool loc_aes_ecb( uint8_t* pc_in, uint8_t* pc_out, bool b_encrypt);
+
+/*!
+ * @brief         XOR a block of data.
+ * @param d       Pointer to destination.
+ * @param s       Pointer to source.
+ */
+static void loc_xorBlock( uint8_t *d, const uint8_t *s );
+
+static void setKey( uint8_t *key);
+static void encrypt(uint8_t *pld);
+
+/*==============================================================================
+                            LOCAL VARIABLES
+==============================================================================*/
+/** Module global variable for storing the encryption key. */
+static CryptoKey     cryptoKey;
+static AESECB_Handle aesHandle;
+
+/*==============================================================================
+                            GLOBAL VARIABLES
+==============================================================================*/
+struct aes_128_driver aes_cc1352_driver = {
+    setKey,
+    encrypt
+};
+
+
+/*==============================================================================
+                          LOCAL FUNCTION
+==============================================================================*/
+
+/*============================================================================*/
+/* loc_xorBlock() */
+/*============================================================================*/
+static void loc_xorBlock( uint8_t *d, const uint8_t *s )
+{
+    ((uint8_t*)d)[ 0] ^= ((uint8_t*)s)[ 0];
+    ((uint8_t*)d)[ 1] ^= ((uint8_t*)s)[ 1];
+    ((uint8_t*)d)[ 2] ^= ((uint8_t*)s)[ 2];
+    ((uint8_t*)d)[ 3] ^= ((uint8_t*)s)[ 3];
+    ((uint8_t*)d)[ 4] ^= ((uint8_t*)s)[ 4];
+    ((uint8_t*)d)[ 5] ^= ((uint8_t*)s)[ 5];
+    ((uint8_t*)d)[ 6] ^= ((uint8_t*)s)[ 6];
+    ((uint8_t*)d)[ 7] ^= ((uint8_t*)s)[ 7];
+    ((uint8_t*)d)[ 8] ^= ((uint8_t*)s)[ 8];
+    ((uint8_t*)d)[ 9] ^= ((uint8_t*)s)[ 9];
+    ((uint8_t*)d)[10] ^= ((uint8_t*)s)[10];
+    ((uint8_t*)d)[11] ^= ((uint8_t*)s)[11];
+    ((uint8_t*)d)[12] ^= ((uint8_t*)s)[12];
+    ((uint8_t*)d)[13] ^= ((uint8_t*)s)[13];
+    ((uint8_t*)d)[14] ^= ((uint8_t*)s)[14];
+    ((uint8_t*)d)[15] ^= ((uint8_t*)s)[15];
+} /* loc_xorBlock() */
+
+/*============================================================================*/
+/* loc_aes_cbc() */
+/*============================================================================*/
+static bool loc_aes_cbc( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce, bool b_encrypt)
+{
+    int32_t result = AESECB_STATUS_ERROR;
+    AESECB_Operation aes_operation;
+    uint16_t len = length;
+    uint8_t temp[AES_BLOCK_SIZE];
+    uint8_t temp_pc_out[AES_BLOCK_SIZE];
+
+    if ( ((length % AES_BLOCK_SIZE) != 0) || (pc_out == NULL || pc_in == NULL || nonce == NULL) )
+        return false;
+
+    memcpy(temp, nonce, AES_BLOCK_SIZE);
+
+    if(b_encrypt)
+    {
+        while (len)
+        {
+            result = AESECB_STATUS_ERROR;
+
+            loc_xorBlock(temp, pc_in + length - len);
+
+            /* Perform a single step encrypt operation of the plain text */
+            AESECB_Operation_init(&aes_operation);
+            aes_operation.key            = &cryptoKey;
+            aes_operation.input          = (uint8_t*) temp;
+            aes_operation.output         = temp_pc_out + length - len;
+            aes_operation.inputLength    = AES_BLOCK_SIZE;
+
+            result = AESECB_oneStepEncrypt(aesHandle, &aes_operation);
+
+            if (result != AESECB_STATUS_SUCCESS) {
+                return false;
+            }else
+            {
+                memcpy(temp, pc_out + length - len, AES_BLOCK_SIZE);
+                len = len - AES_BLOCK_SIZE;
+            }
+        }
+    }else
+    {
+
+        while (len)
+        {
+            result = AESECB_STATUS_ERROR;
+            /* Perform a single step encrypt operation of the plain text */
+            AESECB_Operation_init(&aes_operation);
+            aes_operation.key            = &cryptoKey;
+            aes_operation.input          = (uint8_t*) pc_in + length - len;
+            aes_operation.output         = temp_pc_out;
+            aes_operation.inputLength    = AES_BLOCK_SIZE;
+
+            result = AESECB_oneStepDecrypt(aesHandle, &aes_operation);
+
+            if (result != AESECB_STATUS_SUCCESS) {
+                return false;
+            }else
+            {
+                loc_xorBlock(temp_pc_out, temp);
+                memcpy(temp, pc_in + length - len, AES_BLOCK_SIZE);
+                memcpy(pc_out + length - len , temp_pc_out, AES_BLOCK_SIZE);
+                len = len - AES_BLOCK_SIZE;
+            }
+        }
+    }
+
+    return true;
+
+}/* loc_aes_cbc */
+
+/*============================================================================*/
+/* loc_aes_ecb() */
+/*============================================================================*/
 static bool loc_aes_ecb( uint8_t* pc_in, uint8_t* pc_out,  bool b_encrypt)
 {
-    bool b_return = true;
-    int i_status;
-    uint8_t pc_tmpData[AES_ECB_LENGTH];
-    CryptoCC26XX_AESECB_Transaction trans;
-    CryptoCC26XX_Operation c_cryptOperation;
-    int i_keyIndex;
+    int32_t result = AESECB_STATUS_ERROR;
+    AESECB_Operation aes_operation;
 
-    if(b_encrypt == true)
-    {
-      c_cryptOperation = CRYPTOCC26XX_OP_AES_ECB_ENCRYPT;
-    }/* if */
+    if ( pc_out == NULL || pc_in == NULL )
+        return false;
+
+    /* Perform a single step encrypt operation of the plain text */
+    AESECB_Operation_init(&aes_operation);
+    aes_operation.key            = &cryptoKey;
+    aes_operation.input          = (uint8_t*) pc_in;
+    aes_operation.output         = pc_out;
+    aes_operation.inputLength    = AES_BLOCK_SIZE;
+
+    if(b_encrypt)
+        result = AESECB_oneStepEncrypt(aesHandle, &aes_operation);
     else
-    {
-      c_cryptOperation = CRYPTOCC26XX_OP_AES_ECB_DECRYPT;
-    }/* else */
+        result = AESECB_oneStepDecrypt(aesHandle, &aes_operation);
 
-    i_keyIndex = CryptoCC26XX_allocateKey(gs_cryptoHandle, CRYPTOCC26XX_KEY_0,
-                                          ( uint32_t *) gac_key);
-    if (i_keyIndex == CRYPTOCC26XX_STATUS_ERROR)
-    {
-      b_return = false;
+    if (result != AESECB_STATUS_SUCCESS) {
+        /* Error while encrypting */
+        return false;
+    }
+    else {
+        /* Print prompt and the encrypted result */
+        return true;
     }/* if */
-    else
-    {
-      /* Initialize transaction */
-      CryptoCC26XX_Transac_init((CryptoCC26XX_Transaction *) &trans, c_cryptOperation);
-
-      /* Setup transaction */
-      trans.keyIndex         = i_keyIndex;
-      trans.msgIn            = (uint32_t *) pc_in;
-      trans.msgOut           = (uint32_t *) pc_tmpData;
-
-      /* Encrypt the plaintext with AES ECB */
-      i_status = CryptoCC26XX_transact(gs_cryptoHandle, (CryptoCC26XX_Transaction *) &trans);
-
-      if(i_status != CRYPTOCC26XX_STATUS_SUCCESS)
-      {
-        b_return = false;
-      }/* if */
-      else
-      {
-        memcpy(pc_out, pc_tmpData, AES_ECB_LENGTH);
-      }/* if...else */
-
-      CryptoCC26XX_releaseKey(gs_cryptoHandle, &i_keyIndex);
-    }/* if */
-
-    return b_return;
 }/* loc_aes_ecb */
 
+/*============================================================================*/
+/* encrypt() */
+/*============================================================================*/
 static void encrypt(uint8_t *pld){
     loc_aes_ecb(pld, pld, true);
 }/* ecb_encrypt */
 
+/*============================================================================*/
+/* setKey() */
+/*============================================================================*/
 static void setKey( uint8_t *key){
-    sf_mcu_aes_setKey(key);
+    sf_mcu_aes_setKey(key, AES_BLOCK_SIZE);
 }/* setKey */
 
 /*==============================================================================
@@ -204,15 +240,14 @@ static void setKey( uint8_t *key){
 bool sf_mcu_aes_init(void)
 {
   bool b_return = true;
-  /* Initialize Crypto driver */
-  CryptoCC26XX_init();
 
-  /* Attempt to open CryptoCC26XX. */
-  gs_cryptoHandle = CryptoCC26XX_open(Board_CRYPTO0, false, NULL);
-  if (!gs_cryptoHandle)
-  {
-    b_return = false;
-  }/* if */
+  AESECB_init();
+  /* Initialize Crypto driver */
+  aesHandle = AESECB_open(0, NULL);
+  if (!aesHandle) {
+      /* Initialization of the Crypto driver failed */
+      b_return = false;
+  }
 
   return b_return;
 } /* sf_mcu_aes_init */
@@ -220,43 +255,39 @@ bool sf_mcu_aes_init(void)
 /*============================================================================*/
 /* sf_mcu_aes_setKey() */
 /*============================================================================*/
-bool sf_mcu_aes_setKey( uint8_t* pc_key)
+bool sf_mcu_aes_setKey( uint8_t* pc_key, uint8_t key_length )
 {
-  bool b_return = false;
+    /* Initialize the key structure */
+    if (CryptoKeyPlaintext_initKey(&cryptoKey, (uint8_t*) pc_key, key_length) != CryptoKey_STATUS_SUCCESS)
+        return false;
 
-  if(pc_key)
-  {
-    memcpy(gac_key, pc_key, KEY_BLENGTH);
-    b_return = true;
-  } /* if */
-
-  return b_return;
+    return true;
 } /* sf_mcu_aes_setKey */
 
 /*============================================================================*/
 /* sf_mcu_aes_cbc_encrypt() */
 /*============================================================================*/
-uint16_t sf_mcu_aes_cbc_encrypt( uint8_t* pc_in, uint8_t*  pc_out, uint16_t length, uint8_t* nonce)
+bool sf_mcu_aes_cbc_encrypt( uint8_t* pc_in, uint8_t*  pc_out, uint16_t length, uint8_t* nonce)
 {
-    uint16_t b_return = 0;
+    bool b_return = false;
 
-  /* Call the function to encrypt a block */
-  b_return = loc_aes_cbc(pc_in, pc_out, length, nonce, true);
+    /* Call the function to encrypt a block */
+    b_return = loc_aes_cbc(pc_in, pc_out, length, nonce, true);
 
-  return b_return;
+    return b_return;
 } /* sf_mcu_aes_cbc_encrypt */
 
 /*============================================================================*/
 /* sf_mcu_aes_cbc_decrypt() */
 /*============================================================================*/
-uint16_t sf_mcu_aes_cbc_decrypt( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce)
+bool sf_mcu_aes_cbc_decrypt( uint8_t* pc_in, uint8_t* pc_out, uint16_t length, uint8_t* nonce)
 {
-    uint16_t b_return = 0;
+    bool b_return = 0;
 
-  /* Call the function to decrypt a block */
-  b_return = loc_aes_cbc(pc_in, pc_out, length, nonce, false);
+    /* Call the function to decrypt a block */
+    b_return = loc_aes_cbc(pc_in, pc_out, length, nonce, false);
 
-  return b_return;
+    return b_return;
 } /* sf_mcu_aes_cbc_decrypt */
 
 /*============================================================================*/
@@ -266,10 +297,10 @@ bool sf_mcu_aes_ecb_encrypt( uint8_t* pc_in, uint8_t*  pc_out)
 {
     bool b_return = false;
 
-  /* Call the function to encrypt a block */
-  b_return = loc_aes_ecb(pc_in, pc_out, true);
+    /* Call the function to encrypt a block */
+    b_return = loc_aes_ecb(pc_in, pc_out, true);
 
-  return b_return;
+    return b_return;
 } /* sf_mcu_aes_cbc_encrypt */
 
 /*============================================================================*/
