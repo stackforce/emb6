@@ -128,7 +128,7 @@
 /** Do we support 6lowpan fragmentation */
 #define SICSLOWPAN_CONF_FRAG                 TRUE
 
-#define SICSLOWPAN_CONF_FRAGMENT_BUFFERS     4
+#define SICSLOWPAN_CONF_FRAGMENT_BUFFERS     8
 
 /** Most browsers reissue GETs after 3 seconds which stops frag reassembly, longer MAXAGE does no good */
 #define SICSLOWPAN_CONF_MAXAGE               3
@@ -1015,7 +1015,7 @@ void uip_log(char *msg);
 
  /* QUEUEBUF_NUM is the total number of queuebuf */
  #ifndef QUEUEBUF_CONF_NUM
- #define QUEUEBUF_CONF_NUM                  4
+ #define QUEUEBUF_CONF_NUM                  8
  #endif /* QUEUEBUF_CONF_NUM */
 
 
