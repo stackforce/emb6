@@ -364,15 +364,10 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
       (channel <= CHANNEL_UPPER_LIMIT) )
     {
 
-        if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
-        {
-        /* RX is running and will be stopped, so we need to restart it later. */
-            rxWasRunning = true;
-            loc_cmdAbort(&err);
-        }
-
 #if NETSTK_CFG_2_4_EN == 1
         cc13x2_rf_cmdFs.frequency = (2405 + ( 5 * ( channel - 11 )));
+        /* Update the RX channel settings. */
+        cc13x2_rf_cmdRx.channel = channel;
 #elif NETSTK_CFG_2_4_EN == 0
         uint16_t Cent_freq = 0x035F;
         uint16_t Frac_Freq = 0x2000;
@@ -387,29 +382,37 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
         cc13x2_rf_cmdFs.fractFreq = Frac_Freq;
 #endif
 
-
-        /* Run command */
-        RF_EventMask result = RF_runCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdFs,
-            RF_PriorityNormal, 0, RF_EVENT_MASK);
-
-        if (result && ( RF_EventCmdDone | RF_EventLastCmdDone |
-                RF_EventFGCmdDone | RF_EventLastFGCmdDone) )
+        if (rfHandle)
         {
-#if NETSTK_CFG_2_4_EN == 1
-            /* Setting the new frequency was successful.
-             * Update the RX channel settings. */
-            cc13x2_rf_cmdRx.channel = channel;
-#endif
+            if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
+            {
+            /* RX is running and will be stopped, so we need to restart it later. */
+                rxWasRunning = true;
+                loc_cmdAbort(&err);
+            }
+
+            /* Run command */
+            RF_EventMask result = RF_runCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdFs,
+                RF_PriorityNormal, 0, RF_EVENT_MASK);
+
+            if (result && ( RF_EventCmdDone | RF_EventLastCmdDone |
+                    RF_EventFGCmdDone | RF_EventLastFGCmdDone) )
+            {
+                err = NETSTK_ERR_NONE;
+            }
+
+            if(rxWasRunning)
+            {
+                /* RX was previously running.
+                * Restart it. */
+                loc_startRx(&err);
+            }
+        }else
+        {
             err = NETSTK_ERR_NONE;
         }
+    }
 
-        if(rxWasRunning)
-        {
-            /* RX was previously running.
-            * Restart it. */
-            loc_startRx(&err);
-        }
-      }
 
     return err;
 }
@@ -510,33 +513,35 @@ static e_nsErr_t loc_setTxPower(int8_t txPower)
     //point the Operational Command to the immediate set power command
     immOpCmd.cmdrVal = (uint32_t) &cmdSetPower;
 
-
-    if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
+    if (rfHandle)
     {
-    /* RX is running and will be stopped, so we need to restart it later. */
-        rxWasRunning = true;
-        loc_cmdAbort(&err);
-    }
+        if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
+        {
+        /* RX is running and will be stopped, so we need to restart it later. */
+            rxWasRunning = true;
+            loc_cmdAbort(&err);
+        }
 
-    // Send command
-    RF_CmdHandle cmd = RF_postCmd(rfHandle, (RF_Op*)&immOpCmd,
-            RF_PriorityNormal, 0, RF_EVENT_MASK);
+        // Send command
+        RF_CmdHandle cmd = RF_postCmd(rfHandle, (RF_Op*)&immOpCmd,
+                RF_PriorityNormal, 0, RF_EVENT_MASK);
 
-    RF_EventMask result = RF_pendCmd(rfHandle, cmd, RF_EventLastCmdDone);
+        RF_EventMask result = RF_pendCmd(rfHandle, cmd, RF_EventLastCmdDone);
 
-    if (! (result & RF_EventLastCmdDone))
-    {
-        err = NETSTK_ERR_RF_ERROR;
-    }else
-    {
-        gTxPower = txPower;
-    }
+        if (! (result & RF_EventLastCmdDone))
+        {
+            err = NETSTK_ERR_RF_ERROR;
+        }else
+        {
+            gTxPower = txPower;
+        }
 
-    if(rxWasRunning)
-    {
-      /* RX was previously running.
-       * Restart it. */
-      loc_startRx(&err);
+        if(rxWasRunning)
+        {
+          /* RX was previously running.
+           * Restart it. */
+          loc_startRx(&err);
+        }
     }
 
     return err;
@@ -733,6 +738,9 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
   }
 
   RF_Params_init(&rfParams);
+
+  if(!configured)
+  {
 #if  (NETSTK_CFG_2_4_EN == 1)
         memcpy(&cc13x2_rf_cmdRadioSetup.setup, &RF_cmdRadioSetup, sizeof(rfc_CMD_RADIO_SETUP_t));
         memcpy(&cc13x2_rf_cmdFs, &RF_cmdIeeeFs, sizeof(rfc_CMD_FS_t));
@@ -746,6 +754,8 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
         memcpy(&cc13x2_rf_cmdRx, &RF_cmdPropRxAdv, sizeof(rfc_CMD_PROP_RX_ADV_t));
         memcpy(&cc13x2_rf_cmdTx, &RF_cmdPropTxAdv, sizeof(rfc_CMD_PROP_TX_ADV_t));
 #endif
+  }
+
 
   /* Clear the RX buffer. */
   memset( rxBuffer, 0, sizeof(rxBuffer) );
