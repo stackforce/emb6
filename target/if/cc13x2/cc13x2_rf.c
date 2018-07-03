@@ -184,9 +184,6 @@ uint8_t rxBuffer[RX_BUFF_SIZE];
 static dataQueue_t dataQueue;
 static rfc_dataEntryGeneral_t* currentDataEntry;
 
-
-static uint8_t firstInit = 0;
-
 #if NETSTK_CFG_2_4_EN == 1
 static rfc_ieeeRxOutput_t rxStatistics;
 #elif NETSTK_CFG_2_4_EN == 0
