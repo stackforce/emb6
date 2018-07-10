@@ -1702,16 +1702,6 @@
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/sf_mcu_timer.h</locationURI>
 		</link>
 		<link>
-			<name>target/arch/arm/cm3/ti/device/cc13x2/sf_rf_6lowpan.c</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/sf_rf_6lowpan.c</locationURI>
-		</link>
-		<link>
-			<name>target/arch/arm/cm3/ti/device/cc13x2/sf_rf_6lowpan.h</name>
-			<type>1</type>
-			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/sf_rf_6lowpan.h</locationURI>
-		</link>
-		<link>
 			<name>target/arch/arm/cm3/ti/device/cc13x2/sf_uart.h</name>
 			<type>1</type>
 			<locationURI>REPO_ROOT_DIR/target/arch/arm/cm3/ti/device/cc13x2/sf_uart.h</locationURI>
