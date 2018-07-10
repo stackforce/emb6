@@ -91,7 +91,7 @@ static void loc_startRx( e_nsErr_t* p_err );
 /* Number of RSSI checks that must be lower than the defined threshold */
 #define CC13X2_NUM_OFF_RSSI_CHECKS 5U
 
-#define NUM_DATA_ENTRIES       4 /* NOTE: Only two data entries supported at the moment */
+#define NUM_DATA_ENTRIES       4 /* NOTE: Only 4 data entries supported at the moment */
 
 
 #define RX_BUFF_SIZE                          NUM_DATA_ENTRIES * (MAX_DATA_LENGTH_ENTRY + RF_QUEUE_DATA_ENTRY_HEADER_SIZE + RF_QUEUE_QUEUE_ALIGN_PADDING(MAX_DATA_LENGTH_ENTRY))
@@ -114,14 +114,13 @@ union setupCmd_t{
 };
 
 /* Events that should generate an event. */
-#if (NETSTK_CFG_2_4_EN == 1)
-#define RF_EVENT_MASK  ( RF_EventLastCmdDone | RF_EventCmdPreempted | \
-             RF_EventCmdAborted | RF_EventCmdStopped | RF_EventCmdCancelled | \
-             RF_EventRxOk | RF_EventRxNOk |  RF_EventRxEntryDone )
-#elif (NETSTK_CFG_2_4_EN == 0)
+
+#define RF_RX_EVENT_MASK  ( RF_EventRxOk | RF_EventRxNOk |  RF_EventRxEntryDone )
+
+#define RF_FG_EVENT_MASK  ( RF_EventLastFGCmdDone | RF_EventFGCmdDone )
+
 #define RF_EVENT_MASK  ( RF_EventLastCmdDone | RF_EventCmdPreempted | \
              RF_EventCmdAborted | RF_EventCmdStopped | RF_EventCmdCancelled)
-#endif
 /*============================================================================*/
 /*                                MACROS                                      */
 /*============================================================================*/
@@ -579,7 +578,7 @@ static void loc_startRx( e_nsErr_t* p_err )
 
         /* Start the reception. */
         rf_cmdRXHandle = RF_scheduleCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdRx,
-                                        &rxParam, rxDoneCallback, RF_EVENT_MASK);
+                                        &rxParam, rxDoneCallback, RF_EVENT_MASK | RF_RX_EVENT_MASK);
 #elif (NETSTK_CFG_2_4_EN == 0)
 
         //Clear the Rx statistics structure
@@ -935,10 +934,10 @@ static void cc13x2_Send (uint8_t      *p_data,
   txParam.endTime = 0;
   txParam.bIeeeBgCmd = false;
 
-  RF_CmdHandle rfCmdHandle = RF_scheduleCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdTx, &txParam, txDoneCallback, RF_EventLastFGCmdDone);
-  result = RF_pendCmd(rfHandle, rfCmdHandle,( RF_EventLastFGCmdDone | RF_EventFGCmdDone ));
+  RF_CmdHandle rfCmdHandle = RF_scheduleCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdTx, &txParam, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+  result = RF_pendCmd(rfHandle, rfCmdHandle, RF_EVENT_MASK | RF_FG_EVENT_MASK);
   // Wait for Command to complete
-  if (!(result & RF_EventLastFGCmdDone))
+  if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
   {
       *p_err = NETSTK_ERR_RF_TX_ERROR;
   }
@@ -954,7 +953,7 @@ static void cc13x2_Send (uint8_t      *p_data,
   RF_CmdHandle rf_cmdHandle = RF_postCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdTx,RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
   result = RF_pendCmd(rfHandle, rf_cmdHandle, RF_EventLastCmdDone);
   // Wait for Command to complete
-  if (!(result & RF_EventLastCmdDone))
+  if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
   {
       *p_err = NETSTK_ERR_RF_TX_ERROR;
   }else
