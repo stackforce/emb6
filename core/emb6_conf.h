@@ -549,7 +549,7 @@
 
 /** Default uip_aligned_buf and sicslowpan_aligned_buf sizes of 1280 overflows RAM */
 #ifndef UIP_CONF_BUFFER_SIZE
-#define UIP_CONF_BUFFER_SIZE                350
+#define UIP_CONF_BUFFER_SIZE                512
 #endif
 
 /**
