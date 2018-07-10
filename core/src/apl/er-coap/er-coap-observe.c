@@ -65,7 +65,7 @@ add_observer(uip_ipaddr_t *addr, uint16_t port, const uint8_t *token,
              size_t token_len, const char *uri, int uri_len, unsigned int accept)
 {
   /* Remove existing observe relationship, if any. */
-  coap_remove_observer_by_uri(addr, port, uri);
+  coap_remove_observer_by_uri(addr, port, uri, uri_len);
 
   coap_observer_t *o = memb_alloc(&observers_memb);
 
@@ -145,7 +145,7 @@ coap_remove_observer_by_token(uip_ipaddr_t *addr, uint16_t port,
 /*---------------------------------------------------------------------------*/
 int
 coap_remove_observer_by_uri(uip_ipaddr_t *addr, uint16_t port,
-                            const char *uri)
+                            const char *uri, int uri_len)
 {
   int removed = 0;
   coap_observer_t *obs = NULL;
@@ -155,7 +155,7 @@ coap_remove_observer_by_uri(uip_ipaddr_t *addr, uint16_t port,
     PRINTF("Remove check URL %p\n", uri);
     if((addr == NULL
         || (uip_ipaddr_cmp(&obs->addr, addr) && obs->port == port))
-       && (obs->url == uri || memcmp(obs->url, uri, strlen(obs->url)) == 0)) {
+       && (obs->url == uri || ((strlen(obs->url) == uri_len) && (memcmp(obs->url, uri, strlen(obs->url))) == 0))) {
       coap_remove_observer(obs);
       removed++;
     }
