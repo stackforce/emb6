@@ -242,9 +242,9 @@ static void dllsec_security(void)
 /*---------------------------------------------------------------------------*/
 static void dllsec_input(void)
 {
-#if LLSEC802154_ENABLED && LLSEC802154_USES_FRAME_COUNTER
+#if LLSEC802154_ENABLED && LLSEC802154_USES_FRAME_COUNTER && LLSEC802154_USES_FRAME_COUNTER_CHECK_EN
   uint32_t CounterValReceived;
-  uint8_t replayAttack;
+  uint8_t replayAttack = 0;
   CounterValReceived = dllsec_receivedFrameCounter();
   replayAttack = dllsec_receivedFrameCounterCheck(CounterValReceived);
   /* if frame counter value is less than expected, discarding the frame */
