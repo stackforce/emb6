@@ -843,6 +843,8 @@ static void cc13x2_Send (uint8_t      *p_data,
 #endif
 
 #if  (NETSTK_CFG_2_4_EN == 1)
+  //TODO remove abort call for the RX command, this call is temporary added because an issue when the rx is executed in the BG
+  loc_cmdAbort(p_err);
   RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
   if ( rf_cmdHandle != RF_ALLOC_ERROR )
   {
@@ -853,6 +855,8 @@ static void cc13x2_Send (uint8_t      *p_data,
           *p_err = NETSTK_ERR_RF_TX_ERROR;
       }else
       {
+          //TODO remove rx start, this call is temporary added because an issue when the rx is executed in the BG
+          loc_startRx(p_err);
       }
   }else
   {
