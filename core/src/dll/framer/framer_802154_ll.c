@@ -67,6 +67,9 @@ uint16_t framer802154ll_parse(framer802154ll_attr_t *p_frame, uint8_t *p_buf, ui
       (frameType != SMARTMAC_FRAME_STROBE)) {
     /* unsupported frame types */
     return 0;
+  }else
+  {
+      p_frame->frameType = frameType;
   }
 
   // check frame version and ACK-required fields
