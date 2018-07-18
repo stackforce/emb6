@@ -177,6 +177,8 @@ typedef struct
     uint32_t timeStamp;
     /** Pointer to the current data entry */
     rfc_dataEntryGeneral_t* currentDataEntry;
+    /** Pointer to the last data entry */
+    rfc_dataEntryGeneral_t* lastDataEntry;
     /* Indicates that there is an unhandled frame which must be handled in
      the event function. */
     uint8_t unhandledFrame;
