@@ -758,6 +758,7 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
 
   /* Read out data entry. */
   rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+  rfCtx.rxCtx.lastDataEntry = rfCtx.rxCtx.currentDataEntry;
 
 #if (NETSTK_CFG_2_4_EN == 1)
 
