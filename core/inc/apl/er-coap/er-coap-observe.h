@@ -45,6 +45,10 @@
 
 #define COAP_OBSERVER_URL_LEN 20
 
+#ifndef LWM2M_INST_UPDATE_ON_RESWR
+#define LWM2M_INST_UPDATE_ON_RESWR TRUE
+#endif
+
 typedef struct coap_observable {
   uint32_t observe_clock;
   struct stimer orphan_timer;

@@ -264,6 +264,7 @@ coap_notify_observers_sub(resource_t *resource, const char *subpath)
       }
     }
   }
+#if LWM2M_INST_UPDATE_ON_RESWR
 
   if (!notifDone)
   {
@@ -315,6 +316,7 @@ coap_notify_observers_sub(resource_t *resource, const char *subpath)
     }
     }
   }
+#endif
 }
 /*---------------------------------------------------------------------------*/
 void
