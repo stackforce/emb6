@@ -107,7 +107,6 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
         bsp_led( HAL_LED3, EN_BSP_LED_OP_BLINK );
 #endif /* #if CC13X2_RX_LED_ENABLED */
 
-        emb6_ackHandler(rfCtx.rxCtx.lastDataEntry);
         if (rfCtx.rxCtx.unhandledFrame == 0)
         {
             /* Read out data entry. */
@@ -115,10 +114,9 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
             rfCtx.rxCtx.lastDataEntry = rfCtx.rxCtx.currentDataEntry;
             /* Trigger the execution of the RF event callback function. */
             RF_SEM_POST(EVENT_TYPE_RF);
-        }else
-        {
-            rfCtx.rxCtx.lastDataEntry = RFQueue_getNextDataEntry(rfCtx.rxCtx.lastDataEntry);
         }
+        emb6_ackHandler(rfCtx.rxCtx.lastDataEntry);
+        rfCtx.rxCtx.lastDataEntry = RFQueue_getNextDataEntry(rfCtx.rxCtx.lastDataEntry);
         rfCtx.rxCtx.unhandledFrame++;
     }
     else if (e & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped))
@@ -543,6 +541,7 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
 {
   /* Set the error code to default. */
   e_nsErr_t err = NETSTK_ERR_NONE;
+  framer802154ll_attr_t frame;
 
   /* Check if it is the right event. */
   if (c_event == EVENT_TYPE_RF)
@@ -591,11 +590,16 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
         LOG_RAW("\r\n");
         #endif
 
-        /* Forward the call to the PHY layer. */
-        gpRfNetstk->phy->recv(rfCtx.rxCtx.payload, rfCtx.rxCtx.len, &err);
-
-        /* Read out data entry for the next iteration. */
-        rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+        //Send ack
+        /* parse the received packet to check whether it is an ACK or not */
+        framer802154ll_parse(&frame, rfCtx.rxCtx.payload, rfCtx.rxCtx.len);
+        if(frame.frameType != FRAME802154_ACKFRAME)
+        {
+            /* Forward the call to the PHY layer. */
+            gpRfNetstk->phy->recv(rfCtx.rxCtx.payload, rfCtx.rxCtx.len, &err);
+        }
+            /* Read out data entry for the next iteration. */
+            rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
     }
   }
 }
@@ -631,46 +635,37 @@ static uint8_t emb6_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry)
         p_data[0] = p_data[1];
         p_data[1] = tempData;
 #endif
-
-        #if LOGGER_ENABLE
-        uint8_t temp = rxPacket.len;
-        uint8_t *p_temp = rxPacket.payload;
-        /* Logging */
-        LOG_RAW("==========================");
-        LOG_RAW("\r\n");
-        LOG_RAW("RF receive: ");
-        while (temp--)
-        {
-        LOG_RAW("%02x ", *p_temp++);
-        }
-        LOG_RAW("\r\n");
-        #endif
-
         //Send ack
         /* parse the received packet to check whether it requires ACK or not */
         framer802154ll_parse(&frame, p_data, len);
-        /* check if the frame is valid */
-        if(framer802154ll_addrFilter(&frame, p_data, len ))
+
+#if NETSTK_CFG_IEEE_802154G_EN
+        /* FIXME flip PHR back */
+        tempData = p_data[0];
+        p_data[0] = p_data[1];
+        p_data[1] = tempData;
+#endif
+
+        if( (frame.frameType != FRAME802154_ACKFRAME)
+            && 
+            frame.is_ack_required 
+            )
         {
-          if(frame.is_ack_required)
-          {
             uint8_t ack[10];
             /* create the ACK  */
             uint8_t ack_length = framer802154ll_createAck(&frame, ack, sizeof(ack));
-
             cc13x2_Send(ack, ack_length ,&err);
             return 1;
-          }
-
-          if (rfCtx.txCtx.TxWaitingAck)
-          {
-              if(frame.frameType == FRAME802154_ACKFRAME && frame.seq_no == rfCtx.txCtx.expSeqNo)
-              {
-                rfCtx.txCtx.ackReceived = 1;
-                p_dataEntry->status = DATA_ENTRY_PENDING;
-              }
-              return 0;
-          }
+        }else if (
+            rfCtx.txCtx.TxWaitingAck 
+            && 
+            (frame.frameType == FRAME802154_ACKFRAME) 
+            && 
+            (frame.seq_no == rfCtx.txCtx.expSeqNo)
+            )
+        {
+            rfCtx.txCtx.ackReceived = 1;
+            return 0;
         }
     }
     return 1;
