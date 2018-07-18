@@ -667,6 +667,11 @@
 			<locationURI>REPO_ROOT_DIR/target/if/cc13x2/cc13x2_rf.c</locationURI>
 		</link>
 		<link>
+			<name>target/if/cc13x2/cc13x2_rf.h</name>
+			<type>1</type>
+			<locationURI>REPO_ROOT_DIR/target/if/cc13x2/cc13x2_rf.h</locationURI>
+		</link>
+		<link>
 			<name>target/if/cc13x2/smart_rf</name>
 			<type>2</type>
 			<locationURI>virtual:/virtual</locationURI>
