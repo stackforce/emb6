@@ -15,17 +15,14 @@
 #include DeviceFamily_constructPath(driverlib/rf_ieee_cmd.h)
 #include <ti/drivers/rf/RF.h>
 
-#define rfPowerTable rfPowerTable_ieee
-#define rfPowerTableSize rfPowerTableSize_ieee
-
 /* TX Power dBm lookup table - values from SmartRF Studio */
 typedef struct
 {
     int8_t dbm;
     uint16_t txPower; /* Value for the PROP_DIV_RADIO_SETUP.txPower field */
-} rfPowerConfig_t;
+} rfIeeePowerConfig_t;
 
-extern const rfPowerConfig_t rfPowerTable_ieee[];
+extern const rfIeeePowerConfig_t rfPowerTable_ieee[];
 extern const uint8_t rfPowerTableSize_ieee;
 // TI-RTOS RF Mode Object
 extern RF_Mode RF_ieee;

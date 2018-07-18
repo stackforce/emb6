@@ -1,8 +1,3 @@
-#ifdef __cplusplus
-extern "C"
-{
-#endif
-
 /*!
  * @code
  *  ___ _____ _   ___ _  _____ ___  ___  ___ ___
@@ -22,45 +17,21 @@ extern "C"
     This group is the if driver for the emb6 stack.
   @{  */
 
+#ifdef __cplusplus
+extern "C"
+{
+#endif
+
+
+
 /*============================================================================*/
 /*                                INCLUDES                                    */
 /*============================================================================*/
-#include "emb6.h"
-#include "target_conf.h"
 
-#include "packetbuf.h"
-#include "evproc.h"
-
-/* BIOS Header files */
-#include <ti/sysbios/knl/Clock.h>
-#include <ti/sysbios/knl/Semaphore.h>
-#include <ti/sysbios/BIOS.h>
-#include <ti/sysbios/knl/Task.h>
-
-#ifndef USE_DMM
-#include <ti/drivers/rf/RF.h>
-#include "Board.h"
-#else
-#include <dmm/dmm_rfmap.h>
-#include "board.h"
-#endif //USE_DMM
-
-#include <ti/devices/DeviceFamily.h>
-#include <driverlib/rf_common_cmd.h>
-#include <driverlib/rf_data_entry.h>
-
-#include "RFQueue.h"
-
-#include "bsp.h"
-
-#if NETSTK_CFG_2_4_EN == 1
-#include "smart_rf/IEEE_settings.h"
-#elif NETSTK_CFG_2_4_EN == 0
-#include "smart_rf/smartrf_settings.h"
-#else
-#error Invalid RF configuration
-#endif
-
+#include "cc13x2_rf.h"
+#include "ctimer.h"
+#include "framer_802154_ll.h"
+#include "framer_802154.h"
 
 /*! Enable or disable logging. */
 #define     LOGGER_ENABLE        LOGGER_RADIO
@@ -78,93 +49,6 @@ static void cc13x2_Ioctl(e_nsIocCmd_t cmd, void *p_val, e_nsErr_t *p_err);
 static void loc_startRx( e_nsErr_t* p_err );
 
 /*============================================================================*/
-/*                                DEFINES                                     */
-/*============================================================================*/
-#define MAX_ADDR_SIZE 8
-#define MAX_DATA_LENGTH 128
-#define MAX_DATA_LENGTH_ENTRY 153
-
-/* This is the minimum value which can be disbplayed using a signed 8 bit
- * integer =-127dBm */
-#define CC13X2_MIN_RSSI            128U
-#define CC13X2_MIN_RSSI_SIGNED     -128
-/* Number of RSSI checks that must be lower than the defined threshold */
-#define CC13X2_NUM_OFF_RSSI_CHECKS 5U
-
-#define NUM_DATA_ENTRIES       4 /* NOTE: Only 4 data entries supported at the moment */
-
-
-#define RX_BUFF_SIZE                          NUM_DATA_ENTRIES * (MAX_DATA_LENGTH_ENTRY + RF_QUEUE_DATA_ENTRY_HEADER_SIZE + RF_QUEUE_QUEUE_ALIGN_PADDING(MAX_DATA_LENGTH_ENTRY))
-
-/* Special type definition for power table. */
-#define PACKED_TYPEDEF_CONST_STRUCT    typedef const struct __attribute__((__packed__))
-
-/* Lowest allowed channel. */
-#define CHANNEL_LOWER_LIMIT        11U
-/* Highest allowed channel. */
-#define CHANNEL_UPPER_LIMIT        26U
-
-/* Carrier sense state IDLE. */
-#define CCA_STATE_IDLE              0U
-
-union setupCmd_t{
-    rfc_CMD_PROP_RADIO_DIV_SETUP_t divSetup;
-    rfc_CMD_PROP_RADIO_SETUP_t propSetup;
-    rfc_CMD_RADIO_SETUP_t setup;
-};
-
-/* Events that should generate an event. */
-
-#define RF_RX_EVENT_MASK  ( RF_EventRxOk | RF_EventRxNOk |  RF_EventRxEntryDone )
-
-#define RF_FG_EVENT_MASK  ( RF_EventLastFGCmdDone | RF_EventFGCmdDone )
-
-#define RF_EVENT_MASK  ( RF_EventLastCmdDone | RF_EventCmdPreempted | \
-             RF_EventCmdAborted | RF_EventCmdStopped | RF_EventCmdCancelled)
-/*============================================================================*/
-/*                                MACROS                                      */
-/*============================================================================*/
-
-/* Checks if an RF handle is valid. */
-#define RF_HANDLE_IS_VALID( handle ) ( handle >= 0 )
-/* Invalid RF handle. */
-#define RF_INVALID_RF_HANDLE         (-1)
-
-/* Registers a the RF event function in the event handler. */
-#define RF_SEM_WAIT(_event_) evproc_regCallback(_event_, cc13x2_eventHandler)
-/* Indicates an RF event. */
-#define RF_SEM_POST(_event_) evproc_putEvent(E_EVPROC_HEAD, _event_, NULL)
-
-/* TX power table calculation
- *     15..8   | 7..6 | 5..0
- *   tempCoeff |  GC  |  IB
- */
-#define TX_POUT( TC, GC, IB )                                         \
-  (uint16_t)((((TC) & 0xFF) << 8) | (((GC) & 0x03) << 6) | ((IB) & 0x3F))
-
-/* Calculates the number of entries in the RF power table. */
-#define NUM_TX_POWER_VALUES(x) (sizeof(x) / sizeof(txPwrVal_t))
-
-
-/*============================================================================*/
-/*                            ENUMERATIONS                                    */
-/*============================================================================*/
-
-/*============================================================================*/
-/*                              STRUCTURES                                    */
-/*============================================================================*/
-/*! Storage for received packets. */
-typedef struct
-{
-  /* Length of the received packet. */
-  uint8_t len;
-  /* Payload buffer for the received packet. */
-  uint8_t payload[MAX_DATA_LENGTH];
-  /* RSSI of the received packet. */
-  int8_t  rssi;
-} RxPacket;
-
-/*============================================================================*/
 /*                                  CONSTANTS                                 */
 /*============================================================================*/
 #if defined(__TI_COMPILER_VERSION__)
@@ -176,62 +60,21 @@ typedef struct
 /*============================================================================*/
 /*                                LOCAL VARIABLES                             */
 /*============================================================================*/
-
 /* Rx buffer includes data entry structure, hdr (len=1byte), dst addr (max of 8 bytes) and data. */
 uint8_t rxBuffer[RX_BUFF_SIZE];
+
 /* Receive dataQueue for RF Core to fill in data */
-static dataQueue_t dataQueue;
-static rfc_dataEntryGeneral_t* currentDataEntry;
+dataQueue_t dataQueue;
 
-#if NETSTK_CFG_2_4_EN == 1
-static rfc_ieeeRxOutput_t rxStatistics;
-#elif NETSTK_CFG_2_4_EN == 0
-static rfc_propRxOutput_t rxStatistics;
-#endif
-
-/* RF parameter struct. */
-static RF_Params rfParams;
-/* RF object. */
-static RF_Object rfObject;
-/* RF handle. */
-static RF_Handle rfHandle;
+/* RF main variable. */
+static rf_ctx_t rfCtx;
 
 static s_ns_t *gpRfNetstk;
-
-//Indicating that the API is initialized
-static uint8_t configured = 0;
-
-//local commands, contents will be defined by modulation type
-static union setupCmd_t cc13x2_rf_cmdRadioSetup;
-static rfc_CMD_FS_t cc13x2_rf_cmdFs;
-static RF_Mode cc13x2_rf_RF_mode;
-
-
-#if NETSTK_CFG_2_4_EN == 1
-static rfc_CMD_IEEE_TX_t cc13x2_rf_cmdTx;
-static rfc_CMD_IEEE_RX_t cc13x2_rf_cmdRx;
-#elif NETSTK_CFG_2_4_EN == 0
-static rfc_CMD_PROP_TX_ADV_t cc13x2_rf_cmdTx;
-static rfc_CMD_PROP_RX_ADV_t cc13x2_rf_cmdRx;
-#endif
-
-/* Indicates that there is an unhandled frame which must be handled in
-   the event function. */
-bool gb_unhandledFrame;
-
-/* Buffer for a received packet. */
-static RxPacket rxPacket;
-
-/* Configured transmission power. */
-static int8_t gTxPower;
-
-//Handle for last Async command, which is needed by loc_cmdAbort
-static RF_CmdHandle rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
 
 //Callback for Async Tx complete
 static void txDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
-    if ((e & RF_EventLastCmdDone | RF_EventLastFGCmdDone))
+    if (e & (RF_EventLastCmdDone | RF_EventLastFGCmdDone))
     {
 #if CC13X2_TX_LED_ENABLED
          bsp_led( HAL_LED2, EN_BSP_LED_OP_BLINK );
@@ -247,34 +90,34 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
     bool b_restartRx = true;
     e_nsErr_t  p_err = NETSTK_ERR_NONE;
 
+    rfCtx.rxCtx.is_receiving = 0;
+
 #if (NETSTK_CFG_2_4_EN == 1)
     if ((e & RF_EventRxOk) || (e & RF_EventRxNOk))
     {
 #elif (NETSTK_CFG_2_4_EN == 0)
-    rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
-    if ((e & RF_EventLastCmdDone) && (cc13x2_rf_cmdRx.status == PROP_DONE_OK)  && ((rxStatistics.nRxOk == 1) || (rxStatistics.nRxIgnored == 1)) )
+        rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
+    if ((e & RF_EventLastCmdDone) && (rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->status == PROP_DONE_OK)  && ((rfCtx.rfCmd.propCmd.rxStatistics.nRxOk == 1) || (rfCtx.rfCmd.propCmd.rxStatistics.nRxIgnored == 1)) )
     {
 #endif
-
 #if CC13X2_RX_LED_ENABLED
         bsp_led( HAL_LED3, EN_BSP_LED_OP_BLINK );
 #endif /* #if CC13X2_RX_LED_ENABLED */
 
-        if (!gb_unhandledFrame)
+        if (rfCtx.rxCtx.unhandledFrame == 0)
         {
             /* Read out data entry. */
-            currentDataEntry = RFQueue_getDataEntry();
+            rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
             /* Trigger the execution of the RF event callback function. */
             RF_SEM_POST(EVENT_TYPE_RF);
-
-            gb_unhandledFrame = true;
         }
+        rfCtx.rxCtx.unhandledFrame++;
     }
     else if (e & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped))
     {
         p_err = NETSTK_ERR_RF_ABORTED;
-        rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
-        b_restartRx =false;
+        rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
+        b_restartRx = false;
     }
     else
     {
@@ -300,43 +143,50 @@ static void loc_cmdAbort(e_nsErr_t* p_err)
 {
     *p_err = NETSTK_ERR_NONE;
 
-    if (!configured)
+    if (!rfCtx.configured)
     {
         *p_err = NETSTK_ERR_RF_CONFIG_ERROR;
         return;
     }
     //check an Async command is running, if not return success
-    if (!RF_HANDLE_IS_VALID(rf_cmdRXHandle))
+    if (!RF_HANDLE_IS_VALID(rfCtx.rfParam.rf_cmdRXHandle))
     {
+        rfCtx.rxCtx.is_receiving = 0;
         return;
     }
 
     //force abort (gracefull param set to 0)
-    if (RF_cancelCmd(rfHandle, rf_cmdRXHandle, 0) == RF_StatSuccess)
+    if (RF_cancelCmd(rfCtx.rfParam.rfHandle, rfCtx.rfParam.rf_cmdRXHandle, 0) == RF_StatSuccess)
     {
         /* If command is cancelled immediately, callback may have set the cmd handle to invalid.
          * In that case, no need to pend.
          */
-        if (RF_HANDLE_IS_VALID(rf_cmdRXHandle))
+        if (RF_HANDLE_IS_VALID(rfCtx.rfParam.rf_cmdRXHandle))
         {
             /* Wait for Command to complete */
-            RF_EventMask result = RF_pendCmd(rfHandle, rf_cmdRXHandle, (RF_EventLastCmdDone |
+            RF_EventMask result = RF_pendCmd(rfCtx.rfParam.rfHandle, rfCtx.rfParam.rf_cmdRXHandle, (RF_EventLastCmdDone |
                     RF_EventCmdAborted | RF_EventCmdCancelled | RF_EventCmdStopped));
             if (! (result & RF_EventLastCmdDone))
             {
                 *p_err = NETSTK_ERR_RF_CMD_ERROR;
             }else
             {
-                rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
+                rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
             }
         }else
         {
-            rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
+            rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
         }
     }
     else
     {
         *p_err = NETSTK_ERR_RF_CMD_ERROR;
+    }
+
+    //check an Async command is running, if not return success
+    if (!RF_HANDLE_IS_VALID(rfCtx.rfParam.rf_cmdRXHandle))
+    {
+        rfCtx.rxCtx.is_receiving = 0;
     }
 
     return;
@@ -352,7 +202,7 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
     bool rxWasRunning;
     e_nsErr_t err = NETSTK_ERR_RF_ERROR;
 
-    if ( (!configured) )
+    if ( (!rfCtx.configured) )
     {
         err = NETSTK_ERR_RF_CONFIG_ERROR;
         return err;
@@ -364,9 +214,9 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
     {
 
 #if NETSTK_CFG_2_4_EN == 1
-        cc13x2_rf_cmdFs.frequency = (2405 + ( 5 * ( channel - 11 )));
+        rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdFs->frequency = (2405 + ( 5 * ( channel - 11 )));
         /* Update the RX channel settings. */
-        cc13x2_rf_cmdRx.channel = channel;
+        rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx->channel = channel;
 #elif NETSTK_CFG_2_4_EN == 0
         uint16_t Cent_freq = 0x035F;
         uint16_t Frac_Freq = 0x2000;
@@ -377,22 +227,27 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
         Frac_Freq = Frac_Freq + (channel % 5) * Delta;
 
         /* Set the frequency */
-        cc13x2_rf_cmdFs.frequency = Cent_freq;
-        cc13x2_rf_cmdFs.fractFreq = Frac_Freq;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdFs->frequency = Cent_freq;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdFs->fractFreq = Frac_Freq;
 #endif
 
-        if (rfHandle)
+        if (rfCtx.rfParam.rfHandle)
         {
-            if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
+            if( RF_HANDLE_IS_VALID( rfCtx.rfParam.rf_cmdRXHandle ) )
             {
             /* RX is running and will be stopped, so we need to restart it later. */
                 rxWasRunning = true;
                 loc_cmdAbort(&err);
             }
-
+#if NETSTK_CFG_2_4_EN == 1
             /* Run command */
-            RF_EventMask result = RF_runCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdFs,
+            RF_EventMask result = RF_runCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdFs,
                 RF_PriorityNormal, 0, RF_EVENT_MASK);
+#elif NETSTK_CFG_2_4_EN == 0
+            /* Run command */
+            RF_EventMask result = RF_runCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdFs,
+                RF_PriorityNormal, 0, RF_EVENT_MASK);
+#endif
 
             if (result && ( RF_EventCmdDone | RF_EventLastCmdDone |
                     RF_EventFGCmdDone | RF_EventLastFGCmdDone) )
@@ -411,8 +266,6 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
             err = NETSTK_ERR_NONE;
         }
     }
-
-
     return err;
 }
 
@@ -421,38 +274,86 @@ static e_nsErr_t loc_setChannel(uint8_t channel)
  *
  * @return Netstack error code.
  */
-#if NETSTK_CFG_2_4_EN == 1
+
 static e_nsErr_t loc_cca(void)
 {
   /* RF status return code. */
   RF_Stat rfRetCode;
-  e_nsErr_t err;
+  e_nsErr_t err = NETSTK_ERR_BUSY;
 
-  err = NETSTK_ERR_BUSY;
-
+#if NETSTK_CFG_2_4_EN == 1
   /* The IEEE CCA command requires that an RX background operation is running. */
-  if(RF_HANDLE_IS_VALID(rf_cmdRXHandle))
+  if(RF_HANDLE_IS_VALID(rfCtx.rfParam.rf_cmdRXHandle))
   {
     /* Request the current CCA state. */
-    rfRetCode = RF_runImmediateCmd(rfHandle, (uint32_t*)&RF_cmdIeeeCca);
+    rfRetCode = RF_runImmediateCmd(rfCtx.rfParam.rfHandle, (uint32_t*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cca);
     if( rfRetCode == RF_StatCmdDoneSuccess )
     {
-      if( CCA_STATE_IDLE == RF_cmdIeeeCca.ccaInfo.ccaState )
+      if( CCA_STATE_IDLE == rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cca->ccaInfo.ccaState )
       {
         /* CCA result is IDLE. */
         err = NETSTK_ERR_NONE;
       }
+      else if ( CCA_STATE_BUSY == rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cca->ccaInfo.ccaState )
+      {
+        /* CCA result is IDLE. */
+        err = NETSTK_ERR_BUSY;
+      }
       else
       {
-        /* Channel is currently busy. */
-        err = NETSTK_ERR_CHANNEL_ACESS_FAILURE;
+        err = NETSTK_ERR_RF_ERROR;
       }
     }
+    else
+    {
+      err = NETSTK_ERR_RF_ERROR;
+    }
   }
+#elif NETSTK_CFG_2_4_EN == 0
+
+  bool rxWasRunning = false;
+
+  /* The prop CCA command requires that an RX operation is not running. */
+  if( RF_HANDLE_IS_VALID( rfCtx.rfParam.rf_cmdRXHandle ) )
+  {
+  /* RX is running and will be stopped, so we need to restart it later. */
+      rxWasRunning = true;
+      loc_cmdAbort(&err);
+  }
+    /* Request the current CCA state. */
+    rfRetCode = RF_runImmediateCmd(rfCtx.rfParam.rfHandle, (uint32_t*)rfCtx.rfCmd.propCmd.cc13x2_rf_cca);
+    if( rfRetCode == RF_StatCmdDoneSuccess )
+    {
+      if( PROP_DONE_IDLE == rfCtx.rfCmd.propCmd.cc13x2_rf_cca->status  )
+      {
+        /* CCA result is IDLE. */
+        err = NETSTK_ERR_NONE;
+      }
+      else if( PROP_DONE_BUSY == rfCtx.rfCmd.propCmd.cc13x2_rf_cca->status  )
+      {
+        /* Channel is currently busy. */
+        err = NETSTK_ERR_BUSY;
+      }
+      else
+      {
+        err = NETSTK_ERR_RF_ERROR;
+      }
+    }
+    else
+    {
+      err = NETSTK_ERR_RF_ERROR;
+    }
+
+    if(rxWasRunning)
+    {
+      /* RX was previously running.
+       * Restart it. */
+      loc_startRx(&err);
+    }
+#endif
 
   return err;
 }
-#endif
 
 static e_nsErr_t loc_setTxPower(int8_t txPower)
 {
@@ -464,7 +365,7 @@ static e_nsErr_t loc_setTxPower(int8_t txPower)
     /* Nothing failed yet. */
     e_nsErr_t err = NETSTK_ERR_NONE;
 
-    if (!configured )
+    if (!rfCtx.configured )
     {
         err = NETSTK_ERR_RF_CONFIG_ERROR;
         return err;
@@ -502,9 +403,9 @@ static e_nsErr_t loc_setTxPower(int8_t txPower)
         {
             cmdSetPower.txPower = rfPowerTable[txPowerIdx].txPower;
 #if (NETSTK_CFG_2_4_EN == 1)
-            cc13x2_rf_cmdRadioSetup.setup.txPower = rfPowerTable[txPowerIdx].txPower;
+            rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRadioSetup->setup.txPower = rfPowerTable[txPowerIdx].txPower;
 #elif (NETSTK_CFG_2_4_EN == 0)
-            cc13x2_rf_cmdRadioSetup.propSetup.txPower = rfPowerTable[txPowerIdx].txPower;
+            rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRadioSetup->divSetup.txPower = rfPowerTable[txPowerIdx].txPower;
 #endif
         }
     }
@@ -512,9 +413,9 @@ static e_nsErr_t loc_setTxPower(int8_t txPower)
     //point the Operational Command to the immediate set power command
     immOpCmd.cmdrVal = (uint32_t) &cmdSetPower;
 
-    if (rfHandle)
+    if (rfCtx.rfParam.rfHandle)
     {
-        if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
+        if( RF_HANDLE_IS_VALID( rfCtx.rfParam.rf_cmdRXHandle ) )
         {
         /* RX is running and will be stopped, so we need to restart it later. */
             rxWasRunning = true;
@@ -522,17 +423,17 @@ static e_nsErr_t loc_setTxPower(int8_t txPower)
         }
 
         // Send command
-        RF_CmdHandle cmd = RF_postCmd(rfHandle, (RF_Op*)&immOpCmd,
+        RF_CmdHandle cmd = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)&immOpCmd,
                 RF_PriorityNormal, 0, RF_EVENT_MASK);
 
-        RF_EventMask result = RF_pendCmd(rfHandle, cmd, RF_EventLastCmdDone);
+        RF_EventMask result = RF_pendCmd(rfCtx.rfParam.rfHandle, cmd, RF_EventLastCmdDone);
 
         if (! (result & RF_EventLastCmdDone))
         {
             err = NETSTK_ERR_RF_ERROR;
         }else
         {
-            gTxPower = txPower;
+            rfCtx.txCtx.txPower = txPower;
         }
 
         if(rxWasRunning)
@@ -552,20 +453,20 @@ static e_nsErr_t  loc_getTxPower(int8_t *pi8TxPowerdBm)
     e_nsErr_t err = NETSTK_ERR_NONE;
 
 
-    *pi8TxPowerdBm = gTxPower;
+    *pi8TxPowerdBm = rfCtx.txCtx.txPower;
     return err;
 }
 
 static void loc_startRx( e_nsErr_t* p_err )
 {
     //Check if not configure
-    if ( !configured )
+    if ( !rfCtx.configured )
     {
         *p_err = NETSTK_ERR_RF_CONFIG_ERROR;
         return;
     }
 
-    if( !RF_HANDLE_IS_VALID( rf_cmdRXHandle ) && rfHandle )
+    if( !RF_HANDLE_IS_VALID( rfCtx.rfParam.rf_cmdRXHandle ) && rfCtx.rfParam.rfHandle )
     {
 
 #if  (NETSTK_CFG_2_4_EN == 1)
@@ -577,32 +478,33 @@ static void loc_startRx( e_nsErr_t* p_err )
         rxParam.bIeeeBgCmd = true;
 
         /* Start the reception. */
-        rf_cmdRXHandle = RF_scheduleCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdRx,
+        rfCtx.rfParam.rf_cmdRXHandle = RF_scheduleCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx,
                                         &rxParam, rxDoneCallback, RF_EVENT_MASK | RF_RX_EVENT_MASK);
 #elif (NETSTK_CFG_2_4_EN == 0)
 
         //Clear the Rx statistics structure
-        memset(&rxStatistics, 0, sizeof(rfc_propRxOutput_t));
+        memset(&rfCtx.rfCmd.propCmd.rxStatistics, 0, sizeof(rfc_propRxOutput_t));
 
-        cc13x2_rf_cmdRx.startTrigger.triggerType = TRIG_NOW;
-        cc13x2_rf_cmdRx.startTrigger.pastTrig = 1;
-        cc13x2_rf_cmdRx.startTime = 0;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->startTrigger.triggerType = TRIG_NOW;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->startTrigger.pastTrig = 1;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->startTime = 0;
 
-        cc13x2_rf_cmdRx.endTrigger.triggerType = TRIG_NEVER;
-        cc13x2_rf_cmdRx.endTrigger.pastTrig = 1;
-        cc13x2_rf_cmdRx.endTime = 0;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTrigger.triggerType = TRIG_NEVER;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTrigger.pastTrig = 1;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTime = 0;
 
-        rf_cmdRXHandle = RF_postCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdRx,
+        rfCtx.rfParam.rf_cmdRXHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx,
                                     RF_PriorityNormal, rxDoneCallback, RF_EVENT_MASK);
 #endif
-
     }
 
-    if ( !RF_HANDLE_IS_VALID(rf_cmdRXHandle))
+    if ( !RF_HANDLE_IS_VALID(rfCtx.rfParam.rf_cmdRXHandle))
     {
         *p_err = NETSTK_ERR_RF_CMD_ERROR;
+        emb6_errorHandler(p_err);
     }else
     {
+        rfCtx.rxCtx.is_receiving = 1;
         *p_err = NETSTK_ERR_NONE;
     }
 }
@@ -629,7 +531,7 @@ static void loc_startRx( e_nsErr_t* p_err )
  * @parameter c_event Event that should be handled.
  * @parameter p_data  Data needed to handle the event.
  */
-void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
+void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
 {
   /* Set the error code to default. */
   e_nsErr_t err = NETSTK_ERR_NONE;
@@ -638,20 +540,20 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
   if (c_event == EVENT_TYPE_RF)
   {
     /* Read out data entry. */
-    while (gb_unhandledFrame && currentDataEntry->status == DATA_ENTRY_FINISHED)
+    while ((rfCtx.rxCtx.unhandledFrame > 0) && rfCtx.rxCtx.currentDataEntry->status == DATA_ENTRY_FINISHED)
     {
-        uint8_t *p_data = (uint8_t*)(&currentDataEntry->data) + 1;
+        uint8_t *p_data = (uint8_t*)(&rfCtx.rxCtx.currentDataEntry->data) + 1;
 
         /* get length of the packet in the queue
          * hdr + payload + crc + RSSI
          * */
-        rxPacket.len = (uint8_t)(currentDataEntry->data);
+        rfCtx.rxCtx.len = (uint8_t)(rfCtx.rxCtx.currentDataEntry->data);
 
         /* Store the RSSI of the received packet which is appended to the end of the packet in the Rx queue. */
-        rxPacket.rssi = (int8_t) ((int8_t*)&(currentDataEntry->data))[rxPacket.len];
+        rfCtx.rxCtx.rssi = (int8_t) ((int8_t*)&(rfCtx.rxCtx.currentDataEntry->data))[rfCtx.rxCtx.len];
 
         /* Substitute the rssi length from the total length of the packet in RX queue*/
-        rxPacket.len -= 1;
+        rfCtx.rxCtx.len -= 1;
 
 #if NETSTK_CFG_IEEE_802154G_EN
         uint8_t tempData;
@@ -662,9 +564,10 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
 #endif
         /* Copy the payload into RF buffer.
          The offset of 1 is to skip the length field which has already been stored. */
-        memcpy(&rxPacket.payload, (p_data), rxPacket.len);
+        memcpy(rfCtx.rxCtx.payload, (p_data), rfCtx.rxCtx.len);
 
         RFQueue_nextEntry();
+        rfCtx.rxCtx.unhandledFrame--;
 
         #if LOGGER_ENABLE
         uint8_t temp = rxPacket.len;
@@ -681,12 +584,11 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_data)
         #endif
 
         /* Forward the call to the PHY layer. */
-        gpRfNetstk->phy->recv(rxPacket.payload, rxPacket.len, &err);
+        gpRfNetstk->phy->recv(rfCtx.rxCtx.payload, rfCtx.rxCtx.len, &err);
 
         /* Read out data entry for the next iteration. */
-        currentDataEntry = RFQueue_getDataEntry();
+        rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
     }
-    gb_unhandledFrame = false;
   }
 }
 
@@ -718,43 +620,43 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
   /* Register the RF event handler. */
   RF_SEM_WAIT(EVENT_TYPE_RF);
 
-  /* Initialize variable. */
-  gb_unhandledFrame = false;
-
   /* Set error in case something goes wrong. */
   *p_err = NETSTK_ERR_INIT;
 
   /* Store netstack pointer. */
   gpRfNetstk = p_netstk;
 
-  if (configured)
+  if (rfCtx.configured)
   {
     loc_cmdAbort(p_err);
     if (*p_err == NETSTK_ERR_RF_CMD_ERROR)
         return;
-    RF_close(rfHandle);
-    rfHandle = NULL;
+    RF_close(rfCtx.rfParam.rfHandle);
+    rfCtx.rfParam.rfHandle = NULL;
   }
 
-  RF_Params_init(&rfParams);
+  memset(&rfCtx,0,sizeof(rfCtx));
+  /* Initialize variable. */
+  rfCtx.rxCtx.unhandledFrame = 0;
 
-  if(!configured)
-  {
+
+  RF_Params_init(&rfCtx.rfParam.rfParams);
+
 #if  (NETSTK_CFG_2_4_EN == 1)
-        memcpy(&cc13x2_rf_cmdRadioSetup.setup, &RF_cmdRadioSetup, sizeof(rfc_CMD_RADIO_SETUP_t));
-        memcpy(&cc13x2_rf_cmdFs, &RF_cmdIeeeFs, sizeof(rfc_CMD_FS_t));
-        memcpy(&cc13x2_rf_RF_mode, &RF_ieee, sizeof(RF_Mode));
-        memcpy(&cc13x2_rf_cmdRx, &RF_cmdIeeeRx, sizeof(rfc_CMD_IEEE_RX_t));
-        memcpy(&cc13x2_rf_cmdTx, &RF_cmdIeeeTx, sizeof(rfc_CMD_IEEE_TX_t));
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_RF_mode = &RF_ieee;
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cca = &RF_cmdIeeeCca;
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdFs = &RF_cmdIeeeFs;
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRadioSetup = (setupCmd_t*)&RF_cmdRadioSetup;
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx = &RF_cmdIeeeRx;
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx = &RF_cmdIeeeTx;
 #elif (NETSTK_CFG_2_4_EN == 0)
-        memcpy(&cc13x2_rf_cmdRadioSetup.divSetup, &RF_cmdPropRadioDivSetup, sizeof(rfc_CMD_PROP_RADIO_DIV_SETUP_t));
-        memcpy(&cc13x2_rf_cmdFs, &RF_cmdPropFs, sizeof(rfc_CMD_FS_t));
-        memcpy(&cc13x2_rf_RF_mode, &RF_prop, sizeof(RF_Mode));
-        memcpy(&cc13x2_rf_cmdRx, &RF_cmdPropRxAdv, sizeof(rfc_CMD_PROP_RX_ADV_t));
-        memcpy(&cc13x2_rf_cmdTx, &RF_cmdPropTxAdv, sizeof(rfc_CMD_PROP_TX_ADV_t));
+  rfCtx.rfCmd.propCmd.cc13x2_rf_RF_mode = &RF_prop;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cca = &RF_cmdPropCs;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdFs = &RF_cmdPropFs;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRadioSetup = (setupCmd_t*)&RF_cmdPropRadioDivSetup;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx = &RF_cmdPropRxAdv;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx = &RF_cmdPropTxAdv;
 #endif
-  }
-
 
   /* Clear the RX buffer. */
   memset( rxBuffer, 0, sizeof(rxBuffer) );
@@ -770,42 +672,57 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
       return;
   }
 
-#if (NETSTK_CFG_2_4_EN == 1)
-  cc13x2_rf_cmdRx.pRxQ = &dataQueue;
-  cc13x2_rf_cmdRx.pOutput = &rxStatistics;
+  rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
 
   /* Read out data entry. */
-  currentDataEntry = RFQueue_getDataEntry();
+  rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
 
-  if(rfHandle == NULL)
+#if (NETSTK_CFG_2_4_EN == 1)
+
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx->pRxQ = &dataQueue;
+  rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx->pOutput = &rfCtx.rfCmd.ieeeCmd.rxStatistics;
+
+  if( rfCtx.rfParam.rfHandle == NULL)
   {
      /* Request access to the radio */
-     rfHandle = RF_open(&rfObject, &cc13x2_rf_RF_mode,
-              (RF_RadioSetup*)&cc13x2_rf_cmdRadioSetup.setup, &rfParams);
+      rfCtx.rfParam.rfHandle = RF_open(&rfCtx.rfParam.rfObject, rfCtx.rfCmd.ieeeCmd.cc13x2_rf_RF_mode,
+              (RF_RadioSetup*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRadioSetup, &rfCtx.rfParam.rfParams);
+
+      //Set the frequency
+      RF_CmdHandle rf_cmdHandle = RF_runCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdFs, RF_PriorityNormal, 0, //asyncCmdCallback,
+              RF_EVENT_MASK);
 
 #elif (NETSTK_CFG_2_4_EN == 0)
-  cc13x2_rf_cmdRx.pQueue = &dataQueue;
-  cc13x2_rf_cmdRx.pOutput = (uint8_t*) &rxStatistics;
 
-  if(rfHandle == NULL)
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cca->rssiThr = RF_CCA_RSSI_THR;
+  /* Number of consecutive RSSI measurements below the threshold needed before
+   * the channel is declared Idle.  */
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cca->numRssiIdle = CC13X2_NUM_OFF_RSSI_CHECKS;
+  /* Number of consecutive RSSI measurements above the threshold needed before
+   * the channel is declared Busy */
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cca->numRssiBusy = CC13X2_NUM_OFF_RSSI_CHECKS;
+
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->pQueue = &dataQueue;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->pOutput = (uint8_t*) &rfCtx.rfCmd.propCmd.rxStatistics;
+
+  if(rfCtx.rfParam.rfHandle == NULL)
   {
      /* Request access to the radio */
-     rfHandle = RF_open(&rfObject, &cc13x2_rf_RF_mode,
-              (RF_RadioSetup*)&cc13x2_rf_cmdRadioSetup.propSetup, &rfParams);
+      rfCtx.rfParam.rfHandle = RF_open(&rfCtx.rfParam.rfObject, rfCtx.rfCmd.propCmd.cc13x2_rf_RF_mode,
+              (RF_RadioSetup*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRadioSetup, &rfCtx.rfParam.rfParams);
 
+      //Set the frequency
+      RF_CmdHandle rf_cmdHandle = RF_runCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdFs, RF_PriorityNormal, 0, //asyncCmdCallback,
+              RF_EVENT_MASK);
 #endif
 
-
-    //Set the frequency
-    RF_CmdHandle rf_cmdHandle = RF_runCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdFs, RF_PriorityNormal, 0, //asyncCmdCallback,
-            RF_EVENT_MASK);
 
     if( rf_cmdHandle & ( RF_EventCmdDone | RF_EventLastCmdDone |
                         RF_EventFGCmdDone | RF_EventLastFGCmdDone) )
     {
-      configured = 1;
+      rfCtx.configured = 1;
       loc_startRx(p_err);
-      if( RF_HANDLE_IS_VALID( rf_cmdRXHandle ) )
+      if( RF_HANDLE_IS_VALID( rfCtx.rfParam.rf_cmdRXHandle ) )
       {
         /* No error. */
         *p_err = NETSTK_ERR_NONE;
@@ -848,11 +765,11 @@ static void cc13x2_Off (e_nsErr_t *p_err)
   }
   #endif
 
-  if(rfHandle != NULL)
+  if(rfCtx.rfParam.rfHandle != NULL)
   {
       loc_cmdAbort(p_err);
-      RF_close(rfHandle);
-      rfHandle = NULL;
+      RF_close(  rfCtx.rfParam.rfHandle);
+      rfCtx.rfParam.rfHandle = NULL;
   }
   *p_err = NETSTK_ERR_NONE;
 
@@ -872,13 +789,16 @@ static void cc13x2_Send (uint8_t      *p_data,
 {
 
   RF_EventMask result;
+  framer802154ll_attr_t frame;
+
   *p_err = NETSTK_ERR_NONE;
 
-
-
-
-  if (p_data!=NULL && len > 1 && configured)
+  if (p_data!=NULL && len > 1 && rfCtx.configured)
   {
+
+      /* parse sent packet to check whether it requires ACK or not */
+      framer802154ll_parse(&frame, p_data,  len );
+
 #if NETSTK_CFG_IEEE_802154G_EN
     /* FIXME overwrite PHR */
     uint16_t transmitLen = len - PHY_HEADER_LEN;
@@ -895,21 +815,18 @@ static void cc13x2_Send (uint8_t      *p_data,
 #endif
 
 #if  (NETSTK_CFG_2_4_EN == 1)
-    cc13x2_rf_cmdTx.pPayload = p_data;
-    cc13x2_rf_cmdTx.payloadLen = len;
+    rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx->pPayload = p_data;
+    rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx->payloadLen = len;
 #elif (NETSTK_CFG_2_4_EN == 0)
-    cc13x2_rf_cmdTx.pPkt = p_data;
-    cc13x2_rf_cmdTx.pktLen = len;
+    rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->pPkt = p_data;
+    rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->pktLen = len;
 #endif
-
-
   }
   else
   {
       *p_err = NETSTK_ERR_RF_TX_ERROR;
       return;
   }
-
 
 #if LOGGER_ENABLE
     uint8_t temp = len;
@@ -925,19 +842,19 @@ static void cc13x2_Send (uint8_t      *p_data,
     LOG_RAW("\r\n");
 #endif
 
-
-
 #if  (NETSTK_CFG_2_4_EN == 1)
-  RF_ScheduleCmdParams txParam;
-
-  txParam.priority = RF_PriorityNormal;
-  txParam.endTime = 0;
-  txParam.bIeeeBgCmd = false;
-
-  RF_CmdHandle rfCmdHandle = RF_scheduleCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdTx, &txParam, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
-  result = RF_pendCmd(rfHandle, rfCmdHandle, RF_EVENT_MASK | RF_FG_EVENT_MASK);
-  // Wait for Command to complete
-  if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
+  RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+  if ( rf_cmdHandle != RF_ALLOC_ERROR )
+  {
+      result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+      // Wait for Command to complete
+      if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
+      {
+          *p_err = NETSTK_ERR_RF_TX_ERROR;
+      }else
+      {
+      }
+  }else
   {
       *p_err = NETSTK_ERR_RF_TX_ERROR;
   }
@@ -945,20 +862,26 @@ static void cc13x2_Send (uint8_t      *p_data,
 #elif  (NETSTK_CFG_2_4_EN == 0)
   loc_cmdAbort(p_err);
 
-  cc13x2_rf_cmdTx.startTrigger.triggerType = TRIG_NOW;
-  cc13x2_rf_cmdTx.startTrigger.pastTrig = 1;
-  cc13x2_rf_cmdTx.startTime = 0;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.triggerType = TRIG_NOW;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.pastTrig = 1;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTime = 0;
 
   // Send packet
-  RF_CmdHandle rf_cmdHandle = RF_postCmd(rfHandle, (RF_Op*)&cc13x2_rf_cmdTx,RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
-  result = RF_pendCmd(rfHandle, rf_cmdHandle, RF_EventLastCmdDone);
-  // Wait for Command to complete
-  if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
+  RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
+  if ( rf_cmdHandle != RF_ALLOC_ERROR )
   {
-      *p_err = NETSTK_ERR_RF_TX_ERROR;
+      result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK);
+      // Wait for Command to complete
+      if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
+      {
+          *p_err = NETSTK_ERR_RF_TX_ERROR;
+      }else
+      {
+          loc_startRx(p_err);
+      }
   }else
   {
-      loc_startRx(p_err);
+      *p_err = NETSTK_ERR_RF_TX_ERROR;
   }
 #endif
 
@@ -1009,7 +932,7 @@ static void cc13x2_Ioctl (e_nsIocCmd_t    cmd,
   switch (cmd)
   {
     case NETSTK_CMD_RF_RSSI_GET:
-      *(int8_t*)p_val = rxPacket.rssi;
+      *(int8_t*)p_val = rfCtx.rxCtx.rssi;
       break;
     case NETSTK_CMD_RF_TXPOWER_SET:
       *p_err =  loc_setTxPower(*(int8_t *)p_val);
@@ -1018,20 +941,18 @@ static void cc13x2_Ioctl (e_nsIocCmd_t    cmd,
         *p_err = loc_getTxPower((int8_t*)p_val);
       break;
     case NETSTK_CMD_RF_CCA_GET:
-#if  (NETSTK_CFG_2_4_EN == 1)
       *p_err = loc_cca();
-#elif (NETSTK_CFG_2_4_EN == 0)
-      *p_err = NETSTK_ERR_NONE;
-#endif
       break;
     case NETSTK_CMD_RF_CHAN_NUM_SET:
-        *p_err = loc_setChannel(*(uint8_t*)p_val);
+      *p_err = loc_setChannel(*(uint8_t*)p_val);
       break;
-    case NETSTK_CMD_RF_TIMESTAMP_GET:
+    case NETSTK_CMD_RX_BUF_READ:
+      cc13x2_eventHandler(EVENT_TYPE_RF, NULL);
+      break;
     case NETSTK_CMD_RF_IS_RX_BUSY:
     case NETSTK_CMD_RF_RX_PENDING:
+    case NETSTK_CMD_RF_TIMESTAMP_GET:
     case NETSTK_CMD_RF_OP_MODE_SET:
-    case NETSTK_CMD_RX_BUF_READ:
     case NETSTK_CMD_RF_RF_SWITCH_SET:
     case NETSTK_CMD_RF_ANT_DIV_SET:
     case NETSTK_CMD_RF_SENS_SET:
@@ -1073,7 +994,7 @@ static void cc13x2_Transmit(e_nsErr_t *p_err)
   #if NETSTK_CFG_ARG_CHK_EN
   if (p_err == NULL)
   {
-	*p_err = NETSTK_ERR_INVALID_ARGUMENT;
+    *p_err = NETSTK_ERR_INVALID_ARGUMENT;
     return;
   }
   #endif
@@ -1118,7 +1039,6 @@ const s_nsRF_t rf_driver_ticc13x2 =
     cc13x2_Read,
 };
 
-/*! @} 6lowpan_if */
 
 #ifdef __cplusplus
 }

@@ -37,7 +37,8 @@
 #include <ti/drivers/rf/RF.h>
 #include "smartrf_settings.h"
 
-const rfPowerConfig_t rfPowerTable_prop[] =
+
+const rfPropPowerConfig_t rfPowerTable_prop[] =
 {
     {-20, 0x04C0 },
     {-15, 0x04c1 },
@@ -60,7 +61,7 @@ const rfPowerConfig_t rfPowerTable_prop[] =
     { 14, 0x9F3F },
 };
 
-const uint8_t rfPowerTableSize_prop = (sizeof(rfPowerTable_prop) / sizeof(rfPowerConfig_t));
+const uint8_t rfPowerTableSize_prop = (sizeof(rfPowerTable_prop) / sizeof(rfPropPowerConfig_t));
 
 // TI-RTOS RF Mode Object
 RF_Mode RF_prop =
@@ -301,3 +302,50 @@ rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv =
   .pQueue = 0, // INSERT APPLICABLE POINTER: (dataQueue_t*)&xxx
   .pOutput = 0, // INSERT APPLICABLE POINTER: (uint8_t*)&xxx
 };
+
+// CMD_PROP_CS
+rfc_CMD_PROP_CS_t RF_cmdPropCs =
+{
+    .commandNo                = CMD_PROP_CS,
+    .status                   = 0x0000,
+    .pNextOp                  = 0, // Set this to (uint8_t*)&RF_cmdCountBranch in the application
+    .startTime                = 0x00000000,
+    .startTrigger.triggerType = TRIG_NOW,
+    .startTrigger.bEnaCmd     = 0x0,
+    .startTrigger.triggerNo   = 0x0,
+    .startTrigger.pastTrig    = 0x0,
+    .condition.rule           = COND_NEVER,         // Run next command if this command returned TRUE,
+                                                    // skip a number of commands (.condition.nSkip - 1) if it returned FALSE
+                                                    // End causes for the CMD_PROP_CS command:
+                                                    // Observed channel state Busy with csConf.busyOp = 1:                            PROP_DONE_BUSY        TRUE
+                                                    // 0bserved channel state Idle with csConf.idleOp = 1:                            PROP_DONE_IDLE        FALSE
+                                                    // Timeout trigger observed with channel state Busy:                              PROP_DONE_BUSY        TRUE
+                                                    // Timeout trigger observed with channel state Idle:                              PROP_DONE_IDLE        FALSE
+                                                    // Timeout trigger observed with channel state Invalid and csConf.timeoutRes = 0: PROP_DONE_BUSYTIMEOUT TRUE
+                                                    // Timeout trigger observed with channel state Invalid and csConf.timeoutRes = 1: PROP_DONE_IDLETIMEOUT FALSE
+                                                    // Received CMD_STOP after command started:                                       PROP_DONE_STOPPED     FALSE
+    .condition.nSkip          = 0x0, // Number of skips + 1 if the rule involves skipping. 0: Same, 1: Next, 2: Skip next
+    .csFsConf.bFsOffIdle      = 0x0, // Keep synthesizer running if command ends with channel Idle
+    .csFsConf.bFsOffBusy      = 0x0, // Keep synthesizer running if command ends with Busy
+    .__dummy0                 = 0x00,
+    .csConf.bEnaRssi          = 0x1, // Enable RSSI as a criterion
+    .csConf.bEnaCorr          = 0x0, // Disable correlation (PQT) as a criterion
+    .csConf.operation         = 0x0, // Busy if either RSSI or correlation indicates Busy
+    .csConf.busyOp            = 0x1, // End carrier sense on channel Busy
+    .csConf.idleOp            = 0x1, // Continue on channel Idle
+    .csConf.timeoutRes        = 0x0, // Timeout with channel state Invalid treated as Busy
+    .rssiThr                  = 0x0, // Set the RSSI threshold in the application
+    .numRssiIdle              = 0x0, // Number of consecutive RSSI measurements - 1 below the threshold
+                                     // needed before the channel is declared Idle
+    .numRssiBusy              = 0x0, // Number of consecutive RSSI measurements -1 above the threshold
+                                     // needed before the channel is declared Busy
+    .corrPeriod               = 0x0000, // N/A since .csConf.bEnaCorr = 0
+    .corrConfig.numCorrInv    = 0x0, // N/A since .csConf.bEnaCorr = 0
+    .corrConfig.numCorrBusy   = 0x0, // N/A since .csConf.bEnaCorr = 0
+    .csEndTrigger.triggerType = TRIG_NEVER,
+    .csEndTrigger.bEnaCmd     = 0x0,
+    .csEndTrigger.triggerNo   = 0x0,
+    .csEndTrigger.pastTrig    = 0x0,
+    .csEndTime                = 0x00000000, // Set the CS end time in the application
+};
+

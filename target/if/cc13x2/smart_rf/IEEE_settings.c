@@ -23,7 +23,7 @@
 #include <ti/devices/cc13x2_cc26x2/rf_patches/rf_patch_mce_ieee_802_15_4.h>
 #include "IEEE_settings.h"
 
-const rfPowerConfig_t rfPowerTable_ieee[] =
+const rfIeeePowerConfig_t rfPowerTable_ieee[] =
 {
     {-10, 0x00D2 },
     { -5, 0x00DC },
@@ -35,7 +35,7 @@ const rfPowerConfig_t rfPowerTable_ieee[] =
     {  5, 0x001F },
 };
 
-const uint8_t rfPowerTableSize_ieee = (sizeof(rfPowerTable_ieee) / sizeof(rfPowerConfig_t));
+const uint8_t rfPowerTableSize_ieee = (sizeof(rfPowerTable_ieee) / sizeof(rfIeeePowerConfig_t));
 
 // TI-RTOS RF Mode Object
 RF_Mode RF_ieee =
