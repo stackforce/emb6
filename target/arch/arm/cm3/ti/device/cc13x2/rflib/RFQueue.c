@@ -63,7 +63,22 @@ RFQueue_getDataEntry()
 
 //*****************************************************************************
 //
-//! Move to next dataEntry
+//! Get the Next dataEntry
+//!
+//! \param dataEntry is a pointer to a data Entry
+//!
+//! \return rfc_dataEntry*
+//
+//*****************************************************************************
+rfc_dataEntryGeneral_t*
+RFQueue_getNextDataEntry(rfc_dataEntryGeneral_t* dataEntry)
+{
+  return (rfc_dataEntryGeneral_t*) dataEntry->pNextEntry;
+}
+
+//*****************************************************************************
+//
+//! Set PENDING status and Move to next dataEntry
 //!
 //! \return None
 //

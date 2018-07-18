@@ -59,6 +59,7 @@
 
 extern uint8_t RFQueue_nextEntry();
 extern rfc_dataEntryGeneral_t* RFQueue_getDataEntry();
+extern rfc_dataEntryGeneral_t*  RFQueue_getNextDataEntry(rfc_dataEntryGeneral_t* dataEntry);
 extern uint8_t RFQueue_defineQueue(dataQueue_t *queue ,uint8_t *buf, uint16_t buf_len, uint8_t numEntries, uint16_t length);
 
 #endif
