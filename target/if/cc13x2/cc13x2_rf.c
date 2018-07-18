@@ -72,6 +72,8 @@ static rf_ctx_t rfCtx;
 
 static s_ns_t *gpRfNetstk;
 
+//static struct ctimer ackTimer;
+
 //Callback for Async Tx complete
 static void txDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
@@ -972,6 +974,32 @@ static void cc13x2_Send (uint8_t      *p_data,
   }
 #endif
 
+  // Wait for ACK if needed
+  if(*p_err == NETSTK_ERR_NONE)
+  {
+      if(frame.is_ack_required && frame.frameType != FRAME802154_ACKFRAME)
+      {
+          rfCtx.txCtx.TxWaitingAck = packetbuf_attr(PACKETBUF_ATTR_MAC_ACK);
+          if (rfCtx.txCtx.TxWaitingAck)
+          {
+              rfCtx.txCtx.expSeqNo = packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO);
+
+//              ctimer_set(&ackTimer, (uint16_t) packetbuf_attr(PACKETBUF_ATTR_MAC_ACK_WAIT_DURATION), NULL, NULL);
+//              while(!ctimer_expired(&ackTimer) && !rfCtx.txCtx.ackReceived){}
+//              ctimer_stop(&ackTimer);
+              for(int i=0; i<0x2FFD;i++);
+              if (!rfCtx.txCtx.ackReceived)
+              {
+                  rfCtx.txCtx.TxWaitingAck = 0;
+                  *p_err = NETSTK_ERR_TX_NOACK;
+              }else
+              {
+                  rfCtx.txCtx.TxWaitingAck = 0;
+                  rfCtx.txCtx.ackReceived = 0;
+              }
+          }
+      }
+  }
 }
 
 /*!
