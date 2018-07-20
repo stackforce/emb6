@@ -128,7 +128,7 @@
 /** Do we support 6lowpan fragmentation */
 #define SICSLOWPAN_CONF_FRAG                 TRUE
 
-#define SICSLOWPAN_CONF_FRAGMENT_BUFFERS     4
+#define SICSLOWPAN_CONF_FRAGMENT_BUFFERS     8
 
 /** Most browsers reissue GETs after 3 seconds which stops frag reassembly, longer MAXAGE does no good */
 #define SICSLOWPAN_CONF_MAXAGE               3
@@ -171,6 +171,12 @@
 #else
 #define LLSEC802154_USES_FRAME_COUNTER            LLSEC802154_ENABLED
 #endif /* LLSEC802154_CONF_USES_FRAME_COUNTER */
+
+#if LLSEC802154_USES_FRAME_COUNTER
+#ifndef LLSEC802154_USES_FRAME_COUNTER_CHECK_EN
+#define LLSEC802154_USES_FRAME_COUNTER_CHECK_EN            0
+#endif /* LLSEC802154_USES_FRAME_COUNTER_CHECK_EN */
+#endif
 
 #else
 /* Auxiliary Header is not required */
@@ -549,7 +555,7 @@
 
 /** Default uip_aligned_buf and sicslowpan_aligned_buf sizes of 1280 overflows RAM */
 #ifndef UIP_CONF_BUFFER_SIZE
-#define UIP_CONF_BUFFER_SIZE                350
+#define UIP_CONF_BUFFER_SIZE                512
 #endif
 
 /**
@@ -1015,7 +1021,7 @@ void uip_log(char *msg);
 
  /* QUEUEBUF_NUM is the total number of queuebuf */
  #ifndef QUEUEBUF_CONF_NUM
- #define QUEUEBUF_CONF_NUM                  4
+ #define QUEUEBUF_CONF_NUM                  8
  #endif /* QUEUEBUF_CONF_NUM */
 
 

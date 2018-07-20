@@ -142,10 +142,15 @@ typedef struct lwm2m_value_callback {
 #define LWM2M_RESOURCE_TYPE_CALLBACK                16
 #define LWM2M_RESOURCE_TYPE_INSTANCES               17
 
+#define LWM2M_RESOURCE_ACCESS_RD_ONLY               1
+#define LWM2M_RESOURCE_ACCESS_WR_ONLY               2
+#define LWM2M_RESOURCE_ACCESS_RD_AND_WR             3
+
 typedef struct lwm2m_resource {
   uint16_t id;
   uint8_t type;     /* indicate value type and multi-instance resource */
   uint8_t subtype;  /* subtype in case of a callback */
+  uint8_t access:LWM2M_RESOURCE_ACCESS_RD_AND_WR;   /* Access mode */
   union {
     struct {
       uint16_t len;

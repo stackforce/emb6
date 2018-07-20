@@ -804,14 +804,10 @@ static uint8_t key_compare( uint8_t *key, uint8_t len )
  void frame802154_set_security_key( uint8_t *key, uint8_t len)
 {
   uint8_t sameKey = true;
-
   sameKey = key_compare( key, len );
 
   /* setting key for Advanced Encryption Standard(AES) operations */
-  if(sameKey == false)
-  {
-    CCM_STAR.set_key(currentKey);
-  }
+  CCM_STAR.set_key(currentKey);
 }
 
  /*---------------------------------------------------------------------------*/

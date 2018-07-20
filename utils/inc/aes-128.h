@@ -41,6 +41,7 @@
 #define AES_128_H_
 
 #include "emb6.h"
+#include "board_conf.h"
 
 #define AES_128_BLOCK_SIZE 16
 #define AES_128_KEY_LENGTH 16
@@ -71,6 +72,7 @@ struct aes_128_driver {
  * \brief Pads the key with zeroes before calling AES_128.set_key
  */
 void aes_128_set_padded_key(uint8_t *key, uint8_t key_len);
+
 
 extern const struct aes_128_driver AES_128;
 

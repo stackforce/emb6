@@ -24,6 +24,7 @@ typedef struct s_framer802154ll_attr {
   uint8_t seq_no;
   uint8_t crc_len;
   uint8_t crc_offset;
+  uint8_t frameType;
 } framer802154ll_attr_t;
 
 uint16_t framer802154ll_parse(framer802154ll_attr_t *p_frame, uint8_t *p_buf, uint16_t len);

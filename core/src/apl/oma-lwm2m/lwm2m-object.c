@@ -119,7 +119,7 @@ lwm2m_object_set_resource_string(const lwm2m_resource_t *resource,
       /* Too large */
       return 0;
     }
-    memcpy(resource->value.stringvar.var, string, len);
+    memcpy(*(resource->value.stringvar.var), string, len);
     *(resource->value.stringvar.len) = len;
     return 1;
   }

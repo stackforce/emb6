@@ -1884,7 +1884,87 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
           PRINTF("PUT - no write callback\n");
           REST.set_response_status(response, METHOD_NOT_ALLOWED_4_05);
         }
-      } else {
+      }else if (lwm2m_object_is_resource_int(resource) && resource->access >= LWM2M_RESOURCE_ACCESS_WR_ONLY) {
+          const uint8_t *data;
+          int32_t value;
+          int plen = REST.get_request_payload(request, &data);
+          if (format == TEXT_PLAIN)
+          {
+              lwm2m_plain_text_read_int( data, plen, &value);
+              if( lwm2m_object_set_resource_int(resource, &context, value))
+              {
+                  REST.set_response_status(response, CHANGED_2_04);
+              }
+              else
+              {
+                  REST.set_response_status(response, BAD_REQUEST_4_00);
+              }
+          }else
+          {
+              oma_tlv_t tlv;
+              if(oma_tlv_read(&tlv, data, plen) && tlv.type == OMA_TLV_TYPE_RESOURCE) {
+                  lwm2m_object_set_resource_int(resource, &context,  oma_tlv_get_int32(&tlv));
+                  REST.set_response_status(response, CHANGED_2_04);
+              }else
+              {
+                  REST.set_response_status(response, NOT_ACCEPTABLE_4_06);
+              }
+          }
+      }else if (lwm2m_object_is_resource_floatfix(resource) && resource->access >= LWM2M_RESOURCE_ACCESS_WR_ONLY ) {
+          const uint8_t *data;
+          int32_t value;
+          int plen = REST.get_request_payload(request, &data);
+          if (format == TEXT_PLAIN)
+          {
+              lwm2m_plain_text_read_float32fix( data, plen, &value, LWM2M_FLOAT32_BITS);
+              if( lwm2m_object_set_resource_floatfix(resource, &context, value))
+              {
+                  REST.set_response_status(response, CHANGED_2_04);
+              }
+              else
+              {
+                  REST.set_response_status(response, BAD_REQUEST_4_00);
+              }
+          }else
+          {
+              oma_tlv_t tlv;
+              int32_t value;
+              if(oma_tlv_read(&tlv, data, plen) && tlv.type == OMA_TLV_TYPE_RESOURCE) {
+                  oma_tlv_float32_to_fix(&tlv, &value, LWM2M_FLOAT32_BITS);
+                  lwm2m_object_set_resource_floatfix(resource, &context,  value);
+                  REST.set_response_status(response, CHANGED_2_04);
+              }else
+              {
+                  REST.set_response_status(response, NOT_ACCEPTABLE_4_06);
+              }
+          }
+      }else if (lwm2m_object_is_resource_string(resource) && resource->access >= LWM2M_RESOURCE_ACCESS_WR_ONLY) {
+          const uint8_t *data;
+          int plen = REST.get_request_payload(request, &data);
+          if (format == TEXT_PLAIN)
+          {
+              if( lwm2m_object_set_resource_string(resource, &context, plen, data))
+              {
+                  REST.set_response_status(response, CHANGED_2_04);
+              }
+              else
+              {
+                  REST.set_response_status(response, BAD_REQUEST_4_00);
+              }
+          }else
+          {
+              oma_tlv_t tlv;
+              size_t len;
+              if((len = oma_tlv_read(&tlv, data, plen))  && tlv.type == OMA_TLV_TYPE_RESOURCE) {
+                  lwm2m_object_set_resource_string(resource, &context, len, tlv.value);
+                  REST.set_response_status(response, CHANGED_2_04);
+              }else
+              {
+                  REST.set_response_status(response, NOT_ACCEPTABLE_4_06);
+              }
+          }
+      }else
+      {
         PRINTF("PUT on non-callback resource!\n");
         REST.set_response_status(response, METHOD_NOT_ALLOWED_4_05);
       }

@@ -65,7 +65,7 @@ add_observer(uip_ipaddr_t *addr, uint16_t port, const uint8_t *token,
              size_t token_len, const char *uri, int uri_len, unsigned int accept)
 {
   /* Remove existing observe relationship, if any. */
-  coap_remove_observer_by_uri(addr, port, uri);
+  coap_remove_observer_by_uri(addr, port, uri, uri_len);
 
   coap_observer_t *o = memb_alloc(&observers_memb);
 
@@ -145,7 +145,7 @@ coap_remove_observer_by_token(uip_ipaddr_t *addr, uint16_t port,
 /*---------------------------------------------------------------------------*/
 int
 coap_remove_observer_by_uri(uip_ipaddr_t *addr, uint16_t port,
-                            const char *uri)
+                            const char *uri, int uri_len)
 {
   int removed = 0;
   coap_observer_t *obs = NULL;
@@ -155,7 +155,7 @@ coap_remove_observer_by_uri(uip_ipaddr_t *addr, uint16_t port,
     PRINTF("Remove check URL %p\n", uri);
     if((addr == NULL
         || (uip_ipaddr_cmp(&obs->addr, addr) && obs->port == port))
-       && (obs->url == uri || memcmp(obs->url, uri, strlen(obs->url)) == 0)) {
+       && (obs->url == uri || ((strlen(obs->url) == uri_len) && (memcmp(obs->url, uri, strlen(obs->url))) == 0))) {
       coap_remove_observer(obs);
       removed++;
     }
@@ -195,6 +195,7 @@ coap_notify_observers_sub(resource_t *resource, const char *subpath)
   coap_packet_t notification[1]; /* this way the packet can be treated as pointer as usual */
   coap_packet_t request[1]; /* this way the packet can be treated as pointer as usual */
   coap_observer_t *obs = NULL;
+  uint8_t notifDone = 0;
 
   int url_len, obs_url_len;
   char url[COAP_OBSERVER_URL_LEN];
@@ -222,11 +223,60 @@ coap_notify_observers_sub(resource_t *resource, const char *subpath)
 
     /* Do a match based on the parent/sub-resource match so that it is
        possible to do parent-node observe */
-    if((obs_url_len == url_len
-        || (obs_url_len > url_len
-            && (resource->flags & HAS_SUB_RESOURCES)
-            && obs->url[url_len] == '/'))
+    if((obs_url_len == url_len)
        && strncmp(url, obs->url, url_len) == 0) {
+      coap_transaction_t *transaction = NULL;
+      /*TODO implement special transaction for CON, sharing the same buffer to allow for more observers */
+
+      if((transaction = coap_new_transaction(coap_get_mid(), &obs->addr, obs->port))) {
+        if((COAP_OBSERVE_REFRESH_INTERVAL > 0) &&
+            (obs->obs_counter % COAP_OBSERVE_REFRESH_INTERVAL == 0)) {
+          PRINTF("           Force Confirmable for\n");
+          notification->type = COAP_TYPE_CON;
+        }
+
+        PRINTF("           Observer ");
+        PRINT6ADDR(&obs->addr);
+        PRINTF(":%u\n", obs->port);
+
+        /* update last MID for RST matching */
+        obs->last_mid = transaction->mid;
+
+        /* prepare response */
+        notification->mid = transaction->mid;
+
+        coap_set_header_content_format(request, obs->accept);
+        resource->get_handler(request, notification,
+                              transaction->packet + COAP_MAX_HEADER_SIZE,
+                              REST_MAX_CHUNK_SIZE, NULL, resource->p_user );
+
+        if(notification->code < BAD_REQUEST_4_00) {
+          coap_set_header_observe(notification, (obs->obs_counter)++);
+        }
+        coap_set_token(notification, obs->token, obs->token_len);
+
+        transaction->packet_len =
+          coap_serialize_message(notification, transaction->packet);
+
+        coap_send_transaction(transaction);
+
+        notifDone = 1;
+      }
+    }
+  }
+#if LWM2M_INST_UPDATE_ON_RESWR
+
+  if (!notifDone)
+  {
+    for(obs = (coap_observer_t *)list_head(observers_list); obs;
+      obs = obs->next) {
+    obs_url_len = strlen(obs->url);
+
+    /* Do a match based on the parent/sub-resource match so that it is
+       possible to do parent-node observe */
+    if((obs_url_len < url_len
+            && (resource->flags & HAS_SUB_RESOURCES))
+       && strncmp(url, obs->url, obs_url_len) == 0) {
       coap_transaction_t *transaction = NULL;
 
       /*TODO implement special transaction for CON, sharing the same buffer to allow for more observers */
@@ -264,7 +314,9 @@ coap_notify_observers_sub(resource_t *resource, const char *subpath)
         coap_send_transaction(transaction);
       }
     }
+    }
   }
+#endif
 }
 /*---------------------------------------------------------------------------*/
 void

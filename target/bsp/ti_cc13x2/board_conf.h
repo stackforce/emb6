@@ -46,6 +46,9 @@
 /** transceiver supports standard-specific checksum algorithm */
 #define NETSTK_SUPPORT_HW_CRC               TRUE
 
+/** board supports AES hardware*/
+#define AES_128_CONF                        aes_cc1352_driver
+
 /* radio transceiver does not support standard-specified checksum */
 #ifndef NETSTK_CFG_RF_CRC_EN
 #define NETSTK_CFG_RF_CRC_EN                TRUE

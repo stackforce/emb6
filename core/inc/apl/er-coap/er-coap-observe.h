@@ -45,6 +45,10 @@
 
 #define COAP_OBSERVER_URL_LEN 20
 
+#ifndef LWM2M_INST_UPDATE_ON_RESWR
+#define LWM2M_INST_UPDATE_ON_RESWR TRUE
+#endif
+
 typedef struct coap_observable {
   uint32_t observe_clock;
   struct stimer orphan_timer;
@@ -76,7 +80,7 @@ int coap_remove_observer_by_client(uip_ipaddr_t *addr, uint16_t port);
 int coap_remove_observer_by_token(uip_ipaddr_t *addr, uint16_t port,
                                   uint8_t *token, size_t token_len);
 int coap_remove_observer_by_uri(uip_ipaddr_t *addr, uint16_t port,
-                                const char *uri);
+                                const char *uri, int uri_len);
 int coap_remove_observer_by_mid(uip_ipaddr_t *addr, uint16_t port,
                                 uint16_t mid);
 

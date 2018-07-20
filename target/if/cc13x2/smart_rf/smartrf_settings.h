@@ -16,9 +16,6 @@
 #include DeviceFamily_constructPath(driverlib/rf_prop_cmd.h)
 #include <ti/drivers/rf/RF.h>
 
-#define rfPowerTable rfPowerTable_prop
-#define rfPowerTableSize rfPowerTableSize_prop
-
 #define CC13X2_50KBPS           1
 #define CC13X2_100KBPS          2
 #define CC13X2_150KBPS          3
@@ -33,9 +30,9 @@ typedef struct
 {
     int8_t dbm;
     uint16_t txPower; /* Value for the PROP_DIV_RADIO_SETUP.txPower field */
-} rfPowerConfig_t;
+} rfPropPowerConfig_t;
 
-extern const rfPowerConfig_t rfPowerTable_prop[];
+extern const rfPropPowerConfig_t rfPowerTable_prop[];
 extern const uint8_t rfPowerTableSize_prop;
 
 // TI-RTOS RF Mode Object
@@ -46,5 +43,6 @@ extern rfc_CMD_PROP_RADIO_DIV_SETUP_t RF_cmdPropRadioDivSetup;
 extern rfc_CMD_FS_t RF_cmdPropFs;
 extern rfc_CMD_PROP_TX_ADV_t RF_cmdPropTxAdv;
 extern rfc_CMD_PROP_RX_ADV_t RF_cmdPropRxAdv;
+extern rfc_CMD_PROP_CS_t RF_cmdPropCs;
 
 #endif // _SMARTRF_SETTINGS_H_

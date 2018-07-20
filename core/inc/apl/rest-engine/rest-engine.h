@@ -248,6 +248,12 @@ int rest_invoke_restful_service(void *request, void *response,
 void rest_init_engine(void);
 /*---------------------------------------------------------------------------*/
 /**
+ * \brief Stop the REST Engine process
+ */
+void
+rest_engine_stop(void);
+/*---------------------------------------------------------------------------*/
+/**
  *
  * \brief      Resources wanted to be accessible should be activated with the following code.
  * \param resource
