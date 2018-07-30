@@ -653,28 +653,30 @@ static uint8_t emb6_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry)
         p_data[0] = p_data[1];
         p_data[1] = tempData;
 #endif
-
-        if( (frame.frameType != FRAME802154_ACKFRAME)
-            && 
-            frame.is_ack_required
-            )
+        if(framer802154ll_addrFilter(&frame, p_data , len ))
         {
-            uint8_t ack[10];
-            /* create the ACK  */
-            uint8_t ack_length = framer802154ll_createAck(&frame, ack, sizeof(ack));
-            cc13x2_ackSend(ack, ack_length ,&err);
-            return 1;
-        }else if (
-            rfCtx.txCtx.TxWaitingAck
-            && 
-            (frame.frameType == FRAME802154_ACKFRAME) 
-            && 
-            (frame.seq_no == rfCtx.txCtx.expSeqNo)
-            )
-        {
-            p_dataEntry->status = DATA_ENTRY_PENDING;
-            rfCtx.txCtx.ackReceived = 1;
-            return 0;
+            if( (frame.frameType != FRAME802154_ACKFRAME)
+                &&
+                frame.is_ack_required
+                )
+            {
+                uint8_t ack[10];
+                /* create the ACK  */
+                uint8_t ack_length = framer802154ll_createAck(&frame, ack, sizeof(ack));
+                cc13x2_ackSend(ack, ack_length ,&err);
+                return 1;
+            }else if (
+                rfCtx.txCtx.TxWaitingAck
+                &&
+                (frame.frameType == FRAME802154_ACKFRAME)
+                &&
+                (frame.seq_no == rfCtx.txCtx.expSeqNo)
+                )
+            {
+                p_dataEntry->status = DATA_ENTRY_PENDING;
+                rfCtx.txCtx.ackReceived = 1;
+                return 0;
+            }
         }
     }
     return 1;
