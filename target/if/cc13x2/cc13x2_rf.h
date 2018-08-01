@@ -198,6 +198,10 @@ typedef struct
     uint16_t waitForAckTimeout;
     /** flag to set when an is received */
     volatile uint8_t ackReceived;
+    /** last ACK destination address */
+    uint8_t lastAckDestAddr[8];
+    /** last ACK destination  sequence number */
+    uint8_t lastAckSeq;
 } tx_ctx_t;
 
 typedef union
