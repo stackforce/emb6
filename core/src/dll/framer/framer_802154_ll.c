@@ -181,6 +181,69 @@ uint8_t framer802154ll_createAck(framer802154ll_attr_t *p_frame, uint8_t *p_buf,
 }
 
 
+uint8_t framer802154ll_getAddr(uint8_t *p_buf, uint16_t len, uint8_t* addrOut, uint8_t* addrOutLen, uint8_t addrOwner )
+{
+    uint8_t ix;
+    uint8_t *p;
+    uint8_t addr[8];
+    uint8_t destAddrMode;
+    uint8_t min_addr_len;
+    uint8_t addrLen;
+
+    uint8_t *p_mhr = &p_buf[PHY_HEADER_LEN];
+    uint8_t seq_no_suppressed = p_mhr[1] & 1;
+
+    /* set destination addressing fields to zero */
+    memset(addr, 0, sizeof(addr));
+
+    min_addr_len = 2;
+
+    /* destination address and destination PAN ID (2) */
+    destAddrMode = (p_mhr[1] >> 2) & 3;
+    if (destAddrMode == FRAME802154_SHORTADDRMODE) {
+      min_addr_len += 2;
+    } else if (destAddrMode == FRAME802154_LONGADDRMODE) {
+      min_addr_len += 8;
+    } else {
+      /* destination address is not present */
+      min_addr_len = 0;
+    }
+
+    if (min_addr_len)
+    {
+        if (1 == seq_no_suppressed)
+            p = &p_buf[PHY_HEADER_LEN + 2]; // sequence number is suppressed
+        else
+            p = &p_buf[PHY_HEADER_LEN + 3]; // sequence number is present
+
+        /* advance pointer by length of PAN Id */
+        p += 2;
+        /* verify destination address */
+
+
+        addrLen = min_addr_len - 2;
+        if(addrOwner == 1)
+        {
+            p += addrLen;
+        }
+
+        if (addrLen > 0) {
+            /* read destination address */
+            for (ix = 0; ix < addrLen; ix++) {
+              addr[7 - ix] = p[ix];
+            }
+        }
+
+        if (*addrOutLen >= addrLen)
+        {
+            memset(addrOut, 0, *addrOutLen);
+            memcpy(addrOut, addr, addrLen);
+            *addrOutLen = addrLen;
+        }
+    }
+    return TRUE;
+}
+
 uint8_t framer802154ll_addrFilter(framer802154ll_attr_t *p_frame, uint8_t *p_buf, uint16_t len) {
   uint8_t ix;
   uint8_t *p;
