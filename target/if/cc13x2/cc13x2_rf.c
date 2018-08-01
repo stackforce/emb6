@@ -29,7 +29,6 @@ extern "C"
 /*============================================================================*/
 
 #include "cc13x2_rf.h"
-//#include "ctimer.h"
 #include "framer_802154_ll.h"
 #include "framer_802154.h"
 
@@ -72,8 +71,6 @@ dataQueue_t dataQueue;
 static rf_ctx_t rfCtx;
 
 static s_ns_t *gpRfNetstk;
-
-//static struct ctimer ackTimer;
 
 //Callback for Async Tx complete
 static void txDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
@@ -989,13 +986,12 @@ static void cc13x2_Send (uint8_t      *p_data,
           rfCtx.txCtx.TxWaitingAck = packetbuf_attr(PACKETBUF_ATTR_MAC_ACK);
           if (rfCtx.txCtx.TxWaitingAck)
           {
+              uint16_t i =0;
+
               rfCtx.txCtx.expSeqNo = packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO);
 
-//              ctimer_set(&ackTimer, ((uint16_t)packetbuf_attr(PACKETBUF_ATTR_MAC_ACK_WAIT_DURATION)) / bsp_getTRes(), NULL, NULL);
-//              while(!ctimer_expired(&ackTimer) && !rfCtx.txCtx.ackReceived){}
-//              ctimer_stop(&ackTimer);
-              //bsp_delayUs((uint16_t)packetbuf_attr(PACKETBUF_ATTR_MAC_ACK_WAIT_DURATION));
-              for(int i = 0; i<0xFFFF; i++);
+              for( i = 0; (i< 0xFFFF) && !rfCtx.txCtx.ackReceived; i++);
+
               if (!rfCtx.txCtx.ackReceived)
               {
                   rfCtx.txCtx.TxWaitingAck = 0;
