@@ -190,12 +190,12 @@ static void loc_cmdAbort(e_nsErr_t* p_err)
             /* Wait for Command to complete */
             RF_EventMask result = RF_pendCmd(rfCtx.rfParam.rfHandle, rfCtx.rfParam.rf_cmdRXHandle, (RF_EventLastCmdDone |
                     RF_EventCmdAborted | RF_EventCmdCancelled | RF_EventCmdStopped));
-            if (! (result & RF_EventLastCmdDone))
-            {
-                *p_err = NETSTK_ERR_RF_CMD_ERROR;
-            }else
+            if (result & (RF_EventLastCmdDone | RF_EventCmdAborted | RF_EventCmdCancelled | RF_EventCmdStopped))
             {
                 rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
+            }else
+            {
+                *p_err = NETSTK_ERR_RF_CMD_ERROR;
             }
         }else
         {
