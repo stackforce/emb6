@@ -200,6 +200,8 @@ typedef struct
     volatile uint8_t ackReceived;
     /** last ACK destination address */
     uint8_t lastAckDestAddr[8];
+    /**  last transmitted ACK well received or not handled anymore by the destination*/
+    uint8_t lastAckDone;
     /** last ACK destination  sequence number */
     uint8_t lastAckSeq;
 } tx_ctx_t;

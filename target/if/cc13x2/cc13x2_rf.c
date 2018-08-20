@@ -1075,6 +1075,20 @@ static uint8_t cc13x2_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry, e_nsErr_t
                 rfCtx.txCtx.ackReceived = 1;
                 return 0;
             }
+
+            uint8_t addr[8] = {0};
+            uint8_t addrLen = sizeof(addr);
+
+            framer802154ll_getAddr(p_data, len, addr, &addrLen, 1 );
+
+            if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq != frame.seq_no) && !rfCtx.txCtx.lastAckDone)
+            {
+                rfCtx.txCtx.lastAckDone = 1;
+            }
+            else
+            {
+                rfCtx.txCtx.lastAckDone = 0;
+            }
         }
 
 #if NETSTK_CFG_IEEE_802154G_EN
@@ -1127,11 +1141,6 @@ static uint8_t cc13x2_ackSend (uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
           if (ack!=NULL && ack_length > 1 && rfCtx.configured)
           {
 
-              cc1352_csma(p_err);
-
-              if(*p_err == NETSTK_ERR_CHANNEL_ACESS_FAILURE)
-                  return repeated;
-
               framer802154ll_getAddr(p_data, len, addr, &addrLen, 1 );
 
               if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq == frame.seq_no))
@@ -1139,6 +1148,15 @@ static uint8_t cc13x2_ackSend (uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
                   repeated = 1;
               }
 
+              if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq == frame.seq_no) && rfCtx.txCtx.lastAckDone)
+              {
+                  return repeated;
+              }
+
+              cc1352_csma(p_err);
+
+              if(*p_err == NETSTK_ERR_CHANNEL_ACESS_FAILURE)
+                  return repeated;
 
 #if NETSTK_CFG_IEEE_802154G_EN
             /* FIXME overwrite PHR */
