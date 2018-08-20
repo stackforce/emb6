@@ -76,6 +76,7 @@
 									<listOptionValue builtIn="false" value="${INHERITED_SYMBOLS}"/>
 									<listOptionValue builtIn="false" value="USE_EXTIF=1"/>
 									<listOptionValue builtIn="false" value="NETSTK_CFG_2_4_EN=0"/>
+									<listOptionValue builtIn="false" value="RF_SUPPORT_802154_ACK_EN=TRUE"/>
 									<listOptionValue builtIn="false" value="CC13X2_DATARATE=CC13X2_100KBPS"/>
 									<listOptionValue builtIn="false" value="HAL_SUPPORT_PERIPHIRQ_SLIPUART_RX=1"/>
 									<listOptionValue builtIn="false" value="HAL_SUPPORT_SLIPUART=1"/>

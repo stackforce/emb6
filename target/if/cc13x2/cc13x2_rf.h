@@ -177,6 +177,8 @@ typedef struct
     uint32_t timeStamp;
     /** Pointer to the current data entry */
     rfc_dataEntryGeneral_t* currentDataEntry;
+    /** Pointer to the last data entry */
+    rfc_dataEntryGeneral_t* lastDataEntry;
     /* Indicates that there is an unhandled frame which must be handled in
      the event function. */
     uint8_t unhandledFrame;
@@ -196,6 +198,12 @@ typedef struct
     uint16_t waitForAckTimeout;
     /** flag to set when an is received */
     volatile uint8_t ackReceived;
+    /** last ACK destination address */
+    uint8_t lastAckDestAddr[8];
+    /**  last transmitted ACK well received or not handled anymore by the destination*/
+    uint8_t lastAckDone;
+    /** last ACK destination  sequence number */
+    uint8_t lastAckSeq;
 } tx_ctx_t;
 
 typedef union

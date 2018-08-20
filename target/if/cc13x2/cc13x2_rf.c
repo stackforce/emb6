@@ -29,7 +29,6 @@ extern "C"
 /*============================================================================*/
 
 #include "cc13x2_rf.h"
-#include "ctimer.h"
 #include "framer_802154_ll.h"
 #include "framer_802154.h"
 
@@ -47,7 +46,11 @@ static void cc13x2_Send(uint8_t *p_data, uint16_t len, e_nsErr_t *p_err);
 static void cc13x2_Recv(uint8_t *p_buf, uint16_t len, e_nsErr_t *p_err);
 static void cc13x2_Ioctl(e_nsIocCmd_t cmd, void *p_val, e_nsErr_t *p_err);
 static void loc_startRx( e_nsErr_t* p_err );
-
+#if RF_SUPPORT_802154_ACK_EN == TRUE
+static uint8_t cc13x2_ackSend(uint8_t *p_data, uint16_t len, e_nsErr_t *p_err);
+static void cc1352_csma(e_nsErr_t *p_err);
+static uint8_t cc13x2_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry, e_nsErr_t* err);
+#endif /* #if RF_SUPPORT_802154_ACK_EN */
 /*============================================================================*/
 /*                                  CONSTANTS                                 */
 /*============================================================================*/
@@ -103,7 +106,27 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 #if CC13X2_RX_LED_ENABLED
         bsp_led( HAL_LED3, EN_BSP_LED_OP_BLINK );
 #endif /* #if CC13X2_RX_LED_ENABLED */
-
+#if RF_SUPPORT_802154_ACK_EN == TRUE
+        if (cc13x2_ackHandler(rfCtx.rxCtx.lastDataEntry, &p_err))
+        {
+            if (rfCtx.rxCtx.unhandledFrame == 0)
+            {
+                /* Read out data entry. */
+                rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+                /* Trigger the execution of the RF event callback function. */
+                RF_SEM_POST(EVENT_TYPE_RF);
+            }
+            rfCtx.rxCtx.unhandledFrame++;
+            rfCtx.rxCtx.lastDataEntry = RFQueue_getNextDataEntry(rfCtx.rxCtx.lastDataEntry);
+        }else
+        {
+#if (NETSTK_CFG_2_4_EN == 1)
+            ((dataQueue_t*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx->pRxQ)->pCurrEntry = (uint8_t*)rfCtx.rxCtx.lastDataEntry;
+#elif (NETSTK_CFG_2_4_EN == 0)
+            ((dataQueue_t*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->pQueue)->pCurrEntry = (uint8_t*)rfCtx.rxCtx.lastDataEntry;
+#endif
+        }
+#else
         if (rfCtx.rxCtx.unhandledFrame == 0)
         {
             /* Read out data entry. */
@@ -112,6 +135,8 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
             RF_SEM_POST(EVENT_TYPE_RF);
         }
         rfCtx.rxCtx.unhandledFrame++;
+
+#endif /* #if RF_SUPPORT_802154_ACK_EN */
     }
     else if (e & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped))
     {
@@ -123,7 +148,6 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
     {
         p_err = NETSTK_ERR_RF_ERROR;
     }
-
 
     if( b_restartRx )
     {
@@ -166,12 +190,12 @@ static void loc_cmdAbort(e_nsErr_t* p_err)
             /* Wait for Command to complete */
             RF_EventMask result = RF_pendCmd(rfCtx.rfParam.rfHandle, rfCtx.rfParam.rf_cmdRXHandle, (RF_EventLastCmdDone |
                     RF_EventCmdAborted | RF_EventCmdCancelled | RF_EventCmdStopped));
-            if (! (result & RF_EventLastCmdDone))
-            {
-                *p_err = NETSTK_ERR_RF_CMD_ERROR;
-            }else
+            if (result & (RF_EventLastCmdDone | RF_EventCmdAborted | RF_EventCmdCancelled | RF_EventCmdStopped))
             {
                 rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
+            }else
+            {
+                *p_err = NETSTK_ERR_RF_CMD_ERROR;
             }
         }else
         {
@@ -535,12 +559,13 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
 {
   /* Set the error code to default. */
   e_nsErr_t err = NETSTK_ERR_NONE;
+  framer802154ll_attr_t frame;
 
   /* Check if it is the right event. */
   if (c_event == EVENT_TYPE_RF)
   {
     /* Read out data entry. */
-    while ((rfCtx.rxCtx.unhandledFrame > 0) && rfCtx.rxCtx.currentDataEntry->status == DATA_ENTRY_FINISHED)
+    while ((rfCtx.rxCtx.unhandledFrame) && rfCtx.rxCtx.currentDataEntry->status == DATA_ENTRY_FINISHED)
     {
         uint8_t *p_data = (uint8_t*)(&rfCtx.rxCtx.currentDataEntry->data) + 1;
 
@@ -567,7 +592,6 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
         memcpy(rfCtx.rxCtx.payload, (p_data), rfCtx.rxCtx.len);
 
         RFQueue_nextEntry();
-        rfCtx.rxCtx.unhandledFrame--;
 
         #if LOGGER_ENABLE
         uint8_t temp = rxPacket.len;
@@ -583,11 +607,26 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
         LOG_RAW("\r\n");
         #endif
 
-        /* Forward the call to the PHY layer. */
-        gpRfNetstk->phy->recv(rfCtx.rxCtx.payload, rfCtx.rxCtx.len, &err);
+#if RF_SUPPORT_802154_ACK_EN == TRUE
+        /* parse the received packet to check whether it is an ACK or not */
+        framer802154ll_parse(&frame, rfCtx.rxCtx.payload, rfCtx.rxCtx.len);
+        if(framer802154ll_addrFilter(&frame, rfCtx.rxCtx.payload , rfCtx.rxCtx.len ))
+        {
+            if(!cc13x2_ackSend(rfCtx.rxCtx.payload, rfCtx.rxCtx.len, &err))
+            {
+#endif /* #if RF_SUPPORT_802154_ACK_EN */
+                /* Forward the call to the PHY layer. */
+                gpRfNetstk->phy->recv(rfCtx.rxCtx.payload, rfCtx.rxCtx.len, &err);
 
+#if RF_SUPPORT_802154_ACK_EN == TRUE
+            }
+        }
+#endif /* #if RF_SUPPORT_802154_ACK_EN */
+
+        rfCtx.rxCtx.unhandledFrame--;
         /* Read out data entry for the next iteration. */
         rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+
     }
   }
 }
@@ -604,6 +643,7 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
  */
 void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
 {
+
   #if NETSTK_CFG_ARG_CHK_EN
   if (p_err == NULL)
   {
@@ -617,11 +657,11 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
   }
   #endif /* NETSTK_CFG_ARG_CHK_EN */
 
-  /* Register the RF event handler. */
-  RF_SEM_WAIT(EVENT_TYPE_RF);
-
   /* Set error in case something goes wrong. */
   *p_err = NETSTK_ERR_INIT;
+
+  /* Register the RF event handler. */
+  RF_SEM_WAIT(EVENT_TYPE_RF);
 
   /* Store netstack pointer. */
   gpRfNetstk = p_netstk;
@@ -676,6 +716,7 @@ void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
 
   /* Read out data entry. */
   rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+  rfCtx.rxCtx.lastDataEntry = rfCtx.rxCtx.currentDataEntry;
 
 #if (NETSTK_CFG_2_4_EN == 1)
 
@@ -790,7 +831,6 @@ static void cc13x2_Send (uint8_t      *p_data,
 
   RF_EventMask result;
   framer802154ll_attr_t frame;
-
   *p_err = NETSTK_ERR_NONE;
 
   if (p_data!=NULL && len > 1 && rfCtx.configured)
@@ -827,7 +867,6 @@ static void cc13x2_Send (uint8_t      *p_data,
       *p_err = NETSTK_ERR_RF_TX_ERROR;
       return;
   }
-
 #if LOGGER_ENABLE
     uint8_t temp = len;
     uint8_t *p_temp = p_data;
@@ -845,7 +884,16 @@ static void cc13x2_Send (uint8_t      *p_data,
 #if  (NETSTK_CFG_2_4_EN == 1)
   //TODO remove abort call for the RX command, this call is temporary added because an issue when the rx is executed in the BG
   loc_cmdAbort(p_err);
-  RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+
+  RF_ScheduleCmdParams txParam;
+  /* Set RX parameters */
+  txParam.priority = RF_PriorityNormal;
+  txParam.endTime = 0;
+  txParam.bIeeeBgCmd = false;
+
+  RF_CmdHandle rf_cmdHandle = RF_scheduleCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx,
+                                  &txParam, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+
   if ( rf_cmdHandle != RF_ALLOC_ERROR )
   {
       result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK | RF_FG_EVENT_MASK);
@@ -860,7 +908,7 @@ static void cc13x2_Send (uint8_t      *p_data,
       }
   }else
   {
-      *p_err = NETSTK_ERR_RF_TX_ERROR;
+    *p_err = NETSTK_ERR_RF_TX_ERROR;
   }
 
 #elif  (NETSTK_CFG_2_4_EN == 0)
@@ -889,7 +937,323 @@ static void cc13x2_Send (uint8_t      *p_data,
   }
 #endif
 
+#if RF_SUPPORT_802154_ACK_EN == TRUE
+  // Wait for ACK if needed
+  if(*p_err == NETSTK_ERR_NONE)
+  {
+      if(frame.is_ack_required && frame.frameType != FRAME802154_ACKFRAME)
+      {
+          rfCtx.txCtx.ackReceived = 0;
+          rfCtx.txCtx.TxWaitingAck = packetbuf_attr(PACKETBUF_ATTR_MAC_ACK);
+          if (rfCtx.txCtx.TxWaitingAck)
+          {
+              uint16_t i =0;
+
+              rfCtx.txCtx.expSeqNo = packetbuf_attr(PACKETBUF_ATTR_MAC_SEQNO);
+
+              for( i = 0; (i< 0xFFFF) && !rfCtx.txCtx.ackReceived; i++);
+
+              if (!rfCtx.txCtx.ackReceived )
+              {
+#if USE_EXTIF == 1
+                      rfCtx.txCtx.TxWaitingAck = 0;
+                      rfCtx.txCtx.ackReceived = 0;
+
+#else
+                      rfCtx.txCtx.TxWaitingAck = 0;
+                      *p_err = NETSTK_ERR_TX_NOACK;
+#endif
+              }else
+              {
+                  rfCtx.txCtx.TxWaitingAck = 0;
+                  rfCtx.txCtx.ackReceived = 0;
+              }
+          }
+      }
+  }
+#endif
 }
+
+#if RF_SUPPORT_802154_ACK_EN == TRUE
+
+
+/**
+ * @brief   This function performs CSMA-CA mechanism.
+ *
+ * @param   p_err   Pointer to a variable storing returned error code
+ */
+static void cc1352_csma(e_nsErr_t *p_err)
+{
+  uint32_t delay = 0;
+  uint32_t max_random;
+  uint8_t nb;
+  uint8_t be;
+
+  /* initialize CSMA variables */
+  nb = 0;
+  be = NETSTK_CFG_CSMA_MIN_BE;
+  *p_err = NETSTK_ERR_NONE;
+
+  /* perform CCA maximum MaxBackoff time */
+  while (nb <= NETSTK_CFG_CSMA_MAX_BACKOFF) {
+    /* delay for random (2^BE - 1) unit backoff periods */
+    max_random = (1 << be) - 1;
+    delay  = bsp_getrand(0, max_random);
+    delay *= NETSTK_CFG_CSMA_UNIT_BACKOFF_US;
+    bsp_delayUs(delay);
+
+    /* perform CCA */
+    cc13x2_Ioctl(NETSTK_CMD_RF_CCA_GET, 0, p_err);
+    /* was channel free or was the radio busy? */
+    if (*p_err == NETSTK_ERR_NONE) {
+      /* channel free */
+      break;
+    }
+    else if (*p_err == NETSTK_ERR_BUSY) {
+      /* radio is likely busy receiving a packet and therefore should let it handle the received packet now */
+      *p_err = NETSTK_ERR_CHANNEL_ACESS_FAILURE;
+      break;
+    }
+    /* was channel busy? */
+    else {
+      /* then increase number of backoff by one */
+      nb++;
+      /* be = MIN((be + 1), MaxBE) */
+      be = ((be + 1) < NETSTK_CFG_CSMA_MAX_BE) ? (be + 1) : (NETSTK_CFG_CSMA_MAX_BE);
+    }
+  }
+}
+
+
+
+/* Callback function to send ack in case ack required packet is receive
+ *
+ * @parameter p_dataEntry  Last data entry.
+ *
+ * @return Zero if last received mpacket is ACK .
+ */
+static uint8_t cc13x2_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry, e_nsErr_t* err)
+{
+    framer802154ll_attr_t frame;
+    /* Set the error code to default. */
+    *err = NETSTK_ERR_NONE;
+    /* Read out data entry. */
+    if (p_dataEntry->status == DATA_ENTRY_FINISHED)
+    {
+        uint8_t *p_data = (uint8_t*)(&p_dataEntry->data) + 1;
+
+        /* get length of the packet in the queue
+         * hdr + payload + crc + RSSI
+         * */
+        uint16_t len = (uint8_t)(p_dataEntry->data);
+
+        /* Substitute the rssi length from the total length of the packet in RX queue*/
+        len -= 1;
+
+#if NETSTK_CFG_IEEE_802154G_EN
+        uint8_t tempData;
+        /* FIXME flip PHR back */
+        tempData = p_data[0];
+        p_data[0] = p_data[1];
+        p_data[1] = tempData;
+#endif
+        //Send ack
+        /* parse the received packet to check whether it requires ACK or not */
+        framer802154ll_parse(&frame, p_data, len);
+
+        if(framer802154ll_addrFilter(&frame, p_data , len ))
+        {
+            if (
+                rfCtx.txCtx.TxWaitingAck
+                &&
+                (frame.frameType == FRAME802154_ACKFRAME)
+                &&
+                (frame.seq_no == rfCtx.txCtx.expSeqNo)
+                )
+            {
+                p_dataEntry->status = DATA_ENTRY_PENDING;
+                rfCtx.txCtx.ackReceived = 1;
+                return 0;
+            }
+
+            uint8_t addr[8] = {0};
+            uint8_t addrLen = sizeof(addr);
+
+            framer802154ll_getAddr(p_data, len, addr, &addrLen, 1 );
+
+            if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq != frame.seq_no) && !rfCtx.txCtx.lastAckDone)
+            {
+                rfCtx.txCtx.lastAckDone = 1;
+            }
+            else
+            {
+                rfCtx.txCtx.lastAckDone = 0;
+            }
+        }
+
+#if NETSTK_CFG_IEEE_802154G_EN
+        /* FIXME flip PHR back */
+        tempData = p_data[0];
+        p_data[0] = p_data[1];
+        p_data[1] = tempData;
+#endif
+
+    }else
+    {
+        *err = NETSTK_ERR_RF_RX_ERROR;
+    }
+    return 1;
+}
+
+/*!
+ * @brief   This function transmits ACK packet.
+ *
+ * @parameter p_dataEntry current data entry.
+ *
+ * @param   p_err       Pointer to result enum.
+ */
+static uint8_t cc13x2_ackSend (uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
+{
+  RF_EventMask result;
+  framer802154ll_attr_t frame;
+  uint8_t repeated = 0;
+  uint8_t addr[8] = {0};
+
+  /* Set the error code to default. */
+  *p_err = NETSTK_ERR_NONE;
+
+  /* parse the received packet to check whether it requires ACK or not */
+  framer802154ll_parse(&frame, p_data, len);
+
+  if(framer802154ll_addrFilter(&frame, p_data , len ))
+  {
+      if( (frame.frameType != FRAME802154_ACKFRAME)
+          &&
+          frame.is_ack_required
+          )
+      {
+          uint8_t ack[10];
+          uint8_t addrLen = sizeof(addr);
+
+          /* create the ACK  */
+          uint8_t ack_length = framer802154ll_createAck(&frame, ack, sizeof(ack));
+
+          if (ack!=NULL && ack_length > 1 && rfCtx.configured)
+          {
+
+              framer802154ll_getAddr(p_data, len, addr, &addrLen, 1 );
+
+              if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq == frame.seq_no))
+              {
+                  repeated = 1;
+              }
+
+              if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq == frame.seq_no) && rfCtx.txCtx.lastAckDone)
+              {
+                  return repeated;
+              }
+
+              cc1352_csma(p_err);
+
+              if(*p_err == NETSTK_ERR_CHANNEL_ACESS_FAILURE)
+                  return repeated;
+
+#if NETSTK_CFG_IEEE_802154G_EN
+            /* FIXME overwrite PHR */
+            uint16_t transmitLen = ack_length - PHY_HEADER_LEN;
+            uint16_t totalLen = transmitLen + packetbuf_attr(PACKETBUF_ATTR_MAC_FCS_LEN);
+            /* FIXME only support CRC-32 */
+            ack[0] = totalLen & 0xFF;
+            /* check whether the 32-bits and 16-bits CRC is used // 0x10: 16-bits CRC and 0x00 : 32-bits CRC */
+            if(packetbuf_attr(PACKETBUF_ATTR_MAC_FCS_LEN) == 2)
+                ack[1] = (totalLen >> 8) + 0x10  ;
+            else
+                ack[1] = (totalLen >> 8) + 0x00  ;
+#else
+                ack[0] = ack_length - PHY_HEADER_LEN + 2 ;
+#endif
+
+#if  (NETSTK_CFG_2_4_EN == 1)
+                rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx->pPayload = ack;
+                rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx->payloadLen = ack_length;
+#elif (NETSTK_CFG_2_4_EN == 0)
+                rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->pPkt = ack;
+                rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->pktLen = ack_length;
+#endif
+          }
+          else
+          {
+              *p_err = NETSTK_ERR_RF_TX_ERROR;
+              return 1;
+          }
+
+#if  (NETSTK_CFG_2_4_EN == 1)
+          //TODO remove abort call for the RX command, this call is temporary added because an issue when the rx is executed in the BG
+          loc_cmdAbort(p_err);
+
+          RF_ScheduleCmdParams txParam;
+          /* Set RX parameters */
+          txParam.priority = RF_PriorityNormal;
+          txParam.endTime = 0;
+          txParam.bIeeeBgCmd = false;
+
+          RF_CmdHandle rf_cmdHandle = RF_scheduleCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdTx,
+                                          &txParam, txDoneCallback, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+
+          if ( rf_cmdHandle != RF_ALLOC_ERROR )
+          {
+              result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK | RF_FG_EVENT_MASK);
+              // Wait for Command to complete
+              if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
+              {
+                  *p_err = NETSTK_ERR_RF_TX_ERROR;
+              }else
+              {
+                  //TODO remove rx start, this call is temporary added because an issue when the rx is executed in the BG
+                  loc_startRx(p_err);
+              }
+          }else
+          {
+            *p_err = NETSTK_ERR_RF_TX_ERROR;
+            return 1;
+          }
+
+#elif  (NETSTK_CFG_2_4_EN == 0)
+          loc_cmdAbort(p_err);
+
+          rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.triggerType = TRIG_NOW;
+          rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.pastTrig = 1;
+          rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTime = 0;
+
+          // Send packet
+          RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
+          if ( rf_cmdHandle != RF_ALLOC_ERROR )
+          {
+              result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK);
+              // Wait for Command to complete
+              if ((result & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)))
+              {
+                  *p_err = NETSTK_ERR_RF_TX_ERROR;
+              }else
+              {
+                  loc_startRx(p_err);
+              }
+          }else
+          {
+              *p_err = NETSTK_ERR_RF_TX_ERROR;
+              return 1;
+          }
+#endif
+
+          rfCtx.txCtx.lastAckSeq = frame.seq_no;
+          memcpy(rfCtx.txCtx.lastAckDestAddr, addr, sizeof(addr));
+
+      }
+  }
+
+  return repeated;
+}
+#endif /* #if RF_SUPPORT_802154_ACK_EN */
 
 /*!
  * @brief   This function receives data.

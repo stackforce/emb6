@@ -1183,6 +1183,10 @@ void uip_log(char *msg);
 #define NETSTK_SUPPORT_SW_MAC_AUTOACK                       FALSE
 #endif
 
+#ifndef RF_SUPPORT_802154_ACK_EN
+#define RF_SUPPORT_802154_ACK_EN                           FALSE
+#endif /* RF_SUPPORT_802154_ACK_EN */
+
 /*!< Enable/Disable automatic on/off to netstack
  * If the netstack receives transmission request in sleep mode, it shall
  * go back to the sleep mode upon complete transmission process

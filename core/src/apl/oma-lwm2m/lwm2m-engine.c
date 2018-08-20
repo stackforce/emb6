@@ -133,7 +133,7 @@
 
 
 /* Timoeut for startup delay */
-#define LWM2M_TIMEOUT_DELAY_READY_MIN                   10
+#define LWM2M_TIMEOUT_DELAY_READY_MIN                   2
 #define LWM2M_TIMEOUT_DELAY_READY_RANDOM_MIN            0
 #define LWM2M_TIMEOUT_DELAY_READY_RANDOM_MAX            5
 #define LWM2M_DELAY_READY_TIMEOUT                       LWM2M_GET_RAND_TIMEOUT_TMPLT(LWM2M_TIMEOUT_DELAY_READY)
