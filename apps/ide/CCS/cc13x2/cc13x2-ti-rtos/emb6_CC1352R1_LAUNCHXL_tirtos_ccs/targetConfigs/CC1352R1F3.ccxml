@@ -19,7 +19,7 @@
             </property>
             <property Type="choicelist" Value="1" id="Debug Probe Selection">
                 <choice Name="Select by serial number" value="0">
-                    <property Type="stringfield" Value="L410003Z" id="-- Enter the serial number"/>
+                    <property Type="stringfield" Value="L41003D5" id="-- Enter the serial number"/>
                 </choice>
             </property>
             <platform XML_version="1.2" id="platform_0">

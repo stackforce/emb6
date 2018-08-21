@@ -142,12 +142,12 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="core/src/net/ipv6/multicast/esmrf.c|core/src/net/dtls|core/src/dll/tsch|core/src/apl|target/arch/arm/cm3/ti/toolchain|target/arch/arm/cm3/ti/toolchain/CCS/ti-rtos/src|target/arch/arm/cm3/ti/toolchain/CCS/cc26xx-ti-rtos/src|target/arch/arm/cm3/ti/toolchain/CCS/cc13x2-ti-rtos/tirtos_builds_CC1352R1_LAUNCHXL_release_ccs/src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="target/arch/arm/cm3/ti/toolchain/GCC"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="target/arch/arm/cm3/ti/toolchain/CCS/ti-rtos"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="target/arch/arm/cm3/ti/toolchain/CCS/no-rtos"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="target/arch/arm/cm3/ti/toolchain/CCS/cc13x2-ti-rtos"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="target/arch/arm/cm3/ti/toolchain/CCS/cc26xx-ti-rtos"/>
+						<entry excluding="core/src/dll/dllsec/dllsec_802154.c|core/src/net/ipv6/multicast/esmrf.c|core/src/net/dtls|core/src/dll/tsch|core/src/apl|target/arch/arm/cm3/ti/toolchain|target/arch/arm/cm3/ti/toolchain/CCS/ti-rtos/src|target/arch/arm/cm3/ti/toolchain/CCS/cc26xx-ti-rtos/src|target/arch/arm/cm3/ti/toolchain/CCS/cc13x2-ti-rtos/tirtos_builds_CC1352R1_LAUNCHXL_release_ccs/src" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
