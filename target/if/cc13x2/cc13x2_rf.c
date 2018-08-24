@@ -536,9 +536,9 @@ static void loc_startRx( e_nsErr_t* p_err )
         rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->startTrigger.pastTrig = 1;
         rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->startTime = 0;
 
-        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTrigger.triggerType = TRIG_NEVER;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTrigger.triggerType = TRIG_ABSTIME;
         rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTrigger.pastTrig = 1;
-        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTime = 0;
+        rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->endTime = RF_getCurrentTime() + ms_To_RadioTime(1000);
 
         rfCtx.rfParam.rf_cmdRXHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx,
                                     RF_PriorityNormal, rxDoneCallback, RF_EVENT_MASK);
