@@ -548,7 +548,6 @@ static void loc_startRx( e_nsErr_t* p_err )
     if ( !RF_HANDLE_IS_VALID(rfCtx.rfParam.rf_cmdRXHandle))
     {
         *p_err = NETSTK_ERR_RF_CMD_ERROR;
-        emb6_errorHandler(p_err);
     }else
     {
         rfCtx.rxCtx.is_receiving = 1;
