@@ -274,6 +274,7 @@ uint8_t frame802154_getDSN(void);
 
 uint8_t frame802154_broadcast(frame802154_t *p);
 
+void set_macNoAck_errorCb(void (*cb_func)(void));
 
 #if LLSEC802154_ENABLED && LLSEC802154_USES_AUX_HEADER
 /* checking if the security key is changed*/

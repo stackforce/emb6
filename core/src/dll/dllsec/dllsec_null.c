@@ -134,6 +134,12 @@ static uint8_t dllsec_getOverhead(void)
 }
 
 /*---------------------------------------------------------------------------*/
+static uint8_t dllsec_getSecLevel(void)
+{
+  return 0;
+}
+
+/*---------------------------------------------------------------------------*/
 static void dllsec_init(s_ns_t *p_netstk)
 {
 #if NETSTK_CFG_ARG_CHK_EN
@@ -156,7 +162,9 @@ const s_nsDllsec_t dllsec_driver_null =
   dllsec_send,
   dllsec_onFrameCreated,
   dllsec_input,
-  dllsec_getOverhead
+  dllsec_getOverhead,
+  dllsec_getSecLevel,
+  NULL
 };
 /*---------------------------------------------------------------------------*/
 

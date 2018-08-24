@@ -136,12 +136,26 @@ const s_nsMAC_t mac_driver_802154 =
 
 extern uip_lladdr_t uip_lladdr;
 
+/**
+ * @brief   No ack received callback
+ *
+ */
+static void (*noAckError_cb)(void) =  NULL;
 
 /*
 ********************************************************************************
 *                           LOCAL FUNCTION DEFINITIONS
 ********************************************************************************
 */
+
+/**
+ * @brief   Set the callback function which will be called when no ack is received
+ *
+ */
+void set_macNoAck_errorCb(void (*cb_func)(void))
+{
+    noAckError_cb = cb_func;
+}
 
 /**
  * @brief   Initialize driver
@@ -422,6 +436,11 @@ void mac_send(uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
             is_tx_done = TRUE;
             TRACE_LOG_ERR("+ MAC_TX: CCA failed, r=%d, e=%d", tx_retries, *p_err);
           }
+        }
+
+        if (noAckError_cb && *p_err == NETSTK_ERR_TX_NOACK)
+        {
+            noAckError_cb();
         }
       }
     }

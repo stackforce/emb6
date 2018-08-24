@@ -69,6 +69,8 @@ uint8_t rxBuffer[RX_BUFF_SIZE];
 /* Receive dataQueue for RF Core to fill in data */
 dataQueue_t dataQueue;
 
+static uint8_t rxEventHandlerRunning = 0;
+
 /* RF main variable. */
 static rf_ctx_t rfCtx;
 
@@ -86,6 +88,29 @@ static void txDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
     }
 }
 
+
+static void cc13x2_flushQueue(void)
+{
+    rfc_dataEntryGeneral_t* p_entry;
+    p_entry = rfCtx.rxCtx.currentDataEntry;
+    do
+    {
+        RFQueue_nextEntry();
+        rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+
+    }while(p_entry != rfCtx.rxCtx.currentDataEntry);
+
+    rfCtx.rxCtx.lastDataEntry = rfCtx.rxCtx.currentDataEntry;
+    rfCtx.rxCtx.unhandledFrame = 0;
+
+#if (NETSTK_CFG_2_4_EN == 1)
+            ((dataQueue_t*)rfCtx.rfCmd.ieeeCmd.cc13x2_rf_cmdRx->pRxQ)->pCurrEntry = (uint8_t*)rfCtx.rxCtx.lastDataEntry;
+#elif (NETSTK_CFG_2_4_EN == 0)
+            ((dataQueue_t*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->pQueue)->pCurrEntry = (uint8_t*)rfCtx.rxCtx.lastDataEntry;
+#endif
+
+}
+
 //Callback for Async Rx complete
 static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 {
@@ -94,7 +119,6 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
     e_nsErr_t  p_err = NETSTK_ERR_NONE;
 
     rfCtx.rxCtx.is_receiving = 0;
-
 #if (NETSTK_CFG_2_4_EN == 1)
     if ((e & RF_EventRxOk) || (e & RF_EventRxNOk))
     {
@@ -109,10 +133,8 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 #if RF_SUPPORT_802154_ACK_EN == TRUE
         if (cc13x2_ackHandler(rfCtx.rxCtx.lastDataEntry, &p_err))
         {
-            if (rfCtx.rxCtx.unhandledFrame == 0)
+            if (!rxEventHandlerRunning)
             {
-                /* Read out data entry. */
-                rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
                 /* Trigger the execution of the RF event callback function. */
                 RF_SEM_POST(EVENT_TYPE_RF);
             }
@@ -138,7 +160,7 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
 
 #endif /* #if RF_SUPPORT_802154_ACK_EN */
     }
-    else if (e & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped))
+    else if ((e & (RF_EventCmdCancelled | RF_EventCmdAborted | RF_EventCmdPreempted | RF_EventCmdStopped)) || (rfCtx.rfCmd.propCmd.cc13x2_rf_cmdRx->status == PROP_DONE_OK)  )
     {
         p_err = NETSTK_ERR_RF_ABORTED;
         rfCtx.rfParam.rf_cmdRXHandle = RF_INVALID_RF_HANDLE;
@@ -148,6 +170,7 @@ static void rxDoneCallback(RF_Handle h, RF_CmdHandle ch, RF_EventMask e)
     {
         p_err = NETSTK_ERR_RF_ERROR;
     }
+
 
     if( b_restartRx )
     {
@@ -564,8 +587,9 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
   /* Check if it is the right event. */
   if (c_event == EVENT_TYPE_RF)
   {
+      rxEventHandlerRunning = 1;
     /* Read out data entry. */
-    while ((rfCtx.rxCtx.unhandledFrame) && rfCtx.rxCtx.currentDataEntry->status == DATA_ENTRY_FINISHED)
+    while (/*rfCtx.rxCtx.unhandledFrame &&*/ rfCtx.rxCtx.currentDataEntry->status == DATA_ENTRY_FINISHED)
     {
         uint8_t *p_data = (uint8_t*)(&rfCtx.rxCtx.currentDataEntry->data) + 1;
 
@@ -591,7 +615,13 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
          The offset of 1 is to skip the length field which has already been stored. */
         memcpy(rfCtx.rxCtx.payload, (p_data), rfCtx.rxCtx.len);
 
+        /* Read out data entry for the next iteration. */
         RFQueue_nextEntry();
+        rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
+        rfCtx.rxCtx.unhandledFrame--;
+
+        if (!rfCtx.rxCtx.unhandledFrame && rfCtx.rxCtx.currentDataEntry->status == DATA_ENTRY_FINISHED)
+            cc13x2_flushQueue();
 
         #if LOGGER_ENABLE
         uint8_t temp = rxPacket.len;
@@ -622,12 +652,9 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
             }
         }
 #endif /* #if RF_SUPPORT_802154_ACK_EN */
-
-        rfCtx.rxCtx.unhandledFrame--;
-        /* Read out data entry for the next iteration. */
-        rfCtx.rxCtx.currentDataEntry = RFQueue_getDataEntry();
-
     }
+    rxEventHandlerRunning = 0;
+
   }
 }
 
@@ -643,7 +670,6 @@ void cc13x2_eventHandler(c_event_t c_event, p_data_t p_dataEventType)
  */
 void cc13x2_Init (void *p_netstk, e_nsErr_t *p_err)
 {
-
   #if NETSTK_CFG_ARG_CHK_EN
   if (p_err == NULL)
   {
@@ -887,7 +913,7 @@ static void cc13x2_Send (uint8_t      *p_data,
 
   RF_ScheduleCmdParams txParam;
   /* Set RX parameters */
-  txParam.priority = RF_PriorityNormal;
+  txParam.priority = RF_PriorityHighest;
   txParam.endTime = 0;
   txParam.bIeeeBgCmd = false;
 
@@ -914,12 +940,12 @@ static void cc13x2_Send (uint8_t      *p_data,
 #elif  (NETSTK_CFG_2_4_EN == 0)
   loc_cmdAbort(p_err);
 
-  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.triggerType = TRIG_NOW;
+  rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.triggerType = TRIG_REL_PREVEND;
   rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.pastTrig = 1;
   rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTime = 0;
 
   // Send packet
-  RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
+  RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx, RF_PriorityHighest, txDoneCallback, RF_EVENT_MASK);
   if ( rf_cmdHandle != RF_ALLOC_ERROR )
   {
       result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK);
@@ -1064,31 +1090,35 @@ static uint8_t cc13x2_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry, e_nsErr_t
         if(framer802154ll_addrFilter(&frame, p_data , len ))
         {
             if (
-                rfCtx.txCtx.TxWaitingAck
-                &&
                 (frame.frameType == FRAME802154_ACKFRAME)
-                &&
-                (frame.seq_no == rfCtx.txCtx.expSeqNo)
                 )
             {
+                if ((rfCtx.txCtx.TxWaitingAck)
+                        &&
+                        (frame.seq_no == rfCtx.txCtx.expSeqNo))
+                {
+                    rfCtx.txCtx.ackReceived = 1;
+                }
+
                 p_dataEntry->status = DATA_ENTRY_PENDING;
-                rfCtx.txCtx.ackReceived = 1;
                 return 0;
-            }
-
-            uint8_t addr[8] = {0};
-            uint8_t addrLen = sizeof(addr);
-
-            framer802154ll_getAddr(p_data, len, addr, &addrLen, 1 );
-
-            if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq != frame.seq_no) && !rfCtx.txCtx.lastAckDone)
+            }else if (
+                (frame.frameType == FRAME802154_DATAFRAME)
+                &&
+                (rfCtx.txCtx.lastAckSeq != frame.seq_no)
+                )
             {
-                rfCtx.txCtx.lastAckDone = 1;
+                uint8_t addr[8] = {0};
+                uint8_t addrLen = sizeof(addr);
+
+                framer802154ll_getAddr(p_data, len, addr, &addrLen, 1 );
+
+                if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) )
+                {
+                    rfCtx.txCtx.lastAckDone = rfCtx.txCtx.lastAckSeq;
+                }
             }
-            else
-            {
-                rfCtx.txCtx.lastAckDone = 0;
-            }
+
         }
 
 #if NETSTK_CFG_IEEE_802154G_EN
@@ -1101,6 +1131,7 @@ static uint8_t cc13x2_ackHandler( rfc_dataEntryGeneral_t* p_dataEntry, e_nsErr_t
     }else
     {
         *err = NETSTK_ERR_RF_RX_ERROR;
+        return 0;
     }
     return 1;
 }
@@ -1146,11 +1177,10 @@ static uint8_t cc13x2_ackSend (uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
               if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq == frame.seq_no))
               {
                   repeated = 1;
-              }
-
-              if (!memcmp(addr, rfCtx.txCtx.lastAckDestAddr, addrLen) && (rfCtx.txCtx.lastAckSeq == frame.seq_no) && rfCtx.txCtx.lastAckDone)
-              {
-                  return repeated;
+                  if (rfCtx.txCtx.lastAckDone == frame.seq_no)
+                  {
+                      return repeated;
+                  }
               }
 
               cc1352_csma(p_err);
@@ -1193,7 +1223,7 @@ static uint8_t cc13x2_ackSend (uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
 
           RF_ScheduleCmdParams txParam;
           /* Set RX parameters */
-          txParam.priority = RF_PriorityNormal;
+          txParam.priority = RF_PriorityHighest;
           txParam.endTime = 0;
           txParam.bIeeeBgCmd = false;
 
@@ -1221,12 +1251,12 @@ static uint8_t cc13x2_ackSend (uint8_t *p_data, uint16_t len, e_nsErr_t *p_err)
 #elif  (NETSTK_CFG_2_4_EN == 0)
           loc_cmdAbort(p_err);
 
-          rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.triggerType = TRIG_NOW;
+          rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.triggerType = TRIG_REL_PREVSTART;
           rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTrigger.pastTrig = 1;
           rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx->startTime = 0;
 
           // Send packet
-          RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx, RF_PriorityHigh, txDoneCallback, RF_EVENT_MASK);
+          RF_CmdHandle rf_cmdHandle = RF_postCmd(rfCtx.rfParam.rfHandle, (RF_Op*)rfCtx.rfCmd.propCmd.cc13x2_rf_cmdTx, RF_PriorityHighest, txDoneCallback, RF_EVENT_MASK);
           if ( rf_cmdHandle != RF_ALLOC_ERROR )
           {
               result = RF_pendCmd(rfCtx.rfParam.rfHandle, rf_cmdHandle, RF_EVENT_MASK);
