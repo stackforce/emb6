@@ -535,6 +535,12 @@ struct s_nsDllsec
     /** Returns the security-related overhead per frame in bytes */
     uint8_t (*get_overhead)(void);
 
+    /** Returns security Level */
+    uint8_t (*get_secLevel)(void);
+
+    /** set security Level */
+    void (*set_secLevel)(uint8_t p_ns);
+
 };
 
 /**

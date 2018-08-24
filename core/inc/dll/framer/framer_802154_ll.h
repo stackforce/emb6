@@ -29,6 +29,7 @@ typedef struct s_framer802154ll_attr {
 
 uint16_t framer802154ll_parse(framer802154ll_attr_t *p_frame, uint8_t *p_buf, uint16_t len);
 uint8_t framer802154ll_createAck(framer802154ll_attr_t *p_frame, uint8_t *p_buf, uint16_t len);
+uint8_t framer802154ll_getAddr(uint8_t *p_buf, uint16_t len, uint8_t* addrOut, uint8_t* addrOutLen, uint8_t addrOwner );
 uint8_t framer802154ll_addrFilter(framer802154ll_attr_t *p_frame, uint8_t *p_buf, uint16_t len);
 uint32_t framer802154ll_crcInit(framer802154ll_attr_t *p_frame);
 uint32_t framer802154ll_crcUpdate(framer802154ll_attr_t *p_frame, uint8_t *p_data, uint16_t len, uint32_t curCRC);

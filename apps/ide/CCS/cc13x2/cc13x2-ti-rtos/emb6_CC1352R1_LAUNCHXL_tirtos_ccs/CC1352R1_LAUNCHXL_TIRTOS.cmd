@@ -34,7 +34,7 @@
  *  ======== CC1352R1_LAUNCHXL.cmd ========
  */
 
---stack_size=1024   /* C stack is also used for ISR stack */
+--stack_size=4096   /* C stack is also used for ISR stack */
 
 HEAPSIZE = 0x1000;  /* Size of heap buffer used by HeapMem */
 

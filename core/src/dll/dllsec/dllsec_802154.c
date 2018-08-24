@@ -65,6 +65,8 @@
 static s_ns_t *pdllsec_netstk;
 static mac_callback_t dllsec_txCbFnct;
 
+static uint16_t dllsec_level = LLSEC802154_SECURITY_LEVEL;
+
 #if LLSEC802154_ENABLED
 static frame802154_frame_counter_t counter;
 #endif /* LLSEC802154_ENABLED */
@@ -232,10 +234,11 @@ static void dllsec_security(void)
   packetbuf_set_attr(PACKETBUF_ATTR_FRAME_COUNTER_BYTES_2_3, counter.u16[1]);
  #endif /* LLSEC802154_USES_FRAME_COUNTER */
 
-#if LLSEC802154_SECURITY_LEVEL
-  /* assigning the security level in the corresponding packetbuf attributes */
-  packetbuf_set_attr(PACKETBUF_ATTR_SECURITY_LEVEL, LLSEC802154_SECURITY_LEVEL);
-#endif  /* LLSEC802154_SECURITY_LEVEL*/
+  if(dllsec_level)
+  {
+      /* assigning the security level in the corresponding packetbuf attributes */
+      packetbuf_set_attr(PACKETBUF_ATTR_SECURITY_LEVEL, dllsec_level);
+  }
 }
 #endif /* #if LLSEC802154_ENABLED */
 
@@ -279,7 +282,7 @@ static void dllsec_send(mac_callback_t sent, void *p_arg)
   packetbuf_set_attr(PACKETBUF_ATTR_FRAME_TYPE, FRAME802154_DATAFRAME);
 
 #if LLSEC802154_ENABLED
-  if (LLSEC802154_SECURITY_LEVEL != FRAME802154_SECURITY_LEVEL_NONE)
+  if (dllsec_level != FRAME802154_SECURITY_LEVEL_NONE)
   {
     /* Assigning security key at the sender side */
     frame802154_set_security_key( frame802154_key, FRAME802154_SEC_KEY_SIZE );
@@ -315,6 +318,19 @@ static uint8_t dllsec_getOverhead(void)
 }
 
 /*---------------------------------------------------------------------------*/
+static uint8_t dllsec_getSecLevel(void)
+{
+  return dllsec_level;
+}
+
+/*---------------------------------------------------------------------------*/
+static uint8_t dllsec_setSecLevel(uint8_t secLevel)
+{
+  if(secLevel <= FRAME802154_SECURITY_LEVEL_ENC_MIC_128)
+      dllsec_level = secLevel;
+}
+
+/*---------------------------------------------------------------------------*/
 static void dllsec_init(s_ns_t *p_netstk)
 {
 #if NETSTK_CFG_ARG_CHK_EN
@@ -343,7 +359,9 @@ const s_nsDllsec_t dllsec_driver_802154 =
   dllsec_send,
   dllsec_onFrameCreated,
   dllsec_input,
-  dllsec_getOverhead
+  dllsec_getOverhead,
+  dllsec_getSecLevel,
+  dllsec_setSecLevel
 };
 /*---------------------------------------------------------------------------*/
 
