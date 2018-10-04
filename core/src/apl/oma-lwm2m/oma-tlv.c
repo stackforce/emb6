@@ -262,12 +262,43 @@ oma_tlv_write_float32(int16_t id, int32_t value, int bits,
 size_t
 oma_tlv_float32_to_fix(const oma_tlv_t *tlv, int32_t *value, int bits)
 {
-  /* TLV needs to be 4 bytes */
+  uint8_t tmpVal[4];
+  if( tlv->length == 8 )
+  {
+      union {
+        float f;
+        int i;
+      } fval;
+
+      union {
+        double d;
+        uint64_t i;
+      } dval;
+
+
+      dval.i = 0;
+      for ( int i = 0; i < 8; i++ )
+        dval.i = (dval.i << 8) | tlv->value[i];
+      fval.f = dval.d;
+
+      memset( tmpVal, 0, 4 );
+      for ( int i = 3; i >= 0; i-- )
+      {
+        tmpVal[i] = (fval.i & 0x000000FF);
+        fval.i = fval.i >> 8;
+      }
+  }
+  else
+  {
+      memcpy( tmpVal, tlv->value, 4 );
+  }
+
+
   int e, i;
   int32_t val;
-  int sign = (tlv->value[0] & 0x80) != 0;
-  e = ((tlv->value[0] << 1) & 0xff) | (tlv->value[1] >> 7);
-  val = (((long)tlv->value[1] & 0x7f) << 16) | (tlv->value[2] << 8) | tlv->value[3];
+  int sign = (tmpVal[0] & 0x80) != 0;
+  e = ((tmpVal[0] << 1) & 0xff) | (tmpVal[1] >> 7);
+  val = (((long)tmpVal[1] & 0x7f) << 16) | (tmpVal[2] << 8) | tmpVal[3];
 
   PRINTF("Sign: %d, Fraction: %06lx  0b", val < 0, (long)val);
   for(i = 0; i < 23; i++) {
