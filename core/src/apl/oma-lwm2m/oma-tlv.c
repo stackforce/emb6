@@ -193,7 +193,7 @@ oma_tlv_write_int32(int16_t id, int32_t value, uint8_t *buffer, size_t len)
 
   buf[3] = value & 0xff;
   value = value >> 8;
-  for(i = 1; value > 0 && i < 4; i++) {
+  for(i = 1; value != 0 && i < 4; i++) {
     buf[3 - i] = value & 0xff;
     value = value >> 8;
   }
