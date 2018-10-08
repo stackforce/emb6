@@ -77,6 +77,9 @@
 #define MAX_DATA_LENGTH 128
 #define MAX_DATA_LENGTH_ENTRY 153
 
+
+#define ms_To_RadioTime(ms) (ms*(4000000/1000))
+
 /* This is the minimum value which can be disbplayed using a signed 8 bit
  * integer =-127dBm */
 #define CC13X2_MIN_RSSI            128U

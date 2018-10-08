@@ -1894,6 +1894,8 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
               if( lwm2m_object_set_resource_int(resource, &context, value))
               {
                   REST.set_response_status(response, CHANGED_2_04);
+                  if( resource->fn_write_cb != NULL )
+                      resource->fn_write_cb( object, instance, resource, NULL );
               }
               else
               {
@@ -1905,6 +1907,8 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
               if(oma_tlv_read(&tlv, data, plen) && tlv.type == OMA_TLV_TYPE_RESOURCE) {
                   lwm2m_object_set_resource_int(resource, &context,  oma_tlv_get_int32(&tlv));
                   REST.set_response_status(response, CHANGED_2_04);
+                  if( resource->fn_write_cb != NULL )
+                      resource->fn_write_cb( object, instance, resource, NULL );
               }else
               {
                   REST.set_response_status(response, NOT_ACCEPTABLE_4_06);
@@ -1920,6 +1924,8 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
               if( lwm2m_object_set_resource_floatfix(resource, &context, value))
               {
                   REST.set_response_status(response, CHANGED_2_04);
+                  if( resource->fn_write_cb != NULL )
+                      resource->fn_write_cb( object, instance, resource, NULL );
               }
               else
               {
@@ -1933,6 +1939,8 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
                   oma_tlv_float32_to_fix(&tlv, &value, LWM2M_FLOAT32_BITS);
                   lwm2m_object_set_resource_floatfix(resource, &context,  value);
                   REST.set_response_status(response, CHANGED_2_04);
+                  if( resource->fn_write_cb != NULL )
+                      resource->fn_write_cb( object, instance, resource, NULL );
               }else
               {
                   REST.set_response_status(response, NOT_ACCEPTABLE_4_06);
@@ -1946,6 +1954,8 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
               if( lwm2m_object_set_resource_string(resource, &context, plen, data))
               {
                   REST.set_response_status(response, CHANGED_2_04);
+                  if( resource->fn_write_cb != NULL )
+                      resource->fn_write_cb( object, instance, resource, NULL );
               }
               else
               {
@@ -1958,6 +1968,8 @@ void lwm2m_engine_handler(const lwm2m_object_t *object,
               if((len = oma_tlv_read(&tlv, data, plen))  && tlv.type == OMA_TLV_TYPE_RESOURCE) {
                   lwm2m_object_set_resource_string(resource, &context, len, tlv.value);
                   REST.set_response_status(response, CHANGED_2_04);
+                  if( resource->fn_write_cb != NULL )
+                      resource->fn_write_cb( object, instance, resource, NULL );
               }else
               {
                   REST.set_response_status(response, NOT_ACCEPTABLE_4_06);
