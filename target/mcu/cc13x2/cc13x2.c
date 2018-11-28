@@ -42,6 +42,7 @@
 #include <ti/drivers/PIN.h>
 #include <driverlib/ioc.h>
 #include <xdc/runtime/System.h>
+#include "board.h"
 #else
 #if (HAL_SUPPORT_RTIMER == TRUE)
 #include "rtimer_arch.h"
@@ -142,11 +143,6 @@ static s_hal_gpio_pin_t s_hal_gpio[EN_HAL_PIN_MAX] = {
 s_hal_irq s_hal_irqs[EN_HAL_PERIPHIRQ_MAX];
 
 #if USE_TI_RTOS
-
-#define Board_LED0          IOID_25
-#define Board_LED1          IOID_27
-#define Board_LED2          IOID_7
-#define Board_LED3          IOID_6
 
 /* Pin driver handle */
 static PIN_Handle ledPinHandle;
