@@ -1510,7 +1510,7 @@ void lwm2m_engine_init( char* epname, f_lwm2m_engine_statch_cb p_cb,
   if( epname != NULL )
   {
       snprintf(_ctx.internal.endpoint, sizeof(_ctx.internal.endpoint) - 1,
-               "?ep=%s&lt=%d&b=%s", epname, lwm2m_server_getLifetime(),
+               "?ep=%s&lt=%d&b=%s&lwm2m=1.0", epname, lwm2m_server_getLifetime(),
                lwm2m_server_getBinding() );
   }
   else

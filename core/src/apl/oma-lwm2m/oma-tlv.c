@@ -192,8 +192,9 @@ oma_tlv_write_int32(int16_t id, int32_t value, uint8_t *buffer, size_t len)
   PRINTF("Exporting int32 %d %ld ", id, (long)value);
 
   buf[3] = value & 0xff;
-  value = value >> 8;
+  value = value >> 7;
   for(i = 1; value != 0 && i < 4; i++) {
+    value = value >> 1;
     buf[3 - i] = value & 0xff;
     value = value >> 8;
   }

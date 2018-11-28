@@ -118,9 +118,10 @@ extern "C" {
 #define Board_PIN_BUTTON1       CC1352R1_LAUNCHXL_PIN_BTN2
 #define Board_PIN_BTN1          CC1352R1_LAUNCHXL_PIN_BTN1
 #define Board_PIN_BTN2          CC1352R1_LAUNCHXL_PIN_BTN2
-#define Board_PIN_LED0          CC1352R1_LAUNCHXL_PIN_RLED
-#define Board_PIN_LED1          CC1352R1_LAUNCHXL_PIN_GLED
-#define Board_PIN_LED2          CC1352R1_LAUNCHXL_PIN_RLED
+#define Board_PIN_LED0          IOID_25
+#define Board_PIN_LED1          IOID_27
+#define Board_PIN_LED2          CC1352R1_LAUNCHXL_PIN_GLED
+#define Board_PIN_LED3          CC1352R1_LAUNCHXL_PIN_RLED
 #define Board_PIN_RLED          CC1352R1_LAUNCHXL_PIN_RLED
 #define Board_PIN_GLED          CC1352R1_LAUNCHXL_PIN_GLED
 
