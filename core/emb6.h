@@ -292,6 +292,7 @@ typedef enum
     NETSTK_CMD_RF_CHAN_NUM_SET,
     NETSTK_CMD_RF_OP_MODE_SET,
     NETSTK_CMD_RF_WOR_EN,
+    NETSTK_CMD_RF_MAC_GET,
 
 } e_nsIocCmd_t;
 

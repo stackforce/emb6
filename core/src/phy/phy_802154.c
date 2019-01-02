@@ -158,6 +158,9 @@ static void phy_init(void *p_netstk, e_nsErr_t *p_err)
   /* set transmission power */
   pphy_netstk->rf->ioctrl(NETSTK_CMD_RF_TXPOWER_SET, &mac_phy_config.init_power, p_err);
 
+  /* Get MAC address for upper layer. */
+  pphy_netstk->rf->ioctrl(NETSTK_CMD_RF_MAC_GET, &mac_phy_config.mac_address, p_err);
+
   /* initialize PHY PIB attributes */
   packetbuf_attr_t symbol_period;
   packetbuf_attr_t symbol_per_octet;

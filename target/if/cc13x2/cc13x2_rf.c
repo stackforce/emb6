@@ -32,6 +32,8 @@ extern "C"
 #include "framer_802154_ll.h"
 #include "framer_802154.h"
 
+#include <ti/devices/cc13x2_cc26x2/inc/hw_fcfg1.h>
+
 /*! Enable or disable logging. */
 #define     LOGGER_ENABLE        LOGGER_RADIO
 #include    "logger.h"
@@ -553,6 +555,29 @@ static void loc_startRx( e_nsErr_t* p_err )
         rfCtx.rxCtx.is_receiving = 1;
         *p_err = NETSTK_ERR_NONE;
     }
+}
+
+static e_nsErr_t loc_getMacAddress(uint8_t *mac_address)
+{
+    /* Nothing failed yet. */
+    e_nsErr_t err = NETSTK_ERR_NONE;
+    uint32_t mac_15_4_high = (( HWREG( FCFG1_BASE + FCFG1_O_MAC_15_4_1 ) &
+            FCFG1_MAC_15_4_1_ADDR_32_63_M ) >>
+            FCFG1_MAC_15_4_1_ADDR_32_63_S );
+    uint32_t mac_15_4_low = (( HWREG( FCFG1_BASE + FCFG1_O_MAC_15_4_0 ) &
+            FCFG1_MAC_15_4_0_ADDR_0_31_M ) >>
+            FCFG1_MAC_15_4_0_ADDR_0_31_S );
+
+    *mac_address++ = (uint8_t)(mac_15_4_high >> 24);
+    *mac_address++ = (uint8_t)(mac_15_4_high >> 16);
+    *mac_address++ = (uint8_t)(mac_15_4_high >> 8);
+    *mac_address++ = (uint8_t)mac_15_4_high;
+    *mac_address++ = (uint8_t)(mac_15_4_low >> 24);
+    *mac_address++ = (uint8_t)(mac_15_4_low >> 16);
+    *mac_address++ = (uint8_t)(mac_15_4_low >> 8);
+    *mac_address = (uint8_t)mac_15_4_low;
+
+    return err;
 }
 
 
@@ -1345,6 +1370,9 @@ static void cc13x2_Ioctl (e_nsIocCmd_t    cmd,
       break;
     case NETSTK_CMD_RX_BUF_READ:
       cc13x2_eventHandler(EVENT_TYPE_RF, NULL);
+      break;
+    case NETSTK_CMD_RF_MAC_GET:
+      *p_err = loc_getMacAddress((uint8_t*)p_val);
       break;
     case NETSTK_CMD_RF_IS_RX_BUSY:
     case NETSTK_CMD_RF_RX_PENDING:
