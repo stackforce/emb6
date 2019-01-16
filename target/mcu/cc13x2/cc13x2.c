@@ -42,7 +42,7 @@
 #include <ti/drivers/PIN.h>
 #include <driverlib/ioc.h>
 #include <xdc/runtime/System.h>
-#include "board.h"
+#include "Board.h"
 #else
 #if (HAL_SUPPORT_RTIMER == TRUE)
 #include "rtimer_arch.h"
